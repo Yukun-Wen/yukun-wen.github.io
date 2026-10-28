@@ -155,6 +155,176 @@ body {
 
 }
     </style>
+
+    <!-- ============ Publications section styles ============ -->
+    <style>
+        .pub-section{
+            max-width: 1150px;
+            margin: 0 auto;
+            padding: 3rem 5vw 1.5rem;
+        }
+        .pub-section .pub-heading{
+            text-align: center;
+            font-family: var(--Josefin);
+            font-size: 40px;
+            color: var(--text--gray);
+            margin: 0 0 .45rem;
+            scroll-margin-top: 2rem;
+        }
+        .pub-section .pub-heading::after{
+            content: "";
+            display: block;
+            width: 76px;
+            height: 3px;
+            margin: .7rem auto 0;
+            border-radius: 3px;
+            background: var(--midnight);
+        }
+        .pub-section .pub-sub{
+            text-align: center;
+            font-family: var(--Abel);
+            font-size: 1rem;
+            color: var(--text--gray);
+            opacity: .75;
+            margin: .9rem auto 2.2rem;
+            max-width: 720px;
+        }
+        .pub-list{
+            display: flex;
+            flex-direction: column;
+            gap: 1.1rem;
+        }
+        .pub-group-title{
+            font-family: var(--Josefin);
+            font-size: 1.05rem;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            color: var(--midnight);
+            opacity: .85;
+            margin: 2.4rem 0 1rem;
+            padding-bottom: .45rem;
+            border-bottom: 1px solid rgba(16,79,85,.18);
+        }
+        .pub-sub + .pub-group-title{
+            margin-top: .2rem;
+        }
+        .pub-card{
+            display: flex;
+            gap: 1.2rem;
+            padding: 1.15rem 1.35rem;
+            background: rgba(255,255,255,.72);
+            border: 1px solid rgba(63,73,84,.12);
+            border-left: 5px solid var(--midnight);
+            border-radius: 10px;
+            box-shadow: 0 4px 14px rgba(63,73,84,.07);
+            transition: transform .25s ease, box-shadow .25s ease;
+        }
+        .pub-card:hover{
+            transform: translateY(-3px);
+            box-shadow: 0 10px 24px rgba(63,73,84,.14);
+        }
+        .pub-year{
+            flex: 0 0 auto;
+            min-width: 3.4rem;
+            font-family: var(--Josefin);
+            font-size: 1.35rem;
+            font-weight: 700;
+            line-height: 1;
+            padding-top: .15rem;
+            color: var(--midnight);
+        }
+        .pub-body{
+            flex: 1 1 auto;
+            min-width: 0;
+        }
+        .pub-title{
+            display: block;
+            font-family: var(--Lexend);
+            font-size: 1.02rem;
+            font-weight: 600;
+            line-height: 1.45;
+            color: var(--text--gray);
+            margin: 0 0 .5rem;
+        }
+        .pub-card .pub-title:hover{
+            color: var(--midnight);
+            text-decoration: underline;
+        }
+        .pub-authors{
+            font-family: var(--Abel);
+            font-size: .94rem;
+            color: var(--text--gray);
+            opacity: .85;
+            margin: 0 0 .3rem;
+        }
+        .pub-authors strong{
+            font-weight: 700;
+            opacity: 1;
+            color: var(--midnight);
+        }
+        .pub-venue{
+            font-family: var(--Abel);
+            font-size: .92rem;
+            font-style: italic;
+            color: var(--text--gray);
+            opacity: .75;
+            margin: 0 0 .75rem;
+        }
+        .pub-badges{
+            display: flex;
+            flex-wrap: wrap;
+            gap: .45rem;
+            align-items: center;
+        }
+        .pub-badge{
+            font-family: var(--Abel);
+            font-size: .76rem;
+            letter-spacing: .03em;
+            text-transform: uppercase;
+            padding: .28rem .6rem;
+            border-radius: 999px;
+            white-space: nowrap;
+            background: rgba(16,79,85,.1);
+            color: var(--midnight);
+        }
+        .pub-links{
+            display: flex;
+            flex-wrap: wrap;
+            gap: .5rem;
+            margin-top: .85rem;
+        }
+        .pub-links a{
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+            font-family: var(--Livvic);
+            font-size: .86rem;
+            padding: .38rem .85rem;
+            border-radius: 2rem;
+            border: 1px solid rgba(16,79,85,.35);
+            background: rgba(255,255,255,.6);
+            color: var(--midnight);
+            transition: background .2s ease, color .2s ease, border-color .2s ease;
+        }
+        .pub-links a:hover{
+            background: var(--midnight);
+            border-color: var(--midnight);
+            color: #fff;
+        }
+        .pub-note{
+            margin-top: 1.7rem;
+            text-align: center;
+            font-family: var(--Abel);
+            font-size: .86rem;
+            color: var(--text--gray);
+            opacity: .7;
+        }
+        @media (max-width: 620px){
+            .pub-section .pub-heading{ font-size: 30px; }
+            .pub-card{ flex-direction: column; gap: .55rem; }
+            .pub-year{ min-width: 0; }
+        }
+    </style>
 </head>
 <body>
 
@@ -182,7 +352,7 @@ body {
                         <a href="./webs/ArchitectureHomePage.html">Architecture</a>
                     </li>
                     <li class="nav-link">
-                        <a href="#articles">Publications</a>
+                        <a href="#publications">Publications</a>
                     </li>
                     <li class="nav-link">
                         <a href="#Contact">Contact Me</a>
@@ -354,6 +524,284 @@ body {
          
          
          
+         <!------------- Publications -------------->
+
+         <section class="pub-section">
+             <h2 class="pub-heading" id="publications">Publications</h2>
+             <p class="pub-sub">
+                 Peer-reviewed papers and preprints on multimodal vision&ndash;language learning,
+                 biomedical AI and interpretable machine learning.
+             </p>
+
+             <h3 class="pub-group-title">Selected publications</h3>
+
+             <div class="pub-list">
+
+                 <!-- 2025 / conference -->
+                 <div class="pub-card" data-aos="fade-up" data-aos-delay="100">
+                     <div class="pub-year">2025</div>
+                     <div class="pub-body">
+                         <a class="pub-title"
+                            href="https://ieeexplore.ieee.org/document/11231955/"
+                            target="_blank" rel="noopener">
+                             AugBLIP: An Augmented Generative Model for Robust Multimodal Visual Question
+                             Answering via Data Augmentation Techniques
+                         </a>
+                         <p class="pub-authors"><strong>Yukun Wen</strong></p>
+                         <p class="pub-venue">
+                             2025 4th International Conference on Electronic Information Technology (EIT),
+                             Chengdu, China, 22&ndash;24 Aug 2025, pp. 687&ndash;691
+                         </p>
+                         <div class="pub-badges">
+                             <span class="pub-badge">Conference paper</span>
+                             <span class="pub-badge">IEEE Xplore</span>
+                             <span class="pub-badge">Multimodal VQA</span>
+                         </div>
+                         <div class="pub-links">
+                             <a href="https://ieeexplore.ieee.org/document/11231955/"
+                                target="_blank" rel="noopener">
+                                 <i class="fas fa-file-alt"></i> IEEE Xplore
+                             </a>
+                             <a href="https://doi.org/10.1109/EIT67313.2025.11231955"
+                                target="_blank" rel="noopener">
+                                 <i class="fas fa-link"></i> DOI
+                             </a>
+                         </div>
+                     </div>
+                 </div>
+
+                 <!-- 2025 / journal -->
+                 <div class="pub-card" data-aos="fade-up" data-aos-delay="200">
+                     <div class="pub-year">2025</div>
+                     <div class="pub-body">
+                         <a class="pub-title"
+                            href="https://doi.org/10.1111/dom.70087"
+                            target="_blank" rel="noopener">
+                             Advancing AI&#8209;driven biomarker discovery in diabetic nephropathy:
+                             A framework for robustness and interpretability
+                         </a>
+                         <p class="pub-authors">
+                             <strong>Yukun Wen</strong>, Shijie Zeng
+                         </p>
+                         <p class="pub-venue">
+                             Diabetes, Obesity and Metabolism, vol. 27, no. 12, pp. 7624&ndash;7626, Dec 2025
+                             (online 28 Aug 2025)
+                         </p>
+                         <div class="pub-badges">
+                             <span class="pub-badge">Journal article</span>
+                             <span class="pub-badge">Wiley</span>
+                             <span class="pub-badge">Biomedical AI</span>
+                         </div>
+                         <div class="pub-links">
+                             <a href="https://doi.org/10.1111/dom.70087"
+                                target="_blank" rel="noopener">
+                                 <i class="fas fa-link"></i> DOI
+                             </a>
+                             <a href="https://dom-pubs.onlinelibrary.wiley.com/doi/10.1111/dom.70087"
+                                target="_blank" rel="noopener">
+                                 <i class="fas fa-file-alt"></i> Publisher
+                             </a>
+                             <a href="https://pubmed.ncbi.nlm.nih.gov/40874392/"
+                                target="_blank" rel="noopener">
+                                 <i class="fas fa-database"></i> PubMed
+                             </a>
+                         </div>
+                     </div>
+                 </div>
+
+                 <!-- 2024 / preprint -->
+                 <div class="pub-card" data-aos="fade-up" data-aos-delay="300">
+                     <div class="pub-year">2024</div>
+                     <div class="pub-body">
+                         <a class="pub-title"
+                            href="https://doi.org/10.1101/2024.08.02.24311442"
+                            target="_blank" rel="noopener">
+                             Identification and Modeling of Necroptosis&#8209;Related Genes Associated
+                             with the Prognosis of Breast Cancer
+                         </a>
+                         <p class="pub-authors"><strong>Yukun Wen</strong></p>
+                         <p class="pub-venue">
+                             medRxiv preprint (Health Informatics), first posted 5 Aug 2024;
+                             revised version 29 Jul 2025
+                         </p>
+                         <div class="pub-badges">
+                             <span class="pub-badge">Preprint</span>
+                             <span class="pub-badge">medRxiv</span>
+                             <span class="pub-badge">Cancer Bioinformatics</span>
+                         </div>
+                         <div class="pub-links">
+                             <a href="https://doi.org/10.1101/2024.08.02.24311442"
+                                target="_blank" rel="noopener">
+                                 <i class="fas fa-link"></i> DOI
+                             </a>
+                             <a href="https://www.medrxiv.org/content/10.1101/2024.08.02.24311442v2"
+                                target="_blank" rel="noopener">
+                                 <i class="fas fa-file-alt"></i> medRxiv
+                             </a>
+                             <a href="https://www.medrxiv.org/content/10.1101/2024.08.02.24311442v2.full.pdf"
+                                target="_blank" rel="noopener">
+                                 <i class="fas fa-file-pdf"></i> PDF
+                             </a>
+                         </div>
+                     </div>
+                 </div>
+
+             </div>
+
+             <h3 class="pub-group-title">Additional publications</h3>
+
+             <div class="pub-list">
+
+                 <!-- 2025 / journal -->
+                 <div class="pub-card" data-aos="fade-up" data-aos-delay="100">
+                     <div class="pub-year">2025</div>
+                     <div class="pub-body">
+                         <a class="pub-title"
+                            href="https://doi.org/10.1016/j.oraloncology.2025.107635"
+                            target="_blank" rel="noopener">
+                             Advancing precision radiotherapy through AI/ML in appliance design and
+                             patient outcome prediction: a complement to the GUARD trial
+                         </a>
+                         <p class="pub-authors">
+                             <strong>Yukun Wen</strong>, Shijie Zeng
+                         </p>
+                         <p class="pub-venue">
+                             Oral Oncology, vol. 169, art. 107635, Oct 2025
+                         </p>
+                         <div class="pub-badges">
+                             <span class="pub-badge">Journal article</span>
+                             <span class="pub-badge">Elsevier</span>
+                             <span class="pub-badge">Clinical AI</span>
+                         </div>
+                         <div class="pub-links">
+                             <a href="https://doi.org/10.1016/j.oraloncology.2025.107635"
+                                target="_blank" rel="noopener">
+                                 <i class="fas fa-link"></i> DOI
+                             </a>
+                             <a href="https://pubmed.ncbi.nlm.nih.gov/40857967/"
+                                target="_blank" rel="noopener">
+                                 <i class="fas fa-database"></i> PubMed
+                             </a>
+                         </div>
+                     </div>
+                 </div>
+
+                 <!-- 2025 / journal -->
+                 <div class="pub-card" data-aos="fade-up" data-aos-delay="200">
+                     <div class="pub-year">2025</div>
+                     <div class="pub-body">
+                         <a class="pub-title"
+                            href="https://doi.org/10.1111/jdv.70061"
+                            target="_blank" rel="noopener">
+                             The unmet potential of patient context in melanoma AI: Addressing design
+                             and data biases
+                         </a>
+                         <p class="pub-authors">
+                             <strong>Yukun Wen</strong>, Shijie Zeng
+                         </p>
+                         <p class="pub-venue">
+                             Journal of the European Academy of Dermatology and Venereology, 2025
+                         </p>
+                         <div class="pub-badges">
+                             <span class="pub-badge">Journal article</span>
+                             <span class="pub-badge">Wiley</span>
+                             <span class="pub-badge">Clinical AI</span>
+                         </div>
+                         <div class="pub-links">
+                             <a href="https://doi.org/10.1111/jdv.70061"
+                                target="_blank" rel="noopener">
+                                 <i class="fas fa-link"></i> DOI
+                             </a>
+                             <a href="https://pubmed.ncbi.nlm.nih.gov/40956150/"
+                                target="_blank" rel="noopener">
+                                 <i class="fas fa-database"></i> PubMed
+                             </a>
+                         </div>
+                     </div>
+                 </div>
+
+                 <!-- 2025 / journal -->
+                 <div class="pub-card" data-aos="fade-up" data-aos-delay="300">
+                     <div class="pub-year">2025</div>
+                     <div class="pub-body">
+                         <a class="pub-title"
+                            href="https://doi.org/10.1111/ijd.70057"
+                            target="_blank" rel="noopener">
+                             Enhancing Equitable Sun Protection: Cost&#8209;Effectiveness and Cluster
+                             Analysis for South Africa
+                         </a>
+                         <p class="pub-authors">
+                             <strong>Yukun Wen</strong>, Shijie Zeng
+                         </p>
+                         <p class="pub-venue">
+                             International Journal of Dermatology, 2025
+                         </p>
+                         <div class="pub-badges">
+                             <span class="pub-badge">Journal article</span>
+                             <span class="pub-badge">Wiley</span>
+                             <span class="pub-badge">Health Analytics</span>
+                         </div>
+                         <div class="pub-links">
+                             <a href="https://doi.org/10.1111/ijd.70057"
+                                target="_blank" rel="noopener">
+                                 <i class="fas fa-link"></i> DOI
+                             </a>
+                             <a href="https://pubmed.ncbi.nlm.nih.gov/40899480/"
+                                target="_blank" rel="noopener">
+                                 <i class="fas fa-database"></i> PubMed
+                             </a>
+                         </div>
+                     </div>
+                 </div>
+
+                 <!-- 2024 / journal, co-author -->
+                 <div class="pub-card" data-aos="fade-up" data-aos-delay="400">
+                     <div class="pub-year">2024</div>
+                     <div class="pub-body">
+                         <a class="pub-title"
+                            href="https://doi.org/10.1016/j.jksuci.2024.102219"
+                            target="_blank" rel="noopener">
+                             Firefly forest: A swarm iteration&#8209;free swarm intelligence clustering algorithm
+                         </a>
+                         <p class="pub-authors">
+                             Shijie Zeng, Yuefei Wang, <strong>Yukun Wen</strong>, Xi Yu, Binxiong Li, Zixu Wang
+                         </p>
+                         <p class="pub-venue">
+                             Journal of King Saud University &ndash; Computer and Information Sciences,
+                             vol. 36, no. 9, art. 102219, Nov 2024
+                         </p>
+                         <div class="pub-badges">
+                             <span class="pub-badge">Journal article</span>
+                             <span class="pub-badge">Co&#8209;author</span>
+                             <span class="pub-badge">Swarm Intelligence</span>
+                         </div>
+                         <div class="pub-links">
+                             <a href="https://doi.org/10.1016/j.jksuci.2024.102219"
+                                target="_blank" rel="noopener">
+                                 <i class="fas fa-link"></i> DOI
+                             </a>
+                             <a href="https://link.springer.com/content/pdf/10.1016/j.jksuci.2024.102219.pdf"
+                                target="_blank" rel="noopener">
+                                 <i class="fas fa-file-pdf"></i> PDF
+                             </a>
+                         </div>
+                     </div>
+                 </div>
+
+             </div>
+
+             <p class="pub-note">
+                 Full record: <a href="https://orcid.org/0009-0004-8894-4758" target="_blank" rel="noopener">ORCID</a>
+                 &nbsp;&middot;&nbsp;
+                 <a href="https://www.semanticscholar.org/author/2327514258" target="_blank" rel="noopener">Semantic Scholar</a>
+                 &nbsp;&middot;&nbsp;
+                 <a href="https://github.com/Yukun-Wen" target="_blank" rel="noopener">GitHub</a>
+             </p>
+         </section>
+
+         <!--X----------- Publications -------------->
+
+
          <!------------- Site Content-------------->
 
 
