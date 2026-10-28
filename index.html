@@ -1,1092 +1,1176 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog</title>
-
-    <!-- Font Awesome Icons-->
-    <link rel="stylesheet" href="./css/all.css">
-
-    <!------------ Owl-Carousel ------------>
-    <link rel="stylesheet" href="./css/owl.carousel.min.css">
-    <link rel="stylesheet" href="./css/owl.theme.default.min.css">
-
-
-    <!--------------------- AOS Library---------------->
-    <link rel="stylesheet" href="./css/aos.css">
-
-    <!--Custom Style-->
-    <link rel="stylesheet" href="./css/Style.css">
-    <style>
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background: linear-gradient(135deg, rgba(228, 206, 206, 1) 0%, rgba(233, 237, 214, 50%) 50%, rgba(184, 218, 210, 75%) 75%, rgba(188, 194, 212, 100%) 100%);
-    background-attachment: fixed; /* This will make sure the background doesn't scroll with the content */
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yukun Wen — Architecture, AIGC &amp; Multimodal AI</title>
+<meta name="description" content="Yukun Wen — architecture, generative imagery and multimodal AI research. Selected works, publications and contact.">
+<link rel="icon" href="./assets/logo.png">
+<style>
+/* ---------------------------------------------------------------- fonts */
+@font-face{
+    font-family:'Josefin';
+    src:url('./fonts/Josefin_Sans/JosefinSans-VariableFont_wght.ttf') format('truetype');
+    font-weight:100 700;font-style:normal;font-display:swap;
 }
-.grid-container {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-    padding: 20px;
-    max-width: 1600px;
-    margin: 0 auto; /* Center the container */
-    height: 70%;
-    width: 70%;
+@font-face{
+    font-family:'Lexend';
+    src:url('./fonts/Lexend_Deca/LexendDeca-Regular.ttf') format('truetype');
+    font-weight:400;font-display:swap;
+}
+@font-face{
+    font-family:'Abel';
+    src:url('./fonts/Abel/Abel-Regular.ttf') format('truetype');
+    font-weight:400;font-display:swap;
 }
 
-.grid-container > div {
-    position: relative;
-    perspective: 1000px; /* Enable 3D space for flip effect */
+/* ---------------------------------------------------------------- tokens */
+:root{
+    --paper:#f5f2ec;
+    --paper-2:#eae6dd;
+    --ink:#14171a;
+    --muted:#6b7076;
+    --line:rgba(20,23,26,.14);
+    --accent:#0f5c63;
+    --display:'Josefin','Helvetica Neue',Arial,sans-serif;
+    --body:'Lexend','Helvetica Neue',Arial,sans-serif;
+    --meta:'Abel','Helvetica Neue',Arial,sans-serif;
+    --ease:cubic-bezier(.22,.8,.24,1);
+    --gut:clamp(20px,4.5vw,56px);
+    --maxw:1280px;
 }
 
-.grid-container img {
-    width: 100%;
-    height: auto;
-    display: block;
-    transition: transform 1s;
+*,*::before,*::after{box-sizing:border-box}
+
+html{
+    scroll-behavior:smooth;
+    -webkit-text-size-adjust:100%;
 }
 
-.grid-container .flipper {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    transform-style: preserve-3d;
-    transition: transform 0.6s;
+body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--body);
+    font-size:16px;
+    line-height:1.65;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
 }
 
-.grid-container div:hover .flipper { 
-    transform: rotateY(180deg);
+/* film grain */
+body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:60;opacity:.03;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-.grid-container .front, .grid-container .back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
+img{display:block;max-width:100%}
+
+a{color:inherit;text-decoration:none}
+
+::selection{background:var(--ink);color:var(--paper)}
+
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+
+/* ---------------------------------------------------------------- helpers */
+.wrap{
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding-inline:var(--gut);
 }
 
-.grid-container .front {
-    z-index: 2;
-    transform: rotateY(0deg);
+.reveal{
+    opacity:0;
+    transform:translateY(26px);
+    transition:opacity .95s var(--ease),transform .95s var(--ease);
+}
+.reveal.in{opacity:1;transform:none}
+
+.eyebrow{
+    font-family:var(--meta);
+    font-size:.74rem;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin:0;
 }
 
-.grid-container .back {
-    text-align: center;
-    vertical-align:middle;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(255, 255, 255, 0.2); /* 半透明的背景色 */
-    backdrop-filter: blur(30px); /* 模糊效果 */
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3), /* 内边框 */
-                inset 0 0 15px rgba(255, 255, 255, 0.3); /* 发光效果 */
-    transform: rotateY(180deg);
-    font-size: 2rem;
-    animation: flash 1.5s infinite; /* 闪光动画 */
+/* ---------------------------------------------------------------- scroll progress */
+#progress{
+    position:fixed;top:0;left:0;height:2px;width:100%;
+    background:var(--accent);
+    transform:scaleX(0);transform-origin:0 50%;
+    z-index:120;
+    will-change:transform;
 }
-/* 上一段背面代码的闪光特效 */
-@keyframes flash {
-    0% {
-        box-shadow: inset 0 0 0 10px rgba(255, 255, 255, 0.3), 0 0 15px rgba(255, 255, 255, 0.3);
+
+/* ---------------------------------------------------------------- nav */
+.nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    transition:background .4s var(--ease),border-color .4s var(--ease),backdrop-filter .4s;
+    border-bottom:1px solid transparent;
+    background:rgba(245,242,236,0);
+}
+.nav.scrolled{
+    background:rgba(245,242,236,.82);
+    backdrop-filter:blur(14px) saturate(1.1);
+    -webkit-backdrop-filter:blur(14px) saturate(1.1);
+    border-bottom-color:var(--line);
+}
+.nav-inner{
+    max-width:var(--maxw);margin:0 auto;
+    padding-inline:var(--gut);
+    height:70px;
+    display:flex;align-items:center;justify-content:space-between;gap:20px;
+}
+.brand{
+    font-family:var(--display);
+    font-size:.9rem;font-weight:600;
+    letter-spacing:.26em;text-transform:uppercase;
+    white-space:nowrap;
+}
+.brand span{color:var(--muted);font-weight:300}
+
+.nav-links{
+    display:flex;align-items:center;
+    gap:clamp(16px,2.4vw,34px);
+}
+.nav-links a{
+    font-family:var(--meta);
+    font-size:.82rem;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--muted);
+    padding:6px 0;
+    position:relative;
+    transition:color .3s var(--ease);
+}
+.nav-links a::after{
+    content:"";position:absolute;left:0;right:0;bottom:0;height:1px;
+    background:currentColor;
+    transform:scaleX(0);transform-origin:right;
+    transition:transform .45s var(--ease);
+}
+.nav-links a:hover{color:var(--ink)}
+.nav-links a:hover::after{transform:scaleX(1);transform-origin:left}
+.nav-links a.active{color:var(--ink)}
+.nav-links a.active::after{transform:scaleX(1);transform-origin:left}
+.nav-links a .ext{font-size:.72em;opacity:.6;margin-left:2px}
+
+.menu-btn{
+    display:none;
+    width:42px;height:42px;
+    border:1px solid var(--line);
+    background:transparent;
+    border-radius:50%;
+    cursor:pointer;
+    align-items:center;justify-content:center;
+    gap:4px;flex-direction:column;
+    transition:border-color .3s;
+}
+.menu-btn span{
+    display:block;width:16px;height:1px;background:var(--ink);
+    transition:transform .35s var(--ease),opacity .3s;
+}
+.menu-btn:hover{border-color:var(--ink)}
+
+/* ---------------------------------------------------------------- hero */
+.hero{
+    min-height:100svh;
+    display:flex;align-items:center;
+    padding:120px 0 70px;
+    position:relative;
+}
+.hero-grid{
+    width:100%;
+    display:grid;
+    grid-template-columns:1.06fr .94fr;
+    gap:clamp(30px,5vw,80px);
+    align-items:center;
+}
+.hero-copy{max-width:34rem}
+
+.hero h1{
+    font-family:var(--display);
+    font-weight:200;
+    font-size:clamp(3.6rem,9vw,8.2rem);
+    line-height:.84;
+    letter-spacing:-.03em;
+    margin:.35em 0 .3em;
+}
+.hero h1 em{
+    display:block;
+    font-style:italic;
+    font-weight:200;
+    color:var(--accent);
+}
+
+.lede{
+    font-size:clamp(.98rem,1.4vw,1.1rem);
+    color:var(--muted);
+    max-width:40ch;
+    margin:0 0 2.2em;
+}
+
+.hero-actions{
+    display:flex;align-items:center;flex-wrap:wrap;
+    gap:14px 22px;
+}
+
+.btn{
+    display:inline-flex;align-items:center;gap:10px;
+    font-family:var(--meta);
+    font-size:.82rem;letter-spacing:.14em;text-transform:uppercase;
+    padding:15px 30px;border-radius:999px;
+    background:var(--ink);color:var(--paper);
+    border:1px solid var(--ink);
+    position:relative;overflow:hidden;
+    transition:color .4s var(--ease),border-color .4s;
+    will-change:transform;
+}
+.btn::before{
+    content:"";position:absolute;inset:0;
+    background:var(--accent);
+    transform:translateY(101%);
+    transition:transform .45s var(--ease);
+    z-index:0;
+}
+.btn:hover::before{transform:translateY(0)}
+.btn > *{position:relative;z-index:1}
+.btn:hover{border-color:var(--accent);color:var(--paper)}
+
+.link-arrow{
+    display:inline-flex;align-items:center;gap:9px;
+    font-family:var(--meta);font-size:.82rem;
+    letter-spacing:.14em;text-transform:uppercase;
+    color:var(--ink);
+    position:relative;padding-bottom:4px;
+}
+.link-arrow::after{
+    content:"";position:absolute;left:0;right:0;bottom:0;height:1px;
+    background:currentColor;
+    transform:scaleX(1);transform-origin:left;
+    transition:transform .45s var(--ease);
+}
+.link-arrow:hover::after{transform:scaleX(0);transform-origin:right}
+.link-arrow svg{transition:transform .4s var(--ease)}
+.link-arrow:hover svg{transform:translate(3px,-3px)}
+
+/* hero figure */
+.hero-figure{
+    position:relative;
+    aspect-ratio:3/4;
+    overflow:hidden;
+    border-radius:3px;
+    background:var(--paper-2);
+}
+.hero-figure img{
+    width:100%;height:100%;object-fit:cover;
+    transform:scale(1.06);
+    transition:transform 1.2s var(--ease);
+    will-change:transform;
+}
+.hero-figure:hover img{transform:scale(1.12)}
+.hero-figure figcaption{
+    position:absolute;left:0;right:0;bottom:0;
+    padding:26px 22px 18px;
+    display:flex;justify-content:space-between;align-items:flex-end;gap:12px;
+    font-family:var(--meta);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;
+    color:#fff;
+    background:linear-gradient(to top,rgba(8,10,12,.62),rgba(8,10,12,0));
+}
+
+/* scroll cue */
+.cue{
+    position:absolute;left:50%;bottom:26px;
+    transform:translateX(-50%);
+    display:flex;flex-direction:column;align-items:center;gap:10px;
+    font-family:var(--meta);font-size:.66rem;letter-spacing:.24em;
+    text-transform:uppercase;color:var(--muted);
+}
+.cue i{
+    display:block;width:1px;height:46px;
+    background:linear-gradient(to bottom,var(--line),var(--muted));
+    transform-origin:top;
+    animation:cue 2.4s var(--ease) infinite;
+}
+@keyframes cue{
+    0%{transform:scaleY(0);opacity:0}
+    35%{transform:scaleY(1);opacity:1}
+    100%{transform:scaleY(1);opacity:0}
+}
+
+/* ---------------------------------------------------------------- marquee */
+.marquee{
+    border-block:1px solid var(--line);
+    padding:20px 0;
+    overflow:hidden;
+    display:flex;
+    user-select:none;
+}
+.marquee-track{
+    display:flex;align-items:center;gap:44px;
+    width:max-content;
+    animation:slide 42s linear infinite;
+    will-change:transform;
+}
+.marquee:hover .marquee-track{animation-play-state:paused}
+.marquee-track span{
+    font-family:var(--display);
+    font-weight:200;
+    font-size:clamp(1.5rem,3.4vw,2.9rem);
+    letter-spacing:.02em;
+    text-transform:uppercase;
+    white-space:nowrap;
+}
+.marquee-track span:nth-child(even){
+    color:transparent;
+    -webkit-text-stroke:1px rgba(20,23,26,.34);
+}
+.marquee-track b{
+    color:var(--accent);font-weight:300;font-size:.9em;
+}
+@keyframes slide{
+    from{transform:translateX(0)}
+    to{transform:translateX(-50%)}
+}
+
+/* ---------------------------------------------------------------- sections */
+.section{
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding:clamp(72px,9vw,140px) var(--gut);
+}
+.section-head{
+    display:flex;justify-content:space-between;align-items:flex-end;
+    gap:24px;
+    padding-bottom:20px;
+    margin-bottom:clamp(30px,4.5vw,58px);
+    border-bottom:1px solid var(--line);
+}
+.section-head h2{
+    font-family:var(--display);
+    font-weight:200;
+    font-size:clamp(1.9rem,4.4vw,3.3rem);
+    letter-spacing:-.025em;
+    line-height:1;
+    margin:.3em 0 0;
+}
+.section-head .idx{
+    font-family:var(--meta);font-size:.72rem;
+    letter-spacing:.22em;text-transform:uppercase;
+    color:var(--muted);
+    margin:0;
+    padding-bottom:6px;white-space:nowrap;
+}
+
+/* ---------------------------------------------------------------- work grid */
+.work-grid{
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    grid-auto-rows:clamp(96px,10.5vw,168px);
+    gap:clamp(10px,1.4vw,20px);
+}
+.tile{
+    position:relative;
+    overflow:hidden;
+    border-radius:3px;
+    background:var(--paper-2);
+    isolation:isolate;
+}
+.tile img{
+    width:100%;height:100%;object-fit:cover;
+    transition:transform 1.1s var(--ease);
+    will-change:transform;
+}
+.tile:hover img{transform:scale(1.07)}
+
+.tile .num{
+    position:absolute;top:14px;left:16px;z-index:2;
+    font-family:var(--meta);font-size:.7rem;letter-spacing:.16em;
+    color:#fff;
+    mix-blend-mode:difference;
+    opacity:.85;
+}
+.tile .cap{
+    position:absolute;left:0;right:0;bottom:0;z-index:2;
+    padding:60px 20px 18px;
+    background:linear-gradient(to top,rgba(8,10,12,.78),rgba(8,10,12,0));
+    color:#fff;
+    transform:translateY(14px);
+    opacity:0;
+    transition:transform .55s var(--ease),opacity .55s var(--ease);
+}
+.tile:hover .cap,.tile:focus-visible .cap{transform:none;opacity:1}
+.tile .cap h3{
+    font-family:var(--display);
+    font-weight:300;
+    font-size:clamp(1rem,1.5vw,1.28rem);
+    letter-spacing:.005em;
+    margin:0 0 4px;
+}
+.tile .cap p{
+    font-family:var(--meta);font-size:.7rem;
+    letter-spacing:.18em;text-transform:uppercase;
+    margin:0;opacity:.8;
+}
+
+/* spans */
+.a{grid-column:span 7;grid-row:span 3}
+.b{grid-column:span 5;grid-row:span 3}
+.c{grid-column:span 4;grid-row:span 2}
+.d{grid-column:span 6;grid-row:span 2}
+
+.work-more{
+    display:flex;flex-wrap:wrap;gap:14px 34px;
+    justify-content:center;
+    margin-top:clamp(36px,5vw,60px);
+}
+
+/* ---------------------------------------------------------------- publications */
+.pub-list{border-top:1px solid var(--line)}
+
+.pub{
+    display:grid;
+    grid-template-columns:78px minmax(0,1fr) auto;
+    gap:clamp(14px,2.6vw,38px);
+    padding:clamp(20px,3vw,30px) 0;
+    border-bottom:1px solid var(--line);
+    position:relative;
+    transition:padding-left .5s var(--ease);
+}
+.pub::before{
+    content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;
+    background:var(--ink);
+    transform:scaleX(0);transform-origin:left;
+    transition:transform .6s var(--ease);
+}
+.pub:hover::before{transform:scaleX(1)}
+.pub:hover{padding-left:14px}
+
+.pub .yr{
+    font-family:var(--display);
+    font-weight:300;font-size:1.02rem;
+    color:var(--muted);
+    padding-top:3px;
+    font-variant-numeric:tabular-nums;
+}
+.pub-main{min-width:0}
+.pub h3{
+    font-family:var(--display);
+    font-weight:300;
+    font-size:clamp(1.06rem,1.85vw,1.5rem);
+    line-height:1.34;
+    letter-spacing:-.008em;
+    margin:0 0 10px;
+}
+.pub h3 a{
+    background-image:linear-gradient(currentColor,currentColor);
+    background-size:0 1px;
+    background-repeat:no-repeat;
+    background-position:0 100%;
+    transition:background-size .5s var(--ease),color .3s;
+}
+.pub:hover h3 a{background-size:100% 1px}
+.pub h3 a:hover{color:var(--accent)}
+
+.pub .line{
+    font-family:var(--meta);
+    font-size:.86rem;
+    color:var(--muted);
+    margin:0;
+    display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;
+}
+.pub .line .who{color:var(--ink)}
+.pub .line .sep{opacity:.4}
+.pub .line .venue{font-style:italic}
+
+.pub-acts{
+    display:flex;flex-wrap:wrap;gap:8px;
+    justify-content:flex-end;
+    padding-top:2px;
+}
+.pub-acts a{
+    font-family:var(--meta);
+    font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;
+    padding:8px 14px;border-radius:999px;
+    border:1px solid rgba(20,23,26,.22);
+    color:rgba(20,23,26,.72);
+    white-space:nowrap;
+    transition:background .3s var(--ease),color .3s,border-color .3s,transform .3s var(--ease);
+}
+.pub-acts a:hover{
+    background:var(--ink);color:var(--paper);
+    border-color:var(--ink);
+    transform:translateY(-2px);
+}
+
+.pub-note{
+    margin-top:34px;
+    display:flex;flex-wrap:wrap;gap:10px 26px;
+    font-family:var(--meta);font-size:.8rem;
+    letter-spacing:.06em;color:var(--muted);
+}
+.pub-note a{color:var(--ink);position:relative;padding-bottom:2px}
+.pub-note a::after{
+    content:"";position:absolute;left:0;right:0;bottom:0;height:1px;
+    background:currentColor;transform:scaleX(0);transform-origin:right;
+    transition:transform .4s var(--ease);
+}
+.pub-note a:hover::after{transform:scaleX(1);transform-origin:left}
+
+/* ---------------------------------------------------------------- about */
+.about-grid{
+    display:grid;
+    grid-template-columns:1.15fr .85fr;
+    gap:clamp(32px,6vw,90px);
+    align-items:start;
+}
+.about-text p{
+    font-size:clamp(1rem,1.5vw,1.16rem);
+    color:var(--ink);
+    margin:0 0 1.1em;
+    max-width:52ch;
+}
+.about-text p.dim{color:var(--muted)}
+
+.contact-list{border-top:1px solid var(--line)}
+.contact-row{
+    display:flex;justify-content:space-between;align-items:center;gap:16px;
+    padding:16px 0;
+    border-bottom:1px solid var(--line);
+    transition:padding-left .45s var(--ease),color .3s;
+}
+.contact-row:hover{padding-left:10px;color:var(--accent)}
+.contact-row .k{
+    font-family:var(--meta);font-size:.72rem;
+    letter-spacing:.18em;text-transform:uppercase;color:var(--muted);
+}
+.contact-row .v{
+    font-family:var(--display);font-weight:300;font-size:1rem;
+    flex:1 1 auto;
+    text-align:right;
+    padding-right:14px;
+    overflow-wrap:anywhere;
+}
+.contact-row svg{flex:0 0 auto;opacity:.45;transition:opacity .3s,transform .4s var(--ease)}
+.contact-row:hover svg{opacity:1;transform:translate(2px,-2px)}
+
+/* ---------------------------------------------------------------- footer */
+.footer{
+    border-top:1px solid var(--line);
+    padding:36px var(--gut) 44px;
+}
+.footer-inner{
+    max-width:var(--maxw);margin:0 auto;
+    display:flex;flex-wrap:wrap;gap:18px 28px;
+    align-items:center;justify-content:space-between;
+    font-family:var(--meta);font-size:.76rem;
+    letter-spacing:.1em;text-transform:uppercase;
+    color:var(--muted);
+}
+.footer-inner a{color:var(--muted);transition:color .3s}
+.footer-inner a:hover{color:var(--ink)}
+.footer-inner .tracker{display:flex;align-items:center;gap:10px;opacity:.55;transition:opacity .3s}
+.footer-inner .tracker:hover{opacity:1}
+.footer-inner .tracker img{height:22px;width:auto;filter:grayscale(1)}
+
+/* ---------------------------------------------------------------- cursor */
+.cursor{
+    position:fixed;top:0;left:0;z-index:130;
+    width:26px;height:26px;
+    margin:-13px 0 0 -13px;
+    border:1px solid var(--ink);
+    border-radius:50%;
+    pointer-events:none;
+    opacity:0;
+    transition:width .3s var(--ease),height .3s var(--ease),
+               margin .3s var(--ease),background .3s,border-color .3s,opacity .35s;
+    will-change:transform;
+}
+.cursor.on{opacity:.5}
+.cursor.grow{
+    width:56px;height:56px;margin:-28px 0 0 -28px;
+    background:rgba(15,92,99,.1);
+    border-color:var(--accent);
+}
+
+/* ---------------------------------------------------------------- responsive */
+@media (max-width:1000px){
+    .hero-grid{grid-template-columns:1fr;gap:38px}
+    .hero-copy{max-width:none}
+    .hero-figure{aspect-ratio:16/11;max-width:640px}
+    .about-grid{grid-template-columns:1fr;gap:36px}
+    .cue{display:none}
+}
+
+@media (max-width:860px){
+    .menu-btn{display:flex}
+    .brand{font-size:.8rem;letter-spacing:.18em}
+    .brand span{display:none}
+    .nav-inner{gap:12px}
+    .nav-links{
+        position:fixed;inset:0;
+        z-index:110;
+        flex-direction:column;
+        justify-content:center;
+        gap:8px;
+        background:rgba(245,242,236,.97);
+        backdrop-filter:blur(18px);
+        -webkit-backdrop-filter:blur(18px);
+        opacity:0;visibility:hidden;
+        transform:translateY(-8px);
+        transition:opacity .4s var(--ease),transform .4s var(--ease),visibility .4s;
     }
-    50% {
-        box-shadow: inset 0 0 0 10px rgba(255, 255, 255, 0.3), 0 0 25px rgba(255, 255, 255, 1);
+    .nav-links a{
+        font-family:var(--display);
+        font-size:1.6rem;font-weight:300;
+        letter-spacing:.04em;text-transform:none;
+        color:var(--ink);
+        padding:10px 0;
     }
-    100% {
-        box-shadow: inset 0 0 0 10px rgba(255, 255, 255, 0.3), 0 0 15px rgba(255, 255, 255, 0.3);
+    .nav-links a::after{display:none}
+    body.menu-open .nav-links{opacity:1;visibility:visible;transform:none}
+    body.menu-open{overflow:hidden}
+    body.menu-open .menu-btn span:nth-child(1){transform:translateY(2.5px) rotate(45deg)}
+    body.menu-open .menu-btn span:nth-child(2){transform:translateY(-2.5px) rotate(-45deg)}
+    .menu-btn{position:relative;z-index:120}
+
+    .pub{grid-template-columns:1fr;gap:10px}
+    .pub .yr{padding-top:0}
+    .pub-acts{justify-content:flex-start;margin-top:6px}
+}
+
+@media (max-width:760px){
+    .work-grid{grid-template-columns:1fr;grid-auto-rows:auto;gap:22px}
+    .a,.b,.c,.d{grid-column:1/-1;grid-row:auto;aspect-ratio:4/3}
+    .tile .cap{
+        opacity:1;transform:none;padding:44px 16px 14px;
     }
+    .tile .cap h3{font-size:1.02rem}
+    .tile .num{top:10px;left:12px}
+    .section-head{flex-direction:column;align-items:flex-start;gap:10px}
 }
 
-.overlay {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    background: rgba(255, 255, 255, 0.8);
-    padding: 5px 10px;
-    font-size: 14px;
-}
-
-.main {
-    grid-column: span 2;
-    grid-row: span 2;
-}
-
-.support {
-    grid-column: span 2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #f0f0f0;
-}
-
-.support a {
-    text-decoration: none;
-    color: blue;
-    font-weight: bold;
-}
-
-.small-image {
-    margin-top: 5px;
-    width: 100px;
-    height: 87px;
-}
-
-/* Media query for mobile devices */
-@media (max-width: 600px) {
-    .grid-container {
-        grid-template-columns: 1fr;
-        display: none;
+@media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{
+        animation-duration:.001ms !important;
+        animation-iteration-count:1 !important;
+        transition-duration:.001ms !important;
     }
-    .main, .support {
-        grid-column: span 1;
-        grid-row: span 1;
-    }
-    .support {
-        display: none;
-    }
-    .small-image {
-        margin-top: auto;
-        width: 80px;
-        height: 70px;
-    }
-
+    .reveal{opacity:1;transform:none}
+    .cursor{display:none}
 }
-    </style>
-
-    <!-- ============ Publications section styles ============ -->
-    <style>
-        .pub-section{
-            max-width: 1150px;
-            margin: 0 auto;
-            padding: 3rem 5vw 1.5rem;
-        }
-        .pub-section .pub-heading{
-            text-align: center;
-            font-family: var(--Josefin);
-            font-size: 40px;
-            color: var(--text--gray);
-            margin: 0 0 .45rem;
-            scroll-margin-top: 2rem;
-        }
-        .pub-section .pub-heading::after{
-            content: "";
-            display: block;
-            width: 76px;
-            height: 3px;
-            margin: .7rem auto 0;
-            border-radius: 3px;
-            background: var(--midnight);
-        }
-        .pub-section .pub-sub{
-            text-align: center;
-            font-family: var(--Abel);
-            font-size: 1rem;
-            color: var(--text--gray);
-            opacity: .75;
-            margin: .9rem auto 2.2rem;
-            max-width: 720px;
-        }
-        .pub-list{
-            display: flex;
-            flex-direction: column;
-            gap: 1.1rem;
-        }
-        .pub-group-title{
-            font-family: var(--Josefin);
-            font-size: 1.05rem;
-            letter-spacing: .06em;
-            text-transform: uppercase;
-            color: var(--midnight);
-            opacity: .85;
-            margin: 2.4rem 0 1rem;
-            padding-bottom: .45rem;
-            border-bottom: 1px solid rgba(16,79,85,.18);
-        }
-        .pub-sub + .pub-group-title{
-            margin-top: .2rem;
-        }
-        .pub-card{
-            display: flex;
-            gap: 1.2rem;
-            padding: 1.15rem 1.35rem;
-            background: rgba(255,255,255,.72);
-            border: 1px solid rgba(63,73,84,.12);
-            border-left: 5px solid var(--midnight);
-            border-radius: 10px;
-            box-shadow: 0 4px 14px rgba(63,73,84,.07);
-            transition: transform .25s ease, box-shadow .25s ease;
-        }
-        .pub-card:hover{
-            transform: translateY(-3px);
-            box-shadow: 0 10px 24px rgba(63,73,84,.14);
-        }
-        .pub-year{
-            flex: 0 0 auto;
-            min-width: 3.4rem;
-            font-family: var(--Josefin);
-            font-size: 1.35rem;
-            font-weight: 700;
-            line-height: 1;
-            padding-top: .15rem;
-            color: var(--midnight);
-        }
-        .pub-body{
-            flex: 1 1 auto;
-            min-width: 0;
-        }
-        .pub-title{
-            display: block;
-            font-family: var(--Lexend);
-            font-size: 1.02rem;
-            font-weight: 600;
-            line-height: 1.45;
-            color: var(--text--gray);
-            margin: 0 0 .5rem;
-        }
-        .pub-card .pub-title:hover{
-            color: var(--midnight);
-            text-decoration: underline;
-        }
-        .pub-authors{
-            font-family: var(--Abel);
-            font-size: .94rem;
-            color: var(--text--gray);
-            opacity: .85;
-            margin: 0 0 .3rem;
-        }
-        .pub-authors strong{
-            font-weight: 700;
-            opacity: 1;
-            color: var(--midnight);
-        }
-        .pub-venue{
-            font-family: var(--Abel);
-            font-size: .92rem;
-            font-style: italic;
-            color: var(--text--gray);
-            opacity: .75;
-            margin: 0 0 .75rem;
-        }
-        .pub-badges{
-            display: flex;
-            flex-wrap: wrap;
-            gap: .45rem;
-            align-items: center;
-        }
-        .pub-badge{
-            font-family: var(--Abel);
-            font-size: .76rem;
-            letter-spacing: .03em;
-            text-transform: uppercase;
-            padding: .28rem .6rem;
-            border-radius: 999px;
-            white-space: nowrap;
-            background: rgba(16,79,85,.1);
-            color: var(--midnight);
-        }
-        .pub-links{
-            display: flex;
-            flex-wrap: wrap;
-            gap: .5rem;
-            margin-top: .85rem;
-        }
-        .pub-links a{
-            display: inline-flex;
-            align-items: center;
-            gap: .4rem;
-            font-family: var(--Livvic);
-            font-size: .86rem;
-            padding: .38rem .85rem;
-            border-radius: 2rem;
-            border: 1px solid rgba(16,79,85,.35);
-            background: rgba(255,255,255,.6);
-            color: var(--midnight);
-            transition: background .2s ease, color .2s ease, border-color .2s ease;
-        }
-        .pub-links a:hover{
-            background: var(--midnight);
-            border-color: var(--midnight);
-            color: #fff;
-        }
-        .pub-note{
-            margin-top: 1.7rem;
-            text-align: center;
-            font-family: var(--Abel);
-            font-size: .86rem;
-            color: var(--text--gray);
-            opacity: .7;
-        }
-        @media (max-width: 620px){
-            .pub-section .pub-heading{ font-size: 30px; }
-            .pub-card{ flex-direction: column; gap: .55rem; }
-            .pub-year{ min-width: 0; }
-        }
-    </style>
+</style>
 </head>
 <body>
 
-    <!----------------------Navigation----------------->
+<div id="progress"></div>
+<div class="cursor" id="cursor" aria-hidden="true"></div>
 
-    <nav class="nav">
-        <div class="nav-menu flex-row">
-            <div class="nav-brand" >
-                <img src="./assets/logo.png" alt="Blog Title" class="small-image">
-            </div>
-            <div class="toggle-collapse">
-                <div class="toggle-icons">
-                    <i class="fas fa-bars"></i>
-                </div>
-            </div>
-            <div>
-                <ul class="nav-items">
-                    <li class="nav-link">
-                        <a href="#">Home</a>
-                    </li>
-                    <li class="nav-link">
-                        <a href="./webs/AIGCHome.html">AIGC</a>
-                    </li>
-                    <li class="nav-link">
-                        <a href="./webs/ArchitectureHomePage.html">Architecture</a>
-                    </li>
-                    <li class="nav-link">
-                        <a href="#publications">Publications</a>
-                    </li>
-                    <li class="nav-link">
-                        <a href="#Contact">Contact Me</a>
-                    </li>
-                </ul>
-            </div>
-            <div>
-                <div class="social text-gary">
-                    <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2632292881&site=qq&menu=yes"><i class="fab fa-qq"></i></a>
-                    <a href="#"><i class="fab fa-weixin"></i></a>
-                    <a href="#"><i class="fab fa-weibo"></i></a>
-                    <a href="#"><i class="fab fa-tiktok"></i></a>
-                </div>
-            </div>
-        </div>
-    </nav>
+<!-- ================================================== nav -->
+<header class="nav" id="nav">
+    <div class="nav-inner">
+        <a class="brand" href="#home">Yukun Wen<span> — Design your life</span></a>
 
+        <nav class="nav-links" id="navLinks" aria-label="Primary">
+            <a href="#work">Work</a>
+            <a href="#publications">Publications</a>
+            <a href="#about">About</a>
+            <a href="./webs/AIGCHome.html">AIGC<span class="ext">↗</span></a>
+            <a href="./webs/ArchitectureHomePage.html">Architecture<span class="ext">↗</span></a>
+        </nav>
 
+        <button class="menu-btn" id="menuBtn" aria-label="Toggle menu" aria-expanded="false">
+            <span></span><span></span>
+        </button>
+    </div>
+</header>
 
+<main>
 
-    <!--X--------------------Navigation----------------->
+<!-- ================================================== hero -->
+<section class="hero" id="home">
+    <div class="wrap hero-grid">
+        <div class="hero-copy">
+            <p class="eyebrow reveal">Architecture · AIGC · Multimodal AI</p>
 
+            <h1 class="reveal">Yukun<em>Wen</em></h1>
 
-    <!--------- Main Site Section------------>
-    <main>
-        <!--------- Site Title---------->
+            <p class="lede reveal">
+                Architect and researcher working across spatial design, generative
+                imagery and multimodal visual question answering.
+            </p>
 
-        <!-- <section class="site-title">
-            <div class="site-background" data-aos="fade-up" data-aos-delay="100">
-                <h3>Anime & Comics & Games & Novel</h3>
-                <h1>ACGN Culture Sharing Blog</h1>
-                <a href="./webs/login.html"><button class="btn">Explore</button></a>
-            </div>
-        </section> -->
-        <div class="grid-container">            
-            <div class="main">
-                <div class="flipper">
-                    <img src="./assets/Home_Page/airporttry(1).png" alt="Main Image">
-                <div class="overlay">Architecture Project<br>Experience in the design of airports, hospitals, schools, residential areas, etc</div>
-                </div>
-            </div>
-   
-            <div>
-                <div class="flipper">
-                    <div class="front">
-                    <a href="./webs/AIGCHome.html">
-                        <img src="./assets/Home_Page/cyberpunk.png" alt="Image 1" style="height: 100%;">
-                    </a>
-                    </div>
-                    <div class="back">
-                        <a href="./webs/AIGCHome.html">
-                        <p>AIGC Project</p></a>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <div class="flipper">
-                    <div class="front">
-                        <a href="./webs/ArchitectureHomePage.html">
-                        <img src="./assets/Home_Page/school.png" alt="Image 2" style="height: 100%;">
-                    </a>
-                    </div>
-                    <div class="back">
-                        <a href="./webs/ArchitectureHomePage.html">
-                        <p>Architecture</p></a>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <div class="flipper">
-                    <div class="front">
-                        <a href="./webs/AIGCHome.html">
-                        <img src="./assets/Home_Page/research.png" alt="Image 3" style="height: 100%;">
-                    </a>
-                    </div>
-                    <div class="back">
-                        <a href="./webs/AIGCHome.html">
-                        <p>AIGC Project</p></a>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <div class="flipper">
-                    <div class="front">
-                    <a href="./webs/CV/CV_Yukun Wen.pdf">
-                        <img src="./assets/Home_Page/AIGC.png" alt="Image 4" style="height: 100%;">
-                    </a>
-                    </div>
-                    <div class="back">
-                        <a href="./webs/CV/CV_Yukun Wen.pdf">
-                        <p>Curriculum Vitae</p></a>
-                    </div>
-                </div>
+            <div class="hero-actions reveal">
+                <a class="btn mag" href="#work"><span>View work</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </a>
+                <a class="link-arrow" href="./webs/CV/CV_Yukun%20Wen.pdf" target="_blank" rel="noopener">
+                    Curriculum vitae
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
+                </a>
             </div>
         </div>
-        
-         <!--X------- Site Title---------->
 
+        <figure class="hero-figure reveal" id="heroFig">
+            <img src="./assets/Home_Page/airporttry(1).png" alt="Nanning Wuxu T3 Airport — render" width="1167" height="1692" fetchpriority="high">
+            <figcaption>
+                <span>Nanning Wuxu T3 Airport</span>
+                <span>01 / 07</span>
+            </figcaption>
+        </figure>
+    </div>
 
-         <!------------ Blog Carousel----------->
+    <div class="cue" aria-hidden="true"><span>Scroll</span><i></i></div>
+</section>
 
-         <section>
-             <div class="blog">
-                 <div class="container">
-                    <h2 class="introduce" id="Picture">Project Picture Display</h2>
-                     <div class="owl-carousel owl-theme blog-post">
-                        <div class="blog-content" data-aos="fade-right" data-aos-delay="200" >
-                            <img src="./assets/Project_Pic/img1.png" alt="post-7">
-                            <div class="blog-title">
-                                <h3>Nanning Wuxu T3 Airport</h3>
-                                <button class="btn btn-blog" onclick="window.open('./webs/Architecture-Airport.html')">Find</button>                               
-                            </div>
-                        </div>
-                         <div class="blog-content" data-aos="fade-in" data-aos-delay="200">
-                             <img src="./assets/Project_Pic/img2.png" alt="post-2">
-                             <div class="blog-title">
-                                 <h3>Hospital Projects</h3>
-                                 <button class="btn btn-blog" onclick="window.open('./webs/Architecture-Hospital.html')">Find</button>                                 
-                             </div>
-                         </div>
-                         <div class="blog-content" data-aos="fade-left" data-aos-delay="200">
-                             <img src="./assets/Project_Pic/img3.png" alt="post-3">
-                             <div class="blog-title">
-                                   <h3>Architecture Competition</h3>
-                                 <button class="btn btn-blog" onclick="window.open('./webs/Architecture-House.html')" >Find</button>                                 
-                             </div>
-                         </div>
-                         <div class="blog-content" data-aos="fade-right" data-aos-delay="200">
-                             <img src="./assets/Project_Pic/img4.png" alt="post-4">
-                             <div class="blog-title">
-                                 <h3>Academic Research</h3>
-                                 <button class="btn btn-blog" onclick="window.open('#')">Find</button>                                 
-                             </div>
-                         </div>
-                         <div class="blog-content" data-aos="fade-right" data-aos-delay="200">
-                             <img src="./assets/Project_Pic/img5.png" alt="post-5">
-                             <div class="blog-title">
-                                 <h3>Novel Illustrations</h3>
-                                 <button class="btn btn-blog" onclick="window.open('./webs/AIGC-Novel-Home.html')">Find</button>                                 
-                             </div>
-                         </div>
-                         <div class="blog-content" data-aos="fade-right" data-aos-delay="200">
-                             <img src="./assets/Project_Pic/img6.png" alt="post-6">
-                             <div class="blog-title">
-                                 <h3>Sci-fi setting</h3>
-                                 <button class="btn btn-blog" onclick="window.open('./webs/AIGC-SciFi.html')">Find</button>            
-                             </div>
-                         </div>
-                         <div class="blog-content" data-aos="fade-right" data-aos-delay="200">
-                            <img src="./assets/Project_Pic/img7.png" alt="post-1">
-                            <div class="blog-title">
-                                <h3>Chinese Style</h3>
-                                <button class="btn btn-blog" onclick="window.open('./webs/AIGC-ChineseStyle.html') " >Find</button>
-                              </div>
-                        </div>
-                         
-                     </div>
-                     <div class="owl-navigation">
-                         <span class="owl-nav-prev"><i class="fas fa-long-arrow-alt-left"></i></span>
-                         <span class="owl-nav-next"><i class="fas fa-long-arrow-alt-right"></i></span>
-                     </div>
-                 </div>
-             </div>
-         </section>
-         
+<!-- ================================================== marquee -->
+<div class="marquee" aria-hidden="true">
+    <div class="marquee-track" id="marquee">
+        <span>Architecture</span><b>✳</b>
+        <span>AIGC</span><b>✳</b>
+        <span>Multimodal AI</span><b>✳</b>
+        <span>BIM</span><b>✳</b>
+        <span>Computer Vision</span><b>✳</b>
+        <span>Illustration</span><b>✳</b>
+        <span>Architecture</span><b>✳</b>
+        <span>AIGC</span><b>✳</b>
+        <span>Multimodal AI</span><b>✳</b>
+        <span>BIM</span><b>✳</b>
+        <span>Computer Vision</span><b>✳</b>
+        <span>Illustration</span><b>✳</b>
+    </div>
+</div>
 
-         <!--X---------- Blog Carousel----------->
+<!-- ================================================== work -->
+<section class="section" id="work">
+    <div class="section-head reveal">
+        <div>
+            <p class="eyebrow">(01) — Selected</p>
+            <h2>Work</h2>
+        </div>
+        <p class="idx">Architecture · AIGC · Research</p>
+    </div>
 
-         
-         
-         
-         <!------------- Publications -------------->
+    <div class="work-grid">
+        <a class="tile a reveal" href="./webs/Architecture-Airport.html">
+            <img src="./assets/Project_Pic/img1.png" alt="Nanning Wuxu T3 Airport terminal render" loading="lazy">
+            <span class="num">01</span>
+            <div class="cap"><h3>Nanning Wuxu T3 Airport</h3><p>Architecture</p></div>
+        </a>
 
-         <section class="pub-section">
-             <h2 class="pub-heading" id="publications">Publications</h2>
-             <p class="pub-sub">
-                 Peer-reviewed papers and preprints on multimodal vision&ndash;language learning,
-                 biomedical AI and interpretable machine learning.
-             </p>
+        <a class="tile b reveal" href="./webs/Architecture-Hospital.html">
+            <img src="./assets/Project_Pic/img2.png" alt="Hospital project render" loading="lazy">
+            <span class="num">02</span>
+            <div class="cap"><h3>Hospital Projects</h3><p>Architecture</p></div>
+        </a>
 
-             <h3 class="pub-group-title">Selected publications</h3>
+        <a class="tile c reveal" href="./webs/Architecture-House.html">
+            <img src="./assets/Project_Pic/img3.png" alt="Architecture competition entry" loading="lazy">
+            <span class="num">03</span>
+            <div class="cap"><h3>Architecture Competition</h3><p>Architecture</p></div>
+        </a>
 
-             <div class="pub-list">
+        <a class="tile c reveal" href="#publications">
+            <img src="./assets/Project_Pic/img4.png" alt="Academic research visual" loading="lazy">
+            <span class="num">04</span>
+            <div class="cap"><h3>Academic Research</h3><p>Research</p></div>
+        </a>
 
-                 <!-- 2025 / conference -->
-                 <div class="pub-card" data-aos="fade-up" data-aos-delay="100">
-                     <div class="pub-year">2025</div>
-                     <div class="pub-body">
-                         <a class="pub-title"
-                            href="https://ieeexplore.ieee.org/document/11231955/"
-                            target="_blank" rel="noopener">
-                             AugBLIP: An Augmented Generative Model for Robust Multimodal Visual Question
-                             Answering via Data Augmentation Techniques
-                         </a>
-                         <p class="pub-authors"><strong>Yukun Wen</strong></p>
-                         <p class="pub-venue">
-                             2025 4th International Conference on Electronic Information Technology (EIT),
-                             Chengdu, China, 22&ndash;24 Aug 2025, pp. 687&ndash;691
-                         </p>
-                         <div class="pub-badges">
-                             <span class="pub-badge">Conference paper</span>
-                             <span class="pub-badge">IEEE Xplore</span>
-                             <span class="pub-badge">Multimodal VQA</span>
-                         </div>
-                         <div class="pub-links">
-                             <a href="https://ieeexplore.ieee.org/document/11231955/"
-                                target="_blank" rel="noopener">
-                                 <i class="fas fa-file-alt"></i> IEEE Xplore
-                             </a>
-                             <a href="https://doi.org/10.1109/EIT67313.2025.11231955"
-                                target="_blank" rel="noopener">
-                                 <i class="fas fa-link"></i> DOI
-                             </a>
-                         </div>
-                     </div>
-                 </div>
+        <a class="tile c reveal" href="./webs/AIGC-Novel-Home.html">
+            <img src="./assets/Project_Pic/img5.png" alt="Novel illustration" loading="lazy">
+            <span class="num">05</span>
+            <div class="cap"><h3>Novel Illustrations</h3><p>AIGC</p></div>
+        </a>
 
-                 <!-- 2025 / journal -->
-                 <div class="pub-card" data-aos="fade-up" data-aos-delay="200">
-                     <div class="pub-year">2025</div>
-                     <div class="pub-body">
-                         <a class="pub-title"
-                            href="https://doi.org/10.1111/dom.70087"
-                            target="_blank" rel="noopener">
-                             Advancing AI&#8209;driven biomarker discovery in diabetic nephropathy:
-                             A framework for robustness and interpretability
-                         </a>
-                         <p class="pub-authors">
-                             <strong>Yukun Wen</strong>, Shijie Zeng
-                         </p>
-                         <p class="pub-venue">
-                             Diabetes, Obesity and Metabolism, vol. 27, no. 12, pp. 7624&ndash;7626, Dec 2025
-                             (online 28 Aug 2025)
-                         </p>
-                         <div class="pub-badges">
-                             <span class="pub-badge">Journal article</span>
-                             <span class="pub-badge">Wiley</span>
-                             <span class="pub-badge">Biomedical AI</span>
-                         </div>
-                         <div class="pub-links">
-                             <a href="https://doi.org/10.1111/dom.70087"
-                                target="_blank" rel="noopener">
-                                 <i class="fas fa-link"></i> DOI
-                             </a>
-                             <a href="https://dom-pubs.onlinelibrary.wiley.com/doi/10.1111/dom.70087"
-                                target="_blank" rel="noopener">
-                                 <i class="fas fa-file-alt"></i> Publisher
-                             </a>
-                             <a href="https://pubmed.ncbi.nlm.nih.gov/40874392/"
-                                target="_blank" rel="noopener">
-                                 <i class="fas fa-database"></i> PubMed
-                             </a>
-                         </div>
-                     </div>
-                 </div>
+        <a class="tile d reveal" href="./webs/AIGC-SciFi.html">
+            <img src="./assets/Project_Pic/img6.png" alt="Science-fiction setting" loading="lazy">
+            <span class="num">06</span>
+            <div class="cap"><h3>Sci-fi Setting</h3><p>AIGC</p></div>
+        </a>
 
-                 <!-- 2024 / preprint -->
-                 <div class="pub-card" data-aos="fade-up" data-aos-delay="300">
-                     <div class="pub-year">2024</div>
-                     <div class="pub-body">
-                         <a class="pub-title"
-                            href="https://doi.org/10.1101/2024.08.02.24311442"
-                            target="_blank" rel="noopener">
-                             Identification and Modeling of Necroptosis&#8209;Related Genes Associated
-                             with the Prognosis of Breast Cancer
-                         </a>
-                         <p class="pub-authors"><strong>Yukun Wen</strong></p>
-                         <p class="pub-venue">
-                             medRxiv preprint (Health Informatics), first posted 5 Aug 2024;
-                             revised version 29 Jul 2025
-                         </p>
-                         <div class="pub-badges">
-                             <span class="pub-badge">Preprint</span>
-                             <span class="pub-badge">medRxiv</span>
-                             <span class="pub-badge">Cancer Bioinformatics</span>
-                         </div>
-                         <div class="pub-links">
-                             <a href="https://doi.org/10.1101/2024.08.02.24311442"
-                                target="_blank" rel="noopener">
-                                 <i class="fas fa-link"></i> DOI
-                             </a>
-                             <a href="https://www.medrxiv.org/content/10.1101/2024.08.02.24311442v2"
-                                target="_blank" rel="noopener">
-                                 <i class="fas fa-file-alt"></i> medRxiv
-                             </a>
-                             <a href="https://www.medrxiv.org/content/10.1101/2024.08.02.24311442v2.full.pdf"
-                                target="_blank" rel="noopener">
-                                 <i class="fas fa-file-pdf"></i> PDF
-                             </a>
-                         </div>
-                     </div>
-                 </div>
+        <a class="tile d reveal" href="./webs/AIGC-ChineseStyle.html">
+            <img src="./assets/Project_Pic/img7.png" alt="Chinese style illustration" loading="lazy">
+            <span class="num">07</span>
+            <div class="cap"><h3>Chinese Style</h3><p>AIGC</p></div>
+        </a>
+    </div>
 
-             </div>
+    <div class="work-more reveal">
+        <a class="link-arrow" href="./webs/AIGCHome.html">
+            AIGC gallery
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
+        </a>
+        <a class="link-arrow" href="./webs/ArchitectureHomePage.html">
+            Architecture archive
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
+        </a>
+        <a class="link-arrow" href="./webs/index2.html">
+            Journal
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
+        </a>
+    </div>
+</section>
 
-             <h3 class="pub-group-title">Additional publications</h3>
+<!-- ================================================== publications -->
+<section class="section" id="publications">
+    <div class="section-head reveal">
+        <div>
+            <p class="eyebrow">(02) — Research</p>
+            <h2>Publications</h2>
+        </div>
+        <p class="idx">07 papers · 2024—2025</p>
+    </div>
 
-             <div class="pub-list">
+    <div class="pub-list">
 
-                 <!-- 2025 / journal -->
-                 <div class="pub-card" data-aos="fade-up" data-aos-delay="100">
-                     <div class="pub-year">2025</div>
-                     <div class="pub-body">
-                         <a class="pub-title"
-                            href="https://doi.org/10.1016/j.oraloncology.2025.107635"
-                            target="_blank" rel="noopener">
-                             Advancing precision radiotherapy through AI/ML in appliance design and
-                             patient outcome prediction: a complement to the GUARD trial
-                         </a>
-                         <p class="pub-authors">
-                             <strong>Yukun Wen</strong>, Shijie Zeng
-                         </p>
-                         <p class="pub-venue">
-                             Oral Oncology, vol. 169, art. 107635, Oct 2025
-                         </p>
-                         <div class="pub-badges">
-                             <span class="pub-badge">Journal article</span>
-                             <span class="pub-badge">Elsevier</span>
-                             <span class="pub-badge">Clinical AI</span>
-                         </div>
-                         <div class="pub-links">
-                             <a href="https://doi.org/10.1016/j.oraloncology.2025.107635"
-                                target="_blank" rel="noopener">
-                                 <i class="fas fa-link"></i> DOI
-                             </a>
-                             <a href="https://pubmed.ncbi.nlm.nih.gov/40857967/"
-                                target="_blank" rel="noopener">
-                                 <i class="fas fa-database"></i> PubMed
-                             </a>
-                         </div>
-                     </div>
-                 </div>
-
-                 <!-- 2025 / journal -->
-                 <div class="pub-card" data-aos="fade-up" data-aos-delay="200">
-                     <div class="pub-year">2025</div>
-                     <div class="pub-body">
-                         <a class="pub-title"
-                            href="https://doi.org/10.1111/jdv.70061"
-                            target="_blank" rel="noopener">
-                             The unmet potential of patient context in melanoma AI: Addressing design
-                             and data biases
-                         </a>
-                         <p class="pub-authors">
-                             <strong>Yukun Wen</strong>, Shijie Zeng
-                         </p>
-                         <p class="pub-venue">
-                             Journal of the European Academy of Dermatology and Venereology, 2025
-                         </p>
-                         <div class="pub-badges">
-                             <span class="pub-badge">Journal article</span>
-                             <span class="pub-badge">Wiley</span>
-                             <span class="pub-badge">Clinical AI</span>
-                         </div>
-                         <div class="pub-links">
-                             <a href="https://doi.org/10.1111/jdv.70061"
-                                target="_blank" rel="noopener">
-                                 <i class="fas fa-link"></i> DOI
-                             </a>
-                             <a href="https://pubmed.ncbi.nlm.nih.gov/40956150/"
-                                target="_blank" rel="noopener">
-                                 <i class="fas fa-database"></i> PubMed
-                             </a>
-                         </div>
-                     </div>
-                 </div>
-
-                 <!-- 2025 / journal -->
-                 <div class="pub-card" data-aos="fade-up" data-aos-delay="300">
-                     <div class="pub-year">2025</div>
-                     <div class="pub-body">
-                         <a class="pub-title"
-                            href="https://doi.org/10.1111/ijd.70057"
-                            target="_blank" rel="noopener">
-                             Enhancing Equitable Sun Protection: Cost&#8209;Effectiveness and Cluster
-                             Analysis for South Africa
-                         </a>
-                         <p class="pub-authors">
-                             <strong>Yukun Wen</strong>, Shijie Zeng
-                         </p>
-                         <p class="pub-venue">
-                             International Journal of Dermatology, 2025
-                         </p>
-                         <div class="pub-badges">
-                             <span class="pub-badge">Journal article</span>
-                             <span class="pub-badge">Wiley</span>
-                             <span class="pub-badge">Health Analytics</span>
-                         </div>
-                         <div class="pub-links">
-                             <a href="https://doi.org/10.1111/ijd.70057"
-                                target="_blank" rel="noopener">
-                                 <i class="fas fa-link"></i> DOI
-                             </a>
-                             <a href="https://pubmed.ncbi.nlm.nih.gov/40899480/"
-                                target="_blank" rel="noopener">
-                                 <i class="fas fa-database"></i> PubMed
-                             </a>
-                         </div>
-                     </div>
-                 </div>
-
-                 <!-- 2024 / journal, co-author -->
-                 <div class="pub-card" data-aos="fade-up" data-aos-delay="400">
-                     <div class="pub-year">2024</div>
-                     <div class="pub-body">
-                         <a class="pub-title"
-                            href="https://doi.org/10.1016/j.jksuci.2024.102219"
-                            target="_blank" rel="noopener">
-                             Firefly forest: A swarm iteration&#8209;free swarm intelligence clustering algorithm
-                         </a>
-                         <p class="pub-authors">
-                             Shijie Zeng, Yuefei Wang, <strong>Yukun Wen</strong>, Xi Yu, Binxiong Li, Zixu Wang
-                         </p>
-                         <p class="pub-venue">
-                             Journal of King Saud University &ndash; Computer and Information Sciences,
-                             vol. 36, no. 9, art. 102219, Nov 2024
-                         </p>
-                         <div class="pub-badges">
-                             <span class="pub-badge">Journal article</span>
-                             <span class="pub-badge">Co&#8209;author</span>
-                             <span class="pub-badge">Swarm Intelligence</span>
-                         </div>
-                         <div class="pub-links">
-                             <a href="https://doi.org/10.1016/j.jksuci.2024.102219"
-                                target="_blank" rel="noopener">
-                                 <i class="fas fa-link"></i> DOI
-                             </a>
-                             <a href="https://link.springer.com/content/pdf/10.1016/j.jksuci.2024.102219.pdf"
-                                target="_blank" rel="noopener">
-                                 <i class="fas fa-file-pdf"></i> PDF
-                             </a>
-                         </div>
-                     </div>
-                 </div>
-
-             </div>
-
-             <p class="pub-note">
-                 Full record: <a href="https://orcid.org/0009-0004-8894-4758" target="_blank" rel="noopener">ORCID</a>
-                 &nbsp;&middot;&nbsp;
-                 <a href="https://www.semanticscholar.org/author/2327514258" target="_blank" rel="noopener">Semantic Scholar</a>
-                 &nbsp;&middot;&nbsp;
-                 <a href="https://github.com/Yukun-Wen" target="_blank" rel="noopener">GitHub</a>
-             </p>
-         </section>
-
-         <!--X----------- Publications -------------->
-
-
-         <!------------- Site Content-------------->
-
-
-         <section class="container">
-             <div class="site-content" id="articles">
-                 <div class="posts">
-                     <div class="post-content" data-aos="zoom-in" data-aos-delay="200">
-                         <div class="post-image">
-                             <div>
-                                 <img src="./assets/Index_Page/ICON.jpg" class="img" alt="blog1">
-                             </div>
-                             <div class="post-info flex-row">
-                                 <span><i class="fas fa-calendar-alt text-gray"></i>&nbsp;&nbsp; 2024/07/10</span>
-                                 <span>Personal</span>
-                             </div>
-                         </div>
-                         <div class="post-title">
-                             <a href="webs/CV/CV_Yukun Wen.pdf">Curriculum Vitae</a>
-                             <p>I am the author of this blog Yukun Wen, and you can check my CV here...</p>
-                             <a href="webs/CV/CV_Yukun Wen.pdf" target="blank"><button class="btn post-btn">Read More &nbsp;<i class="fas fa-arrow-right"></i></button></a>
-                         </div>
-                     </div>
-                     <hr>
-                     <div class="post-content" data-aos="zoom-in" data-aos-delay="200">
-                         <div class="post-image">
-                             <div>
-                                 <img src="./assets/Index_Page/NineSongs.jpg" class="img" alt="blog1">
-                             </div>
-                             <div class="post-info flex-row">
-                                 <span><i class="fas fa-calendar-alt text-gray"></i>&nbsp;&nbsp; 2023/12/22</span>
-                                 <span>AIGC</span>
-                             </div>
-                         </div>
-                         <div class="post-title">
-                             <a href="webs/AIGC-ChineseStyle-CCNS.html">The Songs of Chu Nine Songs</a>
-                             <p>Jiu Ge, or Nine Songs is an ancient set of poems...</p>
-                             <a href="webs/AIGC-ChineseStyle-CCNS.html" target="blank"><button class="btn post-btn">Read More &nbsp;<i class="fas fa-arrow-right"></i></button></a>
-                         </div>
-                     </div>
-                     <hr>
-                     <div class="post-content" data-aos="zoom-in" data-aos-delay="200">
-                         <div class="post-image">
-                             <div>
-                                 <img src="./assets/Index_Page/The Book of Poetry.jpg   " class="img" alt="blog2">
-                             </div>
-                             <div class="post-info flex-row">
-                                 <span><i class="fas fa-calendar-alt text-gray"></i>&nbsp;&nbsp; 2023/10/25</span>
-                                 <span>AIGC</span>
-                             </div>
-                         </div>
-                         <div class="post-title">
-                             <a href="./webs/AIGC-ChineseStyle-TBP.html">The Book of Poetry</a>
-                             <p>The Classic of Poetry, also Shijing or Shih-ching, translated variously as the Book of Songs,...</p>
-                             <a href="./webs/AIGC-ChineseStyle-TBP.html"><button class="btn post-btn">Read More &nbsp;<i class="fas fa-arrow-right"></i></button></a>
-                         </div>
-                     </div>
-                     <hr>
-                     <div class="post-content" data-aos="zoom-in" data-aos-delay="200">
-                         <div class="post-image">
-                             <div>
-                                 <img src="./assets/Index_Page/Children's Illlustrated Book.jpg" class="img" alt="blog3">
-                             </div>
-                             <div class="post-info flex-row">
-                                 <span><i class="fas fa-calendar-alt text-gray"></i>&nbsp;&nbsp; 2023/9/29</span>
-                                 <span>AIGC</span>
-                             </div>
-                         </div>
-                         <div class="post-title">
-                             <a href="./webs/AIGC-Children'sIlllustratedBook.html">Children's Illlustrated Book</a>
-                             <p>This is a set of AIGC works related to fairy tales...</p>
-                             <a href="./webs/AIGC-Children'sIlllustratedBook.html"><button class="btn post-btn">Read More &nbsp;<i class="fas fa-arrow-right"></i></button></a>
-                         </div>
-                     </div>
-                     <hr>
-                     <div class="post-content" data-aos="zoom-in" data-aos-delay="200">
-                        <div class="post-image">
-                            <div>
-                                <img src="./assets/Index_Page/Classic.jpg" class="img" alt="blog3">
-                            </div>
-                            <div class="post-info flex-row">
-                                <span><i class="fas fa-calendar-alt text-gray"></i>&nbsp;&nbsp; 2023/9/29</span>
-                                <span>AIGC</span>
-                            </div>
-                        </div>
-                        <div class="post-title">
-                            <a href="./webs/AIGC-classic.html">Classic</a>
-                            <p>This is a set of AIGC works related to classic pictures...</p>
-                            <a href="./webs/AIGC-classic.html"><button class="btn post-btn">Read More &nbsp;<i class="fas fa-arrow-right"></i></button></a>
-                        </div>
-                    </div>
-                    <hr>
-                     <div class="pagination flex-row">
-                         <a href="#"><i class="fas fa-chevron-left"></i></a>
-                         <a href="#" class="pages-now">1</a>
-                         <a href="./webs/index2.html" class="pages">2</a>
-                         <a href="./webs/index2.html"><i class="fas fa-chevron-right"></i></a>
-                     </div>
-                 </div>
-                 <aside class="sidebar">
-                     <div class="category">
-                         <h2 id="Category">Category</h2>
-                         <ul class="category-list">
-                             <li class="list-items" data-aos="fade-left" data-aos-delay="100">
-                                 <a href="#">AIGC</a>
-                                 <span>(12)</span>
-                             </li>
-                             <li class="list-items" data-aos="fade-left" data-aos-delay="200">
-                                 <a href="#">Architecture</a>
-                                 <span>(05)</span>
-                             </li>
-                             <li class="list-items" data-aos="fade-left" data-aos-delay="300">
-                                 <a href="#">BIM</a>
-                                 <span>(03)</span>
-                             </li>
-                             <li class="list-items" data-aos="fade-left" data-aos-delay="400">
-                                 <a href="#">Machine Learning</a>
-                                 <span>(03)</span>
-                             </li>
-                             <li class="list-items" data-aos="fade-left" data-aos-delay="500">
-                                <a href="#">Deep Learning</a>
-                                <span>(02)</span>
-                            </li>
-                         </ul>          
-                         </ul>
-                     </div>
-                     <div class="popular-post">
-                         <h2>Popular Post</h2>
-                         <div class="post-content" data-aos="flip-up" data-aos-delay="200">
-                            <div class="post-image">
-                                <div>
-                                    <img src="./assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_02.png" class="img" alt="m-blog1">
-                                </div>
-                                <div class="post-info flex-row">
-                                    <span><i class="fas fa-calendar-alt text-gray"></i>&nbsp;&nbsp; 2023/10/12</span>
-                                    <span>AIGC</span>
-                                </div>
-                            </div>
-                            <div class="post-title">
-                                <a href="./webs/AIGC-Children'sIlllustratedBook.html">Children's Illlustrated Book</a>
-                                
-                            </div>
-                        </div>
-                         <div class="post-content" data-aos="flip-up" data-aos-delay="300">
-                            <div class="post-image">
-                                <div>
-                                    <img src="./assets/AIGC/ChinieseStyle/TheSongsofChuNineSongs/TheSongsofChuNineSongs_01.png" class="img" alt="m-blog2">
-                                </div>
-                                <div class="post-info flex-row">
-                                    <span><i class="fas fa-calendar-alt text-gray"></i>&nbsp;&nbsp; 2023/11/27</span>
-                                    <span>AIGC</span>
-                                </div>
-                            </div>
-                            <div class="post-title">
-                                <a href="./webs/AIGC-ChineseStyle-TBP.html">The Songs of Chu Nine Songs</a>
-                                
-                            </div>
-                        </div>
-                         <div class="post-content" data-aos="flip-up" data-aos-delay="400">
-                            <div class="post-image">
-                                <div>
-                                    <img src="./assets/Architecture/Airport/FYQ2.png" class="img" alt="m-blog3">
-                                </div>
-                                <div class="post-info flex-row">
-                                    <span><i class="fas fa-calendar-alt text-gray"></i>&nbsp;&nbsp; 2022/12/06</span>
-                                    <span>Architecture</span>
-                                </div>
-                            </div>
-                            <div class="post-title">
-                                <a href="./webs/Architecture-Airport.html">Airport</a>
-                                
-                            </div>
-                        </div>
-                         <div class="post-content" data-aos="flip-up" data-aos-delay="500">
-                            <div class="post-image">
-                                <div>
-                                    <img src="./assets/Architecture/Hospital/ChildrenHospital.png" class="img" alt="m-blog3">
-                                </div>
-                                <div class="post-info flex-row">
-                                    <span><i class="fas fa-calendar-alt text-gray"></i>&nbsp;&nbsp; 2021/12/16</span>
-                                    <span>Architecture</span>
-                                </div>
-                            </div>
-                            <div class="post-title">
-                                <a href="#">Children Hospital</a>
-                                
-                            </div>
-                        </div>
-                     </div>
-                     <div class="newsletter" data-aos="fade-up" data-aos-delay="300">
-                         <h2>newsletter</h2>
-                         <div class="form-element">
-                             <input type="text" class="input-element" placeholder="Email">
-                             <button class="btn form-btn">Subscribe</button>
-                         </div>
-                     </div>
-                     <div class="popular-tags">
-                         <h2>My Skills</h2>
-                         <div class="tags flex-row">
-                             <span class="tag" data-aos="filp-up" data-aos-delay="100">Machine Learning</span>
-                             <span class="tag" data-aos="filp-up" data-aos-delay="200">Deep Learning</span>
-                             <span class="tag" data-aos="filp-up" data-aos-delay="300">Large Language Models</span>
-                             <span class="tag" data-aos="filp-up" data-aos-delay="400">Computer Vision</span>
-                             <span class="tag" data-aos="filp-up" data-aos-delay="500">Multimodality</span>
-                             <span class="tag" data-aos="filp-up" data-aos-delay="600">Architecture Design</span>
-                             <span class="tag" data-aos="filp-up" data-aos-delay="700">BIM</span>
-                             <span class="tag" data-aos="filp-up" data-aos-delay="800">Mid Journey</span>
-                             <span class="tag" data-aos="filp-up" data-aos-delay="900">Stable Diffusion</span>
-                         </div>
-                     </div>
-                 </aside>
-             </div>
-         </section>
-
-
-        <!--X----------- Site Content-------------->
-    </main>
-
-
-    <!--X------- Main Site Section------------>
-
-
-    <!------------------Footer----------------->
-
-    <footer class="footer">
-        <div class="container">
-            <div class="about-us" data-aos="fade-right" data-aos-delay="200">
-                <h2>About the blog</h2>
-                <p>This blog is used to share my projects. You can find my latest works on it.</p>
+        <article class="pub reveal">
+            <div class="yr">2024</div>
+            <div class="pub-main">
+                <h3><a href="https://doi.org/10.1016/j.jksuci.2024.102219" target="_blank" rel="noopener">Firefly forest: A swarm iteration-free swarm intelligence clustering algorithm</a></h3>
+                <p class="line">
+                    <span class="who">Shijie Zeng, Yuefei Wang, Yukun Wen, Xi Yu, Binxiong Li, Zixu Wang</span>
+                    <span class="sep">·</span>
+                    <span class="venue">Journal of King Saud University — Computer and Information Sciences, 36(9), 102219</span>
+                    <span class="sep">·</span>
+                    <span>Co-author</span>
+                </p>
             </div>
-            <div class="newletter" data-aos="fade-right" data-aos-delay="200">
-                <h2>Page Views</h2>
-                <a href="https://clustrmaps.com/site/1c0ex"  title="Visit tracker"><img src="//www.clustrmaps.com/map_v2.png?d=X8vRNXhs_-yNq52z4QEx724MBHsJS1UMqCVq0JZOytI&cl=ffffff" /></a>
+            <div class="pub-acts">
+                <a href="https://doi.org/10.1016/j.jksuci.2024.102219" target="_blank" rel="noopener">DOI</a>
+                <a href="https://link.springer.com/content/pdf/10.1016/j.jksuci.2024.102219.pdf" target="_blank" rel="noopener">PDF</a>
             </div>
-            <div class="pixiv" data-aos="fade-left" data-aos-delay="200">
-                <h2>My Projects</h2>
-                <div class="flex-row">
-                    <img src="./assets/Architecture/HomePage/P1.png" alt="pix1">
-                    <img src="./assets/Architecture/HomePage/P2.png" alt="pix2">
-                    <img src="./assets/Architecture/HomePage/P3.png" alt="pix3">
-                </div>
-                <div class="flex-row">
-                    <img src="./assets/Architecture/Hospital/ChildrenHospital.png" alt="pix4">
-                    <img src="./assets/Architecture/Hospital/Jinxiu.png" alt="pix5">
-                    <img src="./assets/Architecture/Hospital/LaibinChinese.png" alt="pix6">
-                </div>
+        </article>
+
+        <article class="pub reveal">
+            <div class="yr">2025</div>
+            <div class="pub-main">
+                <h3><a href="https://ieeexplore.ieee.org/document/11231955/" target="_blank" rel="noopener">AugBLIP: An Augmented Generative Model for Robust Multimodal Visual Question Answering via Data Augmentation Techniques</a></h3>
+                <p class="line">
+                    <span class="who">Yukun Wen</span>
+                    <span class="sep">·</span>
+                    <span class="venue">2025 4th International Conference on Electronic Information Technology (EIT), Chengdu, China, pp. 687–691</span>
+                </p>
             </div>
-            <div class="follow" data-aos="fade-left" data-aos-delay="200">
-                <h2 id="Contact">Contact Me</h2>
-                <p>wenyukun.edu@gmail.com</p>
-                <p>tel:+86 18278719323</p>
-                <div>
-                    <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2632292881&site=qq&menu=yes"><i class="fab fa-qq"></i></a>
-                    <a href="#"><i class="fab fa-weixin"></i></a>
-                    <a href="#"><i class="fab fa-weibo"></i></a>
-                    <a href="#"><i class="fab fa-tiktok"></i></a>
-                </div>
+            <div class="pub-acts">
+                <a href="https://ieeexplore.ieee.org/document/11231955/" target="_blank" rel="noopener">IEEE Xplore</a>
+                <a href="https://doi.org/10.1109/EIT67313.2025.11231955" target="_blank" rel="noopener">DOI</a>
+            </div>
+        </article>
+
+        <article class="pub reveal">
+            <div class="yr">2025</div>
+            <div class="pub-main">
+                <h3><a href="https://doi.org/10.1111/dom.70087" target="_blank" rel="noopener">Advancing AI&#8209;driven biomarker discovery in diabetic nephropathy: A framework for robustness and interpretability</a></h3>
+                <p class="line">
+                    <span class="who">Yukun Wen, Shijie Zeng</span>
+                    <span class="sep">·</span>
+                    <span class="venue">Diabetes, Obesity and Metabolism, 27(12), 7624–7626</span>
+                </p>
+            </div>
+            <div class="pub-acts">
+                <a href="https://doi.org/10.1111/dom.70087" target="_blank" rel="noopener">DOI</a>
+                <a href="https://pubmed.ncbi.nlm.nih.gov/40874392/" target="_blank" rel="noopener">PubMed</a>
+            </div>
+        </article>
+
+        <article class="pub reveal">
+            <div class="yr">2024</div>
+            <div class="pub-main">
+                <h3><a href="https://doi.org/10.1101/2024.08.02.24311442" target="_blank" rel="noopener">Identification and Modeling of Necroptosis&#8209;Related Genes Associated with the Prognosis of Breast Cancer</a></h3>
+                <p class="line">
+                    <span class="who">Yukun Wen</span>
+                    <span class="sep">·</span>
+                    <span class="venue">medRxiv preprint — Health Informatics; first posted 5 Aug 2024, revised 29 Jul 2025</span>
+                </p>
+            </div>
+            <div class="pub-acts">
+                <a href="https://doi.org/10.1101/2024.08.02.24311442" target="_blank" rel="noopener">DOI</a>
+                <a href="https://www.medrxiv.org/content/10.1101/2024.08.02.24311442v2" target="_blank" rel="noopener">medRxiv</a>
+                <a href="https://www.medrxiv.org/content/10.1101/2024.08.02.24311442v2.full.pdf" target="_blank" rel="noopener">PDF</a>
+            </div>
+        </article>
+
+        <article class="pub reveal">
+            <div class="yr">2025</div>
+            <div class="pub-main">
+                <h3><a href="https://doi.org/10.1016/j.oraloncology.2025.107635" target="_blank" rel="noopener">Advancing precision radiotherapy through AI/ML in appliance design and patient outcome prediction: a complement to the GUARD trial</a></h3>
+                <p class="line">
+                    <span class="who">Yukun Wen, Shijie Zeng</span>
+                    <span class="sep">·</span>
+                    <span class="venue">Oral Oncology, 169, 107635</span>
+                </p>
+            </div>
+            <div class="pub-acts">
+                <a href="https://doi.org/10.1016/j.oraloncology.2025.107635" target="_blank" rel="noopener">DOI</a>
+                <a href="https://pubmed.ncbi.nlm.nih.gov/40857967/" target="_blank" rel="noopener">PubMed</a>
+            </div>
+        </article>
+
+        <article class="pub reveal">
+            <div class="yr">2025</div>
+            <div class="pub-main">
+                <h3><a href="https://doi.org/10.1111/jdv.70061" target="_blank" rel="noopener">The unmet potential of patient context in melanoma AI: Addressing design and data biases</a></h3>
+                <p class="line">
+                    <span class="who">Yukun Wen, Shijie Zeng</span>
+                    <span class="sep">·</span>
+                    <span class="venue">Journal of the European Academy of Dermatology and Venereology</span>
+                </p>
+            </div>
+            <div class="pub-acts">
+                <a href="https://doi.org/10.1111/jdv.70061" target="_blank" rel="noopener">DOI</a>
+                <a href="https://pubmed.ncbi.nlm.nih.gov/40956150/" target="_blank" rel="noopener">PubMed</a>
+            </div>
+        </article>
+
+        <article class="pub reveal">
+            <div class="yr">2025</div>
+            <div class="pub-main">
+                <h3><a href="https://doi.org/10.1111/ijd.70057" target="_blank" rel="noopener">Enhancing Equitable Sun Protection: Cost&#8209;Effectiveness and Cluster Analysis for South Africa</a></h3>
+                <p class="line">
+                    <span class="who">Yukun Wen, Shijie Zeng</span>
+                    <span class="sep">·</span>
+                    <span class="venue">International Journal of Dermatology</span>
+                </p>
+            </div>
+            <div class="pub-acts">
+                <a href="https://doi.org/10.1111/ijd.70057" target="_blank" rel="noopener">DOI</a>
+                <a href="https://pubmed.ncbi.nlm.nih.gov/40899480/" target="_blank" rel="noopener">PubMed</a>
+            </div>
+        </article>
+
+    </div>
+
+    <div class="pub-note reveal">
+        <a href="https://orcid.org/0009-0004-8894-4758" target="_blank" rel="noopener">ORCID</a>
+        <a href="https://www.semanticscholar.org/author/2327514258" target="_blank" rel="noopener">Semantic Scholar</a>
+        <a href="https://github.com/Yukun-Wen" target="_blank" rel="noopener">GitHub</a>
+    </div>
+</section>
+
+<!-- ================================================== about -->
+<section class="section" id="about">
+    <div class="section-head reveal">
+        <div>
+            <p class="eyebrow">(03) — Contact</p>
+            <h2>About</h2>
+        </div>
+        <p class="idx">Kuala Lumpur, Malaysia</p>
+    </div>
+
+    <div class="about-grid">
+        <div class="about-text reveal">
+            <p>
+                I work between architecture and machine learning — designing airports,
+                hospitals and schools, then teaching machines to see, read and draw.
+                My research centres on multimodal vision–language models, data
+                augmentation for robust visual question answering, and interpretable
+                AI for biomedical discovery.
+            </p>
+            <p class="dim">
+                Faculty of Computer Science and Information Technology, Universiti Malaya.
+                Open to collaboration on multimodal learning and computational design.
+            </p>
+        </div>
+
+        <div class="reveal">
+            <div class="contact-list">
+                <a class="contact-row" href="mailto:wenyukun.edu@gmail.com">
+                    <span class="k">Email</span>
+                    <span class="v">wenyukun.edu@gmail.com</span>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
+                </a>
+                <a class="contact-row" href="tel:+8618278719323">
+                    <span class="k">Phone</span>
+                    <span class="v">+86 182 7871 9323</span>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
+                </a>
+                <a class="contact-row" href="https://orcid.org/0009-0004-8894-4758" target="_blank" rel="noopener">
+                    <span class="k">ORCID</span>
+                    <span class="v">0009-0004-8894-4758</span>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
+                </a>
+                <a class="contact-row" href="https://github.com/Yukun-Wen" target="_blank" rel="noopener">
+                    <span class="k">GitHub</span>
+                    <span class="v">Yukun-Wen</span>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
+                </a>
+                <a class="contact-row" href="./webs/CV/CV_Yukun%20Wen.pdf" target="_blank" rel="noopener">
+                    <span class="k">CV</span>
+                    <span class="v">Download PDF</span>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
+                </a>
             </div>
         </div>
-        <div class="move-up">
-            <span><i class="fas fa-arrow-circle-up fa-2x"></i></span>
-        </div>
-    </footer>
+    </div>
+</section>
 
+</main>
 
+<!-- ================================================== footer -->
+<footer class="footer">
+    <div class="footer-inner">
+        <span>© <span id="yr">2026</span> Yukun Wen — Design your life</span>
+        <span>
+            <a href="https://yukun-wen.github.io/">yukun-wen.github.io</a>
+        </span>
+        <span class="tracker">
+            <a href="https://clustrmaps.com/site/1c0ex" title="Visit tracker" target="_blank" rel="noopener">
+                <img src="https://www.clustrmaps.com/map_v2.png?d=X8vRNXhs_-yNq52z4QEx724MBHsJS1UMqCVq0JZOytI&amp;cl=ffffff" alt="Visitor map" loading="lazy">
+            </a>
+        </span>
+    </div>
+</footer>
 
+<script>
+(function () {
+    "use strict";
 
-    
-    <!--X----------------Footer----------------->
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
-    <!--Jquery Library file-->
-    <script src="js/Jquery3.5.1.min.js"></script>
+    /* ---------- year ---------- */
+    var yr = document.getElementById("yr");
+    if (yr) { yr.textContent = new Date().getFullYear(); }
 
+    /* ---------- scroll progress + nav state ---------- */
+    var nav = document.getElementById("nav");
+    var bar = document.getElementById("progress");
 
-    <!------------ Owl-Carousel ------------>
-    <script src="./js/owl.carousel.min.js"></script>
+    function onScroll() {
+        var doc = document.documentElement;
+        var max = doc.scrollHeight - doc.clientHeight;
+        var p = max > 0 ? doc.scrollTop / max : 0;
+        if (bar) { bar.style.transform = "scaleX(" + p + ")"; }
+        if (nav) { nav.classList.toggle("scrolled", doc.scrollTop > 12); }
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
 
+    /* ---------- mobile menu ---------- */
+    var btn = document.getElementById("menuBtn");
+    if (btn) {
+        btn.addEventListener("click", function () {
+            var open = document.body.classList.toggle("menu-open");
+            btn.setAttribute("aria-expanded", open ? "true" : "false");
+        });
+    }
 
+    /* ---------- smooth anchor scrolling ---------- */
+    document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+        a.addEventListener("click", function (e) {
+            var id = a.getAttribute("href");
+            if (!id || id.length < 2) { return; }
+            var target = document.querySelector(id);
+            if (!target) { return; }
+            e.preventDefault();
+            document.body.classList.remove("menu-open");
+            if (btn) { btn.setAttribute("aria-expanded", "false"); }
+            target.scrollIntoView({
+                behavior: reduce ? "auto" : "smooth",
+                block: "start"
+            });
+        });
+    });
 
+    /* ---------- reveal on scroll ---------- */
+    var reveals = document.querySelectorAll(".reveal");
+    if (reduce || !("IntersectionObserver" in window)) {
+        reveals.forEach(function (el) { el.classList.add("in"); });
+    } else {
+        var ro = new IntersectionObserver(function (entries) {
+            entries.forEach(function (en) {
+                if (en.isIntersecting) {
+                    en.target.classList.add("in");
+                    ro.unobserve(en.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: "0px 0px -8% 0px" });
+        reveals.forEach(function (el) { ro.observe(el); });
+    }
 
-    <!--------------------- AOS js Library---------------->
-    <script src="js/aos.js"></script>
+    /* ---------- active nav link ---------- */
+    var links = {};
+    document.querySelectorAll('.nav-links a[href^="#"]').forEach(function (a) {
+        links[a.getAttribute("href").slice(1)] = a;
+    });
+    var sections = document.querySelectorAll("section[id]");
+    if ("IntersectionObserver" in window && sections.length) {
+        var so = new IntersectionObserver(function (entries) {
+            entries.forEach(function (en) {
+                if (!en.isIntersecting) { return; }
+                Object.keys(links).forEach(function (k) {
+                    links[k].classList.toggle("active", k === en.target.id);
+                });
+            });
+        }, { rootMargin: "-46% 0px -50% 0px", threshold: 0 });
+        sections.forEach(function (s) { so.observe(s); });
+    }
 
+    /* ---------- custom cursor ---------- */
+    var cur = document.getElementById("cursor");
+    if (cur && finePointer && !reduce) {
+        var cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+        var tx = cx, ty = cy;
+        var shown = false;
 
+        window.addEventListener("mousemove", function (e) {
+            tx = e.clientX; ty = e.clientY;
+            if (!shown) { shown = true; cur.classList.add("on"); }
+        }, { passive: true });
 
-    <!--Custom Javascript file-->
-    <script src="js/main.js"></script>
+        function loop() {
+            cx += (tx - cx) * 0.18;
+            cy += (ty - cy) * 0.18;
+            cur.style.transform = "translate3d(" + cx + "px," + cy + "px,0)";
+            requestAnimationFrame(loop);
+        }
+        loop();
+
+        document.querySelectorAll("a, button, .tile").forEach(function (el) {
+            el.addEventListener("mouseenter", function () { cur.classList.add("grow"); });
+            el.addEventListener("mouseleave", function () { cur.classList.remove("grow"); });
+        });
+    }
+
+    /* ---------- magnetic buttons ---------- */
+    if (finePointer && !reduce) {
+        document.querySelectorAll(".mag").forEach(function (el) {
+            el.addEventListener("mousemove", function (e) {
+                var r = el.getBoundingClientRect();
+                var dx = (e.clientX - r.left - r.width / 2) * 0.16;
+                var dy = (e.clientY - r.top - r.height / 2) * 0.3;
+                el.style.transform = "translate(" + dx + "px," + dy + "px)";
+            });
+            el.addEventListener("mouseleave", function () {
+                el.style.transform = "";
+            });
+        });
+    }
+
+    /* ---------- hero parallax ---------- */
+    var fig = document.getElementById("heroFig");
+    if (fig && finePointer && !reduce) {
+        var img = fig.querySelector("img");
+        fig.addEventListener("mousemove", function (e) {
+            var r = fig.getBoundingClientRect();
+            var dx = ((e.clientX - r.left) / r.width - 0.5) * 14;
+            var dy = ((e.clientY - r.top) / r.height - 0.5) * 14;
+            img.style.transform = "scale(1.1) translate(" + (-dx) + "px," + (-dy) + "px)";
+        });
+        fig.addEventListener("mouseleave", function () {
+            img.style.transform = "";
+        });
+    }
+
+    /* ---------- marquee: duplicate track for seamless loop ---------- */
+    var track = document.getElementById("marquee");
+    if (track && track.children.length) {
+        track.innerHTML = track.innerHTML + track.innerHTML;
+    }
+})();
+</script>
 </body>
 </html>
