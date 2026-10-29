@@ -1730,7 +1730,15 @@ html[data-theme="dark"] .perch .p-shade{opacity:.28}
 
 /* the first panel sits at the very top of the page, so its bird drops
    down inside the panel to give the bubble room above its head */
-.perch.p1{top:48px}
+.perch.p1{
+    /* sits under the un of Yukun, ground line on the baseline, behind the type */
+    top:262px;
+    z-index:-1;
+}
+.perch.p1 .perch-say{
+    /* lift the bubble clear of the headline so the letters never cover it */
+    bottom:calc(100% + 116px);
+}
 /* the pebble bubble only ever holds one mark, so park it beside the bird
    instead of over the ground where the pebble sits */
 .perch.beat .perch-say{
@@ -1884,7 +1892,7 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
 <!-- ============================================ hero -->
 <section class="hero" id="home">
     <div class="wrap hero-inner">
-            <button class="perch p1" data-say="My master, this is all yours: papers, buildings, strange pictures. A tour? I can't fly and you can't perch.|At your service, my master. Research, architecture, generated art. My only note was 'more worms'.|My master, you built an empire of tabs. I've read three. Don't tell the other birds." type="button" style="--perch-x:16%"
+            <button class="perch p1" data-say="My master, this is all yours: papers, buildings, strange pictures. A tour? I can't fly and you can't perch.|At your service, my master. Research, architecture, generated art. My only note was 'more worms'.|My master, you built an empire of tabs. I've read three. Don't tell the other birds." type="button" style="--perch-x:24%"
                 aria-label="What this section tells you about Yukun Wen">
                 <span class="perch-land" aria-hidden="true"><span class="perch-track"></span></span>
                 <span class="perch-stone" aria-hidden="true"></span>
