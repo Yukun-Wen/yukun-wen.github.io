@@ -1503,6 +1503,50 @@ html[data-theme="dark"] .perch .p-shade{opacity:.28}
 .perch.p5 .p-idle,.perch.p5 .p-legA,.perch.p5 .p-legB{animation-delay:-1.85s}
 .perch.p6 .p-idle,.perch.p6 .p-legA,.perch.p6 .p-legB{animation-delay:-0.35s}
 
+/* every so often the bird throws its head up and cackles */
+.perch .p-laugh,
+.perch .p-jaw{
+    transform-box:view-box;
+    animation-delay:inherit;
+}
+.perch .p-laugh{
+    transform-origin:62px 116px;
+    animation:laugh-tilt 8.2s cubic-bezier(.4,0,.3,1) infinite;
+}
+.perch .p-jaw{
+    transform-origin:22px 48px;
+    animation:laugh-jaw 8.2s cubic-bezier(.4,0,.3,1) infinite;
+}
+
+@keyframes laugh-tilt{
+    0%,58%  {transform:rotate(0deg)}
+    64%     {transform:rotate(6deg)}
+    70%     {transform:rotate(1.5deg)}
+    76%     {transform:rotate(7deg)}
+    82%     {transform:rotate(2deg)}
+    88%     {transform:rotate(5deg)}
+    94%,100%{transform:rotate(0deg)}
+}
+@keyframes laugh-jaw{
+    0%,58%  {transform:rotate(0deg)}
+    62%     {transform:rotate(-27deg)}
+    66%     {transform:rotate(-3deg)}
+    70%     {transform:rotate(-26deg)}
+    74%     {transform:rotate(-4deg)}
+    78%     {transform:rotate(-25deg)}
+    82%     {transform:rotate(-3deg)}
+    86%     {transform:rotate(-24deg)}
+    90%     {transform:rotate(-2deg)}
+    94%,100%{transform:rotate(0deg)}
+}
+
+.perch.p1 .p-laugh,.perch.p1 .p-jaw{animation-delay:-3.1s}
+.perch.p2 .p-laugh,.perch.p2 .p-jaw{animation-delay:-7.4s}
+.perch.p3 .p-laugh,.perch.p3 .p-jaw{animation-delay:-0.9s}
+.perch.p4 .p-laugh,.perch.p4 .p-jaw{animation-delay:-5.6s}
+.perch.p5 .p-laugh,.perch.p5 .p-jaw{animation-delay:-1.8s}
+.perch.p6 .p-laugh,.perch.p6 .p-jaw{animation-delay:-6.3s}
+
 /* pose variation */
 .perch .p-tilt,
 .perch .p-wing,
@@ -1594,7 +1638,9 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
     .perch.talk .p-eye{animation:none}
     .perch .p-idle,
     .perch .p-legA,
-    .perch .p-legB{animation:none}
+    .perch .p-legB,
+    .perch .p-laugh,
+    .perch .p-jaw{animation:none}
     .perch .perch-art,
     .perch .p-head,
     .perch .p-wing,
@@ -1706,27 +1752,32 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
                     <g class="paint-rough">
                         <g class="p-tilt">
                             <g class="p-idle">
-                                <path class="p-fuzz" d="M17 46 C22 39 26 32 36 28 C46 24 55 26 64 29 C77 33 90 39 101 46 C109 50 113 53 117 56 C110 57 103 58 96 60 C83 65 68 72 55 73 C46 74 39 68 36 60 C32 54 24 50 17 46 Z"/>
-                                <path class="p-tail" d="M90 49 C98 52 105 55 110 57 C105 58 98 59 92 61 Z"/>
-                                <path class="p-body" d="M17 46 C22 39 26 32 36 28 C46 24 55 26 64 29 C77 33 90 39 101 46 C109 50 113 53 117 56 C110 57 103 58 96 60 C83 65 68 72 55 73 C46 74 39 68 36 60 C32 54 24 50 17 46 Z"/>
-                                <ellipse class="p-shade" cx="84" cy="57" rx="23" ry="10" filter="url(#soft)"/>
-                                <ellipse class="p-sheen" cx="48" cy="37" rx="17" ry="7" filter="url(#soft)"/>
-                                <g class="p-strokes">
-                                    <path d="M30 39 C45 32 62 32 76 37"/>
-                                    <path d="M34 49 C51 43 71 43 88 50"/>
-                                    <path d="M45 61 C59 56 75 56 89 61"/>
-                                </g>
-                                <path class="p-bodyline" d="M17 46 C22 39 26 32 36 28 C46 24 55 26 64 29 C77 33 90 39 101 46 C109 50 113 53 117 56 C110 57 103 58 96 60 C83 65 68 72 55 73 C46 74 39 68 36 60 C32 54 24 50 17 46 Z"/>
-                                <path class="p-wing" d="M58 31 C74 33 89 41 97 49 C101 53 98 57 92 56 C78 53 65 46 59 39 C56 35 55 32 58 31 Z"/>
-                                <g class="p-feathers">
-                                    <path d="M67 37 C79 41 88 48 92 53"/>
-                                    <path d="M64 43 C74 47 83 53 87 58"/>
-                                </g>
-                                <g class="p-head">
-                                    <path class="p-beak" d="M22 42 L2 47 L22 51 Z"/>
-                                    <g class="p-eye">
-                                        <circle class="p-eye-ball" cx="35" cy="34" r="4.3"/>
-                                        <circle class="p-glint" cx="36.6" cy="32.4" r="1.5"/>
+                                <g class="p-laugh">
+                                    <path class="p-fuzz" d="M17 46 C22 39 26 32 36 28 C46 24 55 26 64 29 C77 33 90 39 101 46 C109 50 113 53 117 56 C110 57 103 58 96 60 C83 65 68 72 55 73 C46 74 39 68 36 60 C32 54 24 50 17 46 Z"/>
+                                    <path class="p-tail" d="M90 49 C98 52 105 55 110 57 C105 58 98 59 92 61 Z"/>
+                                    <path class="p-body" d="M17 46 C22 39 26 32 36 28 C46 24 55 26 64 29 C77 33 90 39 101 46 C109 50 113 53 117 56 C110 57 103 58 96 60 C83 65 68 72 55 73 C46 74 39 68 36 60 C32 54 24 50 17 46 Z"/>
+                                    <ellipse class="p-shade" cx="84" cy="57" rx="23" ry="10" filter="url(#soft)"/>
+                                    <ellipse class="p-sheen" cx="48" cy="37" rx="17" ry="7" filter="url(#soft)"/>
+                                    <g class="p-strokes">
+                                        <path d="M30 39 C45 32 62 32 76 37"/>
+                                        <path d="M34 49 C51 43 71 43 88 50"/>
+                                        <path d="M45 61 C59 56 75 56 89 61"/>
+                                    </g>
+                                    <path class="p-bodyline" d="M17 46 C22 39 26 32 36 28 C46 24 55 26 64 29 C77 33 90 39 101 46 C109 50 113 53 117 56 C110 57 103 58 96 60 C83 65 68 72 55 73 C46 74 39 68 36 60 C32 54 24 50 17 46 Z"/>
+                                    <path class="p-wing" d="M58 31 C74 33 89 41 97 49 C101 53 98 57 92 56 C78 53 65 46 59 39 C56 35 55 32 58 31 Z"/>
+                                    <g class="p-feathers">
+                                        <path d="M67 37 C79 41 88 48 92 53"/>
+                                        <path d="M64 43 C74 47 83 53 87 58"/>
+                                    </g>
+                                    <g class="p-head">
+                                        <path class="p-beak" d="M22 42 L2 47 L22 47.6 Z"/>
+                                        <g class="p-jaw">
+                                            <path class="p-beak" d="M22 47.6 L4 48.6 L22 51 Z"/>
+                                        </g>
+                                        <g class="p-eye">
+                                            <circle class="p-eye-ball" cx="35" cy="34" r="4.3"/>
+                                            <circle class="p-glint" cx="36.6" cy="32.4" r="1.5"/>
+                                        </g>
                                     </g>
                                 </g>
                             </g>
@@ -1789,27 +1840,32 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
                     <g class="paint-rough">
                         <g class="p-tilt">
                             <g class="p-idle">
-                                <path class="p-fuzz" d="M17 46 C22 39 26 32 36 28 C46 24 55 26 64 29 C77 33 90 39 101 46 C109 50 113 53 117 56 C110 57 103 58 96 60 C83 65 68 72 55 73 C46 74 39 68 36 60 C32 54 24 50 17 46 Z"/>
-                                <path class="p-tail" d="M90 49 C98 52 105 55 110 57 C105 58 98 59 92 61 Z"/>
-                                <path class="p-body" d="M17 46 C22 39 26 32 36 28 C46 24 55 26 64 29 C77 33 90 39 101 46 C109 50 113 53 117 56 C110 57 103 58 96 60 C83 65 68 72 55 73 C46 74 39 68 36 60 C32 54 24 50 17 46 Z"/>
-                                <ellipse class="p-shade" cx="84" cy="57" rx="23" ry="10" filter="url(#soft)"/>
-                                <ellipse class="p-sheen" cx="48" cy="37" rx="17" ry="7" filter="url(#soft)"/>
-                                <g class="p-strokes">
-                                    <path d="M30 39 C45 32 62 32 76 37"/>
-                                    <path d="M34 49 C51 43 71 43 88 50"/>
-                                    <path d="M45 61 C59 56 75 56 89 61"/>
-                                </g>
-                                <path class="p-bodyline" d="M17 46 C22 39 26 32 36 28 C46 24 55 26 64 29 C77 33 90 39 101 46 C109 50 113 53 117 56 C110 57 103 58 96 60 C83 65 68 72 55 73 C46 74 39 68 36 60 C32 54 24 50 17 46 Z"/>
-                                <path class="p-wing" d="M58 31 C74 33 89 41 97 49 C101 53 98 57 92 56 C78 53 65 46 59 39 C56 35 55 32 58 31 Z"/>
-                                <g class="p-feathers">
-                                    <path d="M67 37 C79 41 88 48 92 53"/>
-                                    <path d="M64 43 C74 47 83 53 87 58"/>
-                                </g>
-                                <g class="p-head">
-                                    <path class="p-beak" d="M22 42 L2 47 L22 51 Z"/>
-                                    <g class="p-eye">
-                                        <circle class="p-eye-ball" cx="35" cy="34" r="4.3"/>
-                                        <circle class="p-glint" cx="36.6" cy="32.4" r="1.5"/>
+                                <g class="p-laugh">
+                                    <path class="p-fuzz" d="M17 46 C22 39 26 32 36 28 C46 24 55 26 64 29 C77 33 90 39 101 46 C109 50 113 53 117 56 C110 57 103 58 96 60 C83 65 68 72 55 73 C46 74 39 68 36 60 C32 54 24 50 17 46 Z"/>
+                                    <path class="p-tail" d="M90 49 C98 52 105 55 110 57 C105 58 98 59 92 61 Z"/>
+                                    <path class="p-body" d="M17 46 C22 39 26 32 36 28 C46 24 55 26 64 29 C77 33 90 39 101 46 C109 50 113 53 117 56 C110 57 103 58 96 60 C83 65 68 72 55 73 C46 74 39 68 36 60 C32 54 24 50 17 46 Z"/>
+                                    <ellipse class="p-shade" cx="84" cy="57" rx="23" ry="10" filter="url(#soft)"/>
+                                    <ellipse class="p-sheen" cx="48" cy="37" rx="17" ry="7" filter="url(#soft)"/>
+                                    <g class="p-strokes">
+                                        <path d="M30 39 C45 32 62 32 76 37"/>
+                                        <path d="M34 49 C51 43 71 43 88 50"/>
+                                        <path d="M45 61 C59 56 75 56 89 61"/>
+                                    </g>
+                                    <path class="p-bodyline" d="M17 46 C22 39 26 32 36 28 C46 24 55 26 64 29 C77 33 90 39 101 46 C109 50 113 53 117 56 C110 57 103 58 96 60 C83 65 68 72 55 73 C46 74 39 68 36 60 C32 54 24 50 17 46 Z"/>
+                                    <path class="p-wing" d="M58 31 C74 33 89 41 97 49 C101 53 98 57 92 56 C78 53 65 46 59 39 C56 35 55 32 58 31 Z"/>
+                                    <g class="p-feathers">
+                                        <path d="M67 37 C79 41 88 48 92 53"/>
+                                        <path d="M64 43 C74 47 83 53 87 58"/>
+                                    </g>
+                                    <g class="p-head">
+                                        <path class="p-beak" d="M22 42 L2 47 L22 47.6 Z"/>
+                                        <g class="p-jaw">
+                                            <path class="p-beak" d="M22 47.6 L4 48.6 L22 51 Z"/>
+                                        </g>
+                                        <g class="p-eye">
+                                            <circle class="p-eye-ball" cx="35" cy="34" r="4.3"/>
+                                            <circle class="p-glint" cx="36.6" cy="32.4" r="1.5"/>
+                                        </g>
                                     </g>
                                 </g>
                             </g>
@@ -1872,27 +1928,32 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
                     <g class="paint-rough">
                         <g class="p-tilt">
                             <g class="p-idle">
-                                <path class="p-fuzz" d="M17 46 C22 39 26 32 36 28 C46 24 55 26 64 29 C77 33 90 39 101 46 C109 50 113 53 117 56 C110 57 103 58 96 60 C83 65 68 72 55 73 C46 74 39 68 36 60 C32 54 24 50 17 46 Z"/>
-                                <path class="p-tail" d="M90 49 C98 52 105 55 110 57 C105 58 98 59 92 61 Z"/>
-                                <path class="p-body" d="M17 46 C22 39 26 32 36 28 C46 24 55 26 64 29 C77 33 90 39 101 46 C109 50 113 53 117 56 C110 57 103 58 96 60 C83 65 68 72 55 73 C46 74 39 68 36 60 C32 54 24 50 17 46 Z"/>
-                                <ellipse class="p-shade" cx="84" cy="57" rx="23" ry="10" filter="url(#soft)"/>
-                                <ellipse class="p-sheen" cx="48" cy="37" rx="17" ry="7" filter="url(#soft)"/>
-                                <g class="p-strokes">
-                                    <path d="M30 39 C45 32 62 32 76 37"/>
-                                    <path d="M34 49 C51 43 71 43 88 50"/>
-                                    <path d="M45 61 C59 56 75 56 89 61"/>
-                                </g>
-                                <path class="p-bodyline" d="M17 46 C22 39 26 32 36 28 C46 24 55 26 64 29 C77 33 90 39 101 46 C109 50 113 53 117 56 C110 57 103 58 96 60 C83 65 68 72 55 73 C46 74 39 68 36 60 C32 54 24 50 17 46 Z"/>
-                                <path class="p-wing" d="M58 31 C74 33 89 41 97 49 C101 53 98 57 92 56 C78 53 65 46 59 39 C56 35 55 32 58 31 Z"/>
-                                <g class="p-feathers">
-                                    <path d="M67 37 C79 41 88 48 92 53"/>
-                                    <path d="M64 43 C74 47 83 53 87 58"/>
-                                </g>
-                                <g class="p-head">
-                                    <path class="p-beak" d="M22 42 L2 47 L22 51 Z"/>
-                                    <g class="p-eye">
-                                        <circle class="p-eye-ball" cx="35" cy="34" r="4.3"/>
-                                        <circle class="p-glint" cx="36.6" cy="32.4" r="1.5"/>
+                                <g class="p-laugh">
+                                    <path class="p-fuzz" d="M17 46 C22 39 26 32 36 28 C46 24 55 26 64 29 C77 33 90 39 101 46 C109 50 113 53 117 56 C110 57 103 58 96 60 C83 65 68 72 55 73 C46 74 39 68 36 60 C32 54 24 50 17 46 Z"/>
+                                    <path class="p-tail" d="M90 49 C98 52 105 55 110 57 C105 58 98 59 92 61 Z"/>
+                                    <path class="p-body" d="M17 46 C22 39 26 32 36 28 C46 24 55 26 64 29 C77 33 90 39 101 46 C109 50 113 53 117 56 C110 57 103 58 96 60 C83 65 68 72 55 73 C46 74 39 68 36 60 C32 54 24 50 17 46 Z"/>
+                                    <ellipse class="p-shade" cx="84" cy="57" rx="23" ry="10" filter="url(#soft)"/>
+                                    <ellipse class="p-sheen" cx="48" cy="37" rx="17" ry="7" filter="url(#soft)"/>
+                                    <g class="p-strokes">
+                                        <path d="M30 39 C45 32 62 32 76 37"/>
+                                        <path d="M34 49 C51 43 71 43 88 50"/>
+                                        <path d="M45 61 C59 56 75 56 89 61"/>
+                                    </g>
+                                    <path class="p-bodyline" d="M17 46 C22 39 26 32 36 28 C46 24 55 26 64 29 C77 33 90 39 101 46 C109 50 113 53 117 56 C110 57 103 58 96 60 C83 65 68 72 55 73 C46 74 39 68 36 60 C32 54 24 50 17 46 Z"/>
+                                    <path class="p-wing" d="M58 31 C74 33 89 41 97 49 C101 53 98 57 92 56 C78 53 65 46 59 39 C56 35 55 32 58 31 Z"/>
+                                    <g class="p-feathers">
+                                        <path d="M67 37 C79 41 88 48 92 53"/>
+                                        <path d="M64 43 C74 47 83 53 87 58"/>
+                                    </g>
+                                    <g class="p-head">
+                                        <path class="p-beak" d="M22 42 L2 47 L22 47.6 Z"/>
+                                        <g class="p-jaw">
+                                            <path class="p-beak" d="M22 47.6 L4 48.6 L22 51 Z"/>
+                                        </g>
+                                        <g class="p-eye">
+                                            <circle class="p-eye-ball" cx="35" cy="34" r="4.3"/>
+                                            <circle class="p-glint" cx="36.6" cy="32.4" r="1.5"/>
+                                        </g>
                                     </g>
                                 </g>
                             </g>
@@ -2204,27 +2265,32 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
                     <g class="paint-rough">
                         <g class="p-tilt">
                             <g class="p-idle">
-                                <path class="p-fuzz" d="M17 46 C22 39 26 32 36 28 C46 24 55 26 64 29 C77 33 90 39 101 46 C109 50 113 53 117 56 C110 57 103 58 96 60 C83 65 68 72 55 73 C46 74 39 68 36 60 C32 54 24 50 17 46 Z"/>
-                                <path class="p-tail" d="M90 49 C98 52 105 55 110 57 C105 58 98 59 92 61 Z"/>
-                                <path class="p-body" d="M17 46 C22 39 26 32 36 28 C46 24 55 26 64 29 C77 33 90 39 101 46 C109 50 113 53 117 56 C110 57 103 58 96 60 C83 65 68 72 55 73 C46 74 39 68 36 60 C32 54 24 50 17 46 Z"/>
-                                <ellipse class="p-shade" cx="84" cy="57" rx="23" ry="10" filter="url(#soft)"/>
-                                <ellipse class="p-sheen" cx="48" cy="37" rx="17" ry="7" filter="url(#soft)"/>
-                                <g class="p-strokes">
-                                    <path d="M30 39 C45 32 62 32 76 37"/>
-                                    <path d="M34 49 C51 43 71 43 88 50"/>
-                                    <path d="M45 61 C59 56 75 56 89 61"/>
-                                </g>
-                                <path class="p-bodyline" d="M17 46 C22 39 26 32 36 28 C46 24 55 26 64 29 C77 33 90 39 101 46 C109 50 113 53 117 56 C110 57 103 58 96 60 C83 65 68 72 55 73 C46 74 39 68 36 60 C32 54 24 50 17 46 Z"/>
-                                <path class="p-wing" d="M58 31 C74 33 89 41 97 49 C101 53 98 57 92 56 C78 53 65 46 59 39 C56 35 55 32 58 31 Z"/>
-                                <g class="p-feathers">
-                                    <path d="M67 37 C79 41 88 48 92 53"/>
-                                    <path d="M64 43 C74 47 83 53 87 58"/>
-                                </g>
-                                <g class="p-head">
-                                    <path class="p-beak" d="M22 42 L2 47 L22 51 Z"/>
-                                    <g class="p-eye">
-                                        <circle class="p-eye-ball" cx="35" cy="34" r="4.3"/>
-                                        <circle class="p-glint" cx="36.6" cy="32.4" r="1.5"/>
+                                <g class="p-laugh">
+                                    <path class="p-fuzz" d="M17 46 C22 39 26 32 36 28 C46 24 55 26 64 29 C77 33 90 39 101 46 C109 50 113 53 117 56 C110 57 103 58 96 60 C83 65 68 72 55 73 C46 74 39 68 36 60 C32 54 24 50 17 46 Z"/>
+                                    <path class="p-tail" d="M90 49 C98 52 105 55 110 57 C105 58 98 59 92 61 Z"/>
+                                    <path class="p-body" d="M17 46 C22 39 26 32 36 28 C46 24 55 26 64 29 C77 33 90 39 101 46 C109 50 113 53 117 56 C110 57 103 58 96 60 C83 65 68 72 55 73 C46 74 39 68 36 60 C32 54 24 50 17 46 Z"/>
+                                    <ellipse class="p-shade" cx="84" cy="57" rx="23" ry="10" filter="url(#soft)"/>
+                                    <ellipse class="p-sheen" cx="48" cy="37" rx="17" ry="7" filter="url(#soft)"/>
+                                    <g class="p-strokes">
+                                        <path d="M30 39 C45 32 62 32 76 37"/>
+                                        <path d="M34 49 C51 43 71 43 88 50"/>
+                                        <path d="M45 61 C59 56 75 56 89 61"/>
+                                    </g>
+                                    <path class="p-bodyline" d="M17 46 C22 39 26 32 36 28 C46 24 55 26 64 29 C77 33 90 39 101 46 C109 50 113 53 117 56 C110 57 103 58 96 60 C83 65 68 72 55 73 C46 74 39 68 36 60 C32 54 24 50 17 46 Z"/>
+                                    <path class="p-wing" d="M58 31 C74 33 89 41 97 49 C101 53 98 57 92 56 C78 53 65 46 59 39 C56 35 55 32 58 31 Z"/>
+                                    <g class="p-feathers">
+                                        <path d="M67 37 C79 41 88 48 92 53"/>
+                                        <path d="M64 43 C74 47 83 53 87 58"/>
+                                    </g>
+                                    <g class="p-head">
+                                        <path class="p-beak" d="M22 42 L2 47 L22 47.6 Z"/>
+                                        <g class="p-jaw">
+                                            <path class="p-beak" d="M22 47.6 L4 48.6 L22 51 Z"/>
+                                        </g>
+                                        <g class="p-eye">
+                                            <circle class="p-eye-ball" cx="35" cy="34" r="4.3"/>
+                                            <circle class="p-glint" cx="36.6" cy="32.4" r="1.5"/>
+                                        </g>
                                     </g>
                                 </g>
                             </g>
@@ -2287,27 +2353,32 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
                     <g class="paint-rough">
                         <g class="p-tilt">
                             <g class="p-idle">
-                                <path class="p-fuzz" d="M17 46 C22 39 26 32 36 28 C46 24 55 26 64 29 C77 33 90 39 101 46 C109 50 113 53 117 56 C110 57 103 58 96 60 C83 65 68 72 55 73 C46 74 39 68 36 60 C32 54 24 50 17 46 Z"/>
-                                <path class="p-tail" d="M90 49 C98 52 105 55 110 57 C105 58 98 59 92 61 Z"/>
-                                <path class="p-body" d="M17 46 C22 39 26 32 36 28 C46 24 55 26 64 29 C77 33 90 39 101 46 C109 50 113 53 117 56 C110 57 103 58 96 60 C83 65 68 72 55 73 C46 74 39 68 36 60 C32 54 24 50 17 46 Z"/>
-                                <ellipse class="p-shade" cx="84" cy="57" rx="23" ry="10" filter="url(#soft)"/>
-                                <ellipse class="p-sheen" cx="48" cy="37" rx="17" ry="7" filter="url(#soft)"/>
-                                <g class="p-strokes">
-                                    <path d="M30 39 C45 32 62 32 76 37"/>
-                                    <path d="M34 49 C51 43 71 43 88 50"/>
-                                    <path d="M45 61 C59 56 75 56 89 61"/>
-                                </g>
-                                <path class="p-bodyline" d="M17 46 C22 39 26 32 36 28 C46 24 55 26 64 29 C77 33 90 39 101 46 C109 50 113 53 117 56 C110 57 103 58 96 60 C83 65 68 72 55 73 C46 74 39 68 36 60 C32 54 24 50 17 46 Z"/>
-                                <path class="p-wing" d="M58 31 C74 33 89 41 97 49 C101 53 98 57 92 56 C78 53 65 46 59 39 C56 35 55 32 58 31 Z"/>
-                                <g class="p-feathers">
-                                    <path d="M67 37 C79 41 88 48 92 53"/>
-                                    <path d="M64 43 C74 47 83 53 87 58"/>
-                                </g>
-                                <g class="p-head">
-                                    <path class="p-beak" d="M22 42 L2 47 L22 51 Z"/>
-                                    <g class="p-eye">
-                                        <circle class="p-eye-ball" cx="35" cy="34" r="4.3"/>
-                                        <circle class="p-glint" cx="36.6" cy="32.4" r="1.5"/>
+                                <g class="p-laugh">
+                                    <path class="p-fuzz" d="M17 46 C22 39 26 32 36 28 C46 24 55 26 64 29 C77 33 90 39 101 46 C109 50 113 53 117 56 C110 57 103 58 96 60 C83 65 68 72 55 73 C46 74 39 68 36 60 C32 54 24 50 17 46 Z"/>
+                                    <path class="p-tail" d="M90 49 C98 52 105 55 110 57 C105 58 98 59 92 61 Z"/>
+                                    <path class="p-body" d="M17 46 C22 39 26 32 36 28 C46 24 55 26 64 29 C77 33 90 39 101 46 C109 50 113 53 117 56 C110 57 103 58 96 60 C83 65 68 72 55 73 C46 74 39 68 36 60 C32 54 24 50 17 46 Z"/>
+                                    <ellipse class="p-shade" cx="84" cy="57" rx="23" ry="10" filter="url(#soft)"/>
+                                    <ellipse class="p-sheen" cx="48" cy="37" rx="17" ry="7" filter="url(#soft)"/>
+                                    <g class="p-strokes">
+                                        <path d="M30 39 C45 32 62 32 76 37"/>
+                                        <path d="M34 49 C51 43 71 43 88 50"/>
+                                        <path d="M45 61 C59 56 75 56 89 61"/>
+                                    </g>
+                                    <path class="p-bodyline" d="M17 46 C22 39 26 32 36 28 C46 24 55 26 64 29 C77 33 90 39 101 46 C109 50 113 53 117 56 C110 57 103 58 96 60 C83 65 68 72 55 73 C46 74 39 68 36 60 C32 54 24 50 17 46 Z"/>
+                                    <path class="p-wing" d="M58 31 C74 33 89 41 97 49 C101 53 98 57 92 56 C78 53 65 46 59 39 C56 35 55 32 58 31 Z"/>
+                                    <g class="p-feathers">
+                                        <path d="M67 37 C79 41 88 48 92 53"/>
+                                        <path d="M64 43 C74 47 83 53 87 58"/>
+                                    </g>
+                                    <g class="p-head">
+                                        <path class="p-beak" d="M22 42 L2 47 L22 47.6 Z"/>
+                                        <g class="p-jaw">
+                                            <path class="p-beak" d="M22 47.6 L4 48.6 L22 51 Z"/>
+                                        </g>
+                                        <g class="p-eye">
+                                            <circle class="p-eye-ball" cx="35" cy="34" r="4.3"/>
+                                            <circle class="p-glint" cx="36.6" cy="32.4" r="1.5"/>
+                                        </g>
                                     </g>
                                 </g>
                             </g>
@@ -2378,27 +2449,32 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
                     <g class="paint-rough">
                         <g class="p-tilt">
                             <g class="p-idle">
-                                <path class="p-fuzz" d="M17 46 C22 39 26 32 36 28 C46 24 55 26 64 29 C77 33 90 39 101 46 C109 50 113 53 117 56 C110 57 103 58 96 60 C83 65 68 72 55 73 C46 74 39 68 36 60 C32 54 24 50 17 46 Z"/>
-                                <path class="p-tail" d="M90 49 C98 52 105 55 110 57 C105 58 98 59 92 61 Z"/>
-                                <path class="p-body" d="M17 46 C22 39 26 32 36 28 C46 24 55 26 64 29 C77 33 90 39 101 46 C109 50 113 53 117 56 C110 57 103 58 96 60 C83 65 68 72 55 73 C46 74 39 68 36 60 C32 54 24 50 17 46 Z"/>
-                                <ellipse class="p-shade" cx="84" cy="57" rx="23" ry="10" filter="url(#soft)"/>
-                                <ellipse class="p-sheen" cx="48" cy="37" rx="17" ry="7" filter="url(#soft)"/>
-                                <g class="p-strokes">
-                                    <path d="M30 39 C45 32 62 32 76 37"/>
-                                    <path d="M34 49 C51 43 71 43 88 50"/>
-                                    <path d="M45 61 C59 56 75 56 89 61"/>
-                                </g>
-                                <path class="p-bodyline" d="M17 46 C22 39 26 32 36 28 C46 24 55 26 64 29 C77 33 90 39 101 46 C109 50 113 53 117 56 C110 57 103 58 96 60 C83 65 68 72 55 73 C46 74 39 68 36 60 C32 54 24 50 17 46 Z"/>
-                                <path class="p-wing" d="M58 31 C74 33 89 41 97 49 C101 53 98 57 92 56 C78 53 65 46 59 39 C56 35 55 32 58 31 Z"/>
-                                <g class="p-feathers">
-                                    <path d="M67 37 C79 41 88 48 92 53"/>
-                                    <path d="M64 43 C74 47 83 53 87 58"/>
-                                </g>
-                                <g class="p-head">
-                                    <path class="p-beak" d="M22 42 L2 47 L22 51 Z"/>
-                                    <g class="p-eye">
-                                        <circle class="p-eye-ball" cx="35" cy="34" r="4.3"/>
-                                        <circle class="p-glint" cx="36.6" cy="32.4" r="1.5"/>
+                                <g class="p-laugh">
+                                    <path class="p-fuzz" d="M17 46 C22 39 26 32 36 28 C46 24 55 26 64 29 C77 33 90 39 101 46 C109 50 113 53 117 56 C110 57 103 58 96 60 C83 65 68 72 55 73 C46 74 39 68 36 60 C32 54 24 50 17 46 Z"/>
+                                    <path class="p-tail" d="M90 49 C98 52 105 55 110 57 C105 58 98 59 92 61 Z"/>
+                                    <path class="p-body" d="M17 46 C22 39 26 32 36 28 C46 24 55 26 64 29 C77 33 90 39 101 46 C109 50 113 53 117 56 C110 57 103 58 96 60 C83 65 68 72 55 73 C46 74 39 68 36 60 C32 54 24 50 17 46 Z"/>
+                                    <ellipse class="p-shade" cx="84" cy="57" rx="23" ry="10" filter="url(#soft)"/>
+                                    <ellipse class="p-sheen" cx="48" cy="37" rx="17" ry="7" filter="url(#soft)"/>
+                                    <g class="p-strokes">
+                                        <path d="M30 39 C45 32 62 32 76 37"/>
+                                        <path d="M34 49 C51 43 71 43 88 50"/>
+                                        <path d="M45 61 C59 56 75 56 89 61"/>
+                                    </g>
+                                    <path class="p-bodyline" d="M17 46 C22 39 26 32 36 28 C46 24 55 26 64 29 C77 33 90 39 101 46 C109 50 113 53 117 56 C110 57 103 58 96 60 C83 65 68 72 55 73 C46 74 39 68 36 60 C32 54 24 50 17 46 Z"/>
+                                    <path class="p-wing" d="M58 31 C74 33 89 41 97 49 C101 53 98 57 92 56 C78 53 65 46 59 39 C56 35 55 32 58 31 Z"/>
+                                    <g class="p-feathers">
+                                        <path d="M67 37 C79 41 88 48 92 53"/>
+                                        <path d="M64 43 C74 47 83 53 87 58"/>
+                                    </g>
+                                    <g class="p-head">
+                                        <path class="p-beak" d="M22 42 L2 47 L22 47.6 Z"/>
+                                        <g class="p-jaw">
+                                            <path class="p-beak" d="M22 47.6 L4 48.6 L22 51 Z"/>
+                                        </g>
+                                        <g class="p-eye">
+                                            <circle class="p-eye-ball" cx="35" cy="34" r="4.3"/>
+                                            <circle class="p-glint" cx="36.6" cy="32.4" r="1.5"/>
+                                        </g>
                                     </g>
                                 </g>
                             </g>
