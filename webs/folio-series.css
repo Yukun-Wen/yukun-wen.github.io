@@ -201,73 +201,149 @@ body[data-series="children"] .shot:hover {
 }
 body[data-series="children"] .masthead h1 { font-style: italic; }
 
-/* ------------------------------------------------------- 5. Novel — She */
+/* ------------------------------------------------------- 5+6. Novel
+   red, yellow and black. A ground that never sits still: two drifting
+   colour fields plus a set of diagonal bands sliding across, so the page
+   feels restless rather than decorative.                                             */
+
+body[data-series="she"],
+body[data-series="thebest"] {
+    --ink: #f8f0e0;
+    --muted: rgba(248, 240, 224, .76);
+    --faint: rgba(248, 240, 224, .48);
+    --hairline: rgba(255, 84, 58, .3);
+    --panel: rgba(255, 255, 255, .05);
+    --bar: rgba(8, 4, 6, .78);
+    --ring: rgba(255, 84, 58, .55);
+
+    background-size: 170% 170%, 170% 170%, 170% 170%, cover;
+    animation: novel-flow 26s ease-in-out infinite;
+}
+
+/* She leans red */
 body[data-series="she"] {
-    --s-bg: radial-gradient(60% 45% at 80% 10%, #f3d9d9 0%, rgba(243, 217, 217, 0) 72%),
-            linear-gradient(180deg, #f7e9e8 0%, #ecd6d5 52%, #d8bcbb 100%);
-    --ink: #2c1d1e;
-    --muted: rgba(44, 29, 30, .74);
-    --faint: rgba(44, 29, 30, .5);
-    --accent: #b3252f;
-    --hairline: rgba(179, 37, 47, .24);
-    --panel: rgba(255, 250, 249, .54);
-    --bar: rgba(248, 236, 235, .78);
-    --ring: rgba(179, 37, 47, .5);
+    --accent: #ff3b30;
+    --accent-2: #ffc72e;
+    --s-bg:
+        radial-gradient(52% 44% at 22% 18%, rgba(224, 32, 40, .62), transparent 68%),
+        radial-gradient(44% 38% at 82% 76%, rgba(255, 198, 46, .34), transparent 70%),
+        radial-gradient(60% 50% at 50% 50%, rgba(120, 8, 14, .55), transparent 76%),
+        linear-gradient(160deg, #080305 0%, #17060a 46%, #1e0a05 100%);
+}
+
+/* The Best leans yellow */
+body[data-series="thebest"] {
+    --accent: #ffc72e;
+    --accent-2: #ff3b30;
+    --s-bg:
+        radial-gradient(50% 42% at 76% 20%, rgba(255, 198, 46, .52), transparent 68%),
+        radial-gradient(46% 40% at 20% 78%, rgba(224, 32, 40, .48), transparent 70%),
+        radial-gradient(58% 48% at 50% 50%, rgba(96, 40, 6, .55), transparent 76%),
+        linear-gradient(200deg, #07040a 0%, #140806 46%, #1b0d04 100%);
+}
+
+html[data-theme="dark"] body[data-series="she"],
+html[data-theme="dark"] body[data-series="thebest"] {
+    --ink: #fff6e6;
+    --muted: rgba(255, 246, 230, .8);
+    --faint: rgba(255, 246, 230, .5);
+    --panel: rgba(255, 255, 255, .05);
+    --bar: rgba(4, 2, 3, .82);
 }
 html[data-theme="dark"] body[data-series="she"] {
-    --s-bg: radial-gradient(60% 45% at 80% 8%, #3a1013 0%, rgba(58, 16, 19, 0) 70%),
-            linear-gradient(180deg, #0c0506 0%, #1c0a0c 52%, #33100f 100%);
-    --ink: #f7e6e4;
-    --muted: rgba(247, 230, 228, .76);
-    --faint: rgba(247, 230, 228, .46);
-    --accent: #ff6b6f;
-    --hairline: rgba(255, 107, 111, .26);
-    --panel: rgba(255, 255, 255, .05);
-    --bar: rgba(12, 5, 6, .76);
-    --ring: rgba(255, 107, 111, .5);
-}
-body[data-series="she"] .series-fx::before {
-    background: radial-gradient(120% 90% at 50% 50%, transparent 42%, rgba(90, 10, 16, .22) 100%);
-}
-body[data-series="she"] .shot { border-radius: 8px; }
-body[data-series="she"] .shot:hover {
-    transform: scale(1.02);
-    box-shadow: 0 0 0 1px rgba(179, 37, 47, .45), 0 22px 48px rgba(120, 20, 30, .3);
-}
-body[data-series="she"] .masthead h1 { font-style: italic; }
-
-/* ------------------------------------------------------- 6. Novel — The Best */
-body[data-series="thebest"] {
-    --s-bg: radial-gradient(55% 40% at 22% 6%, #dbe3ef 0%, rgba(219, 227, 239, 0) 72%),
-            linear-gradient(180deg, #e9edf4 0%, #d8dfeb 52%, #bfc9da 100%);
-    --ink: #1e2533;
-    --muted: rgba(30, 37, 51, .74);
-    --faint: rgba(30, 37, 51, .5);
-    --accent: #a3212b;
-    --hairline: rgba(42, 63, 107, .26);
-    --panel: rgba(252, 253, 255, .56);
-    --bar: rgba(236, 240, 247, .8);
-    --ring: rgba(163, 33, 43, .5);
+    --accent: #ff4f42;
+    --hairline: rgba(255, 79, 66, .32);
+    --ring: rgba(255, 79, 66, .6);
+    --s-bg:
+        radial-gradient(52% 44% at 22% 18%, rgba(255, 46, 52, .55), transparent 66%),
+        radial-gradient(44% 38% at 82% 76%, rgba(255, 208, 60, .3), transparent 70%),
+        radial-gradient(60% 50% at 50% 50%, rgba(70, 2, 8, .7), transparent 76%),
+        linear-gradient(160deg, #040203 0%, #100407 46%, #160704 100%);
 }
 html[data-theme="dark"] body[data-series="thebest"] {
-    --s-bg: radial-gradient(55% 40% at 22% 6%, #14203a 0%, rgba(20, 32, 58, 0) 72%),
-            linear-gradient(180deg, #05070d 0%, #0b1224 52%, #131c33 100%);
-    --ink: #e6ebf5;
-    --muted: rgba(230, 235, 245, .76);
-    --faint: rgba(230, 235, 245, .46);
-    --accent: #ff5f69;
-    --hairline: rgba(255, 95, 105, .24);
-    --panel: rgba(255, 255, 255, .05);
-    --bar: rgba(5, 8, 14, .76);
-    --ring: rgba(255, 95, 105, .48);
+    --accent: #ffd23f;
+    --hairline: rgba(255, 210, 63, .32);
+    --ring: rgba(255, 210, 63, .6);
+    --s-bg:
+        radial-gradient(50% 42% at 76% 20%, rgba(255, 208, 60, .46), transparent 66%),
+        radial-gradient(46% 40% at 20% 78%, rgba(255, 46, 52, .42), transparent 70%),
+        radial-gradient(58% 48% at 50% 50%, rgba(60, 24, 2, .7), transparent 76%),
+        linear-gradient(200deg, #030206 0%, #0d0504 46%, #120902 100%);
 }
+
+@keyframes novel-flow {
+    0%   { background-position: 0% 50%, 100% 50%, 50% 50%, 50% 50%; }
+    33%  { background-position: 60% 20%, 30% 80%, 50% 50%, 50% 50%; }
+    66%  { background-position: 100% 70%, 0% 30%, 50% 50%, 50% 50%; }
+    100% { background-position: 0% 50%, 100% 50%, 50% 50%, 50% 50%; }
+}
+
+/* sliding diagonal bands + a drifting colour field */
+body[data-series="she"] .series-fx::before,
 body[data-series="thebest"] .series-fx::before {
+    inset: -80px;
     background-image: repeating-linear-gradient(
-        180deg, transparent 0 3px, rgba(42, 63, 107, .05) 3px 4px);
+        118deg,
+        transparent 0 52px,
+        rgba(255, 70, 48, .10) 52px 55px,
+        transparent 55px 78px,
+        rgba(255, 200, 60, .07) 78px 80px);
+    animation: novel-bands 11s linear infinite;
 }
-body[data-series="thebest"] .shot { border-radius: 4px; }
-body[data-series="thebest"] .shot:hover { transform: translateY(-6px) rotate(-.5deg); }
-body[data-series="thebest"] .kicker { color: var(--accent); }
+
+@keyframes novel-bands {
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(80px, -80px, 0); }
+}
+
+body[data-series="she"] .series-fx::after,
+body[data-series="thebest"] .series-fx::after {
+    inset: -10%;
+    background: radial-gradient(34% 28% at 32% 42%, rgba(255, 58, 40, .30), transparent 70%),
+                radial-gradient(30% 26% at 74% 66%, rgba(255, 200, 60, .22), transparent 72%);
+    filter: blur(18px);
+    animation: novel-drift 19s ease-in-out infinite alternate;
+}
+
+@keyframes novel-drift {
+    from { transform: translate3d(-4%, -2%, 0) scale(1); }
+    to   { transform: translate3d(6%, 4%, 0) scale(1.12); }
+}
+
+/* plates: hard edges, red rim, a kick on hover */
+body[data-series="she"] .shot,
+body[data-series="thebest"] .shot {
+    border-radius: 0;
+    border: 1px solid rgba(255, 84, 58, .45);
+    background: rgba(0, 0, 0, .3);
+}
+
+body[data-series="she"] .shot:hover,
+body[data-series="thebest"] .shot:hover {
+    transform: translateY(-6px) skewX(-1.2deg) scale(1.015);
+    border-color: rgba(255, 200, 60, .8);
+    box-shadow: 0 0 0 1px rgba(255, 84, 58, .5), 0 24px 54px rgba(150, 10, 20, .5);
+}
+
+body[data-series="she"] .masthead h1 {
+    font-style: italic;
+    color: #fff6e6;
+    text-shadow: 0 2px 30px rgba(255, 60, 40, .35);
+}
+
+body[data-series="thebest"] .masthead h1 {
+    color: #fff6e6;
+    text-shadow: 0 2px 30px rgba(255, 200, 60, .3);
+}
+
+body[data-series="she"] .kicker,
+body[data-series="thebest"] .kicker { letter-spacing: .34em; }
+
+body[data-series="she"] .tally li::before,
+body[data-series="thebest"] .tally li::before { background: var(--accent); }
+
+body[data-series="she"] .foot,
+body[data-series="thebest"] .foot { border-top-color: rgba(255, 84, 58, .3); }
 
 /* ------------------------------------------------------- 7. Sci-fi — People */
 body[data-series="scifi-people"] {
