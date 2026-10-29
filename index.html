@@ -802,7 +802,8 @@ html[data-theme="dark"] .pillar:hover{background:rgba(124,187,192,.07)}
     --plate:#ffffff;
 
     --panel-bg:linear-gradient(180deg, rgba(255,252,249,.58) 0%, rgba(255,251,247,.30) 100%);
-    --panel-border:rgba(150,116,126,.17);
+    --panel-tex:url(./assets/textures/pearl.png);
+    --panel-border:rgba(255,255,255,.85);
     --panel-backdrop:blur(30px) saturate(1.05) brightness(1.04);
     --panel-shadow:
         0 26px 70px rgba(96,88,124,.16),
@@ -849,6 +850,7 @@ html[data-theme="dark"]{
     --plate:#ffffff;
 
     --panel-bg:linear-gradient(180deg, rgba(255,255,255,.05) 0%, rgba(0,0,0,.14) 100%);
+    --panel-tex:none;
     --panel-border:rgba(244,229,52,.28);
     --panel-backdrop:blur(26px) saturate(1.30) brightness(.52);
     --panel-shadow:
@@ -897,7 +899,10 @@ html.theme-swap *::after{
 /* ---------------------------------------------- page gradients */
 body{
     min-height:100vh;
+    position:relative;
     background:
+        url(./assets/textures/clouds.png) 50% 0 / 100% 1180px no-repeat,
+        radial-gradient(72% 26% at 50% 40%, rgba(255,203,178,.30) 0%, rgba(255,203,178,0) 72%),
         radial-gradient(130% 60% at 50% -5%,  rgba(170,180,225,.42) 0%, rgba(170,180,225,0) 66%),
         radial-gradient(115% 50% at 50% 104%, rgba(70,115,140,.34) 0%, rgba(70,115,140,0) 68%),
         linear-gradient(180deg,
@@ -937,6 +942,29 @@ body{
 }
 html[data-theme="dark"] .paint{display:none}
 
+/* ---------------------------------------------- light on the water
+   A band of horizontal glints anchored to the bottom of the document,
+   faded in at the top so it meets the gradient without a seam. */
+.water{
+    position:absolute;left:0;right:0;bottom:0;
+    height:min(62vh,760px);
+    z-index:0;
+    pointer-events:none;
+    background-image:url(./assets/textures/water.png);
+    background-size:1000px 100%;
+    background-repeat:repeat-x;
+    background-position:0 bottom;
+    opacity:.85;
+    -webkit-mask-image:linear-gradient(to bottom, rgba(0,0,0,0) 0%, #000 62%);
+    mask-image:linear-gradient(to bottom, rgba(0,0,0,0) 0%, #000 62%);
+    animation:water-drift 110s linear infinite;
+}
+@keyframes water-drift{
+    from{background-position-x:0}
+    to{background-position-x:-1000px}
+}
+html[data-theme="dark"] .water{display:none}
+
 /* content sits on top of the painted ground */
 .hero-inner,
 .pillars,
@@ -973,7 +1001,16 @@ main > .section{
     overflow:hidden;
     border-radius:22px;
     border:1px solid var(--panel-border);
-    background:var(--panel-bg);
+    /* pearl glitter, cursor spotlight, sheen, base fill */
+    background-image:
+        radial-gradient(260px 260px at var(--mx,50%) var(--my,0%),
+            var(--spot), rgba(0,0,0,0) 72%),
+        var(--panel-sheen),
+        var(--panel-tex),
+        var(--panel-bg);
+    background-size:auto, auto, 244px 244px, auto;
+    background-repeat:no-repeat, no-repeat, repeat, no-repeat;
+    background-position:center, center, 0 0, center;
     -webkit-backdrop-filter:var(--panel-backdrop);
     backdrop-filter:var(--panel-backdrop);
     box-shadow:var(--panel-shadow);
@@ -983,26 +1020,56 @@ main > .section{
     .hero-inner,
     .pillars,
     main > .section{
-        background:rgba(255,255,255,.80);
+        background-image:none;
+        background-color:rgba(255,255,255,.80);
     }
     html[data-theme="dark"] .hero-inner,
     html[data-theme="dark"] .pillars,
     html[data-theme="dark"] main > .section{
-        background:rgba(7,10,20,.90);
+        background-color:rgba(7,10,20,.90);
     }
 }
 
-/* sheen + cursor spotlight */
+/* ---------------------------------------------- flowing light along the rim */
 .hero-inner::before,
 .pillars::before,
 main > .section::before{
     content:"";
-    position:absolute;inset:0;z-index:0;pointer-events:none;
-    background:
-        radial-gradient(260px 260px at var(--mx,50%) var(--my,0%),
-            var(--spot), rgba(0,0,0,0) 72%),
-        var(--panel-sheen);
+    position:absolute;inset:0;z-index:2;pointer-events:none;
+    border-radius:inherit;
+    padding:1.8px;
+    background:linear-gradient(112deg,
+        rgba(255,255,255,0) 26%,
+        rgba(255,255,255,.22) 38%,
+        rgba(255,255,255,1) 46%,
+        rgba(255,255,255,1) 50%,
+        rgba(255,255,255,.70) 56%,
+        rgba(255,255,255,0) 68%);
+    background-size:280% 100%;
+    background-repeat:no-repeat;
+    -webkit-mask:
+        linear-gradient(#fff,#fff) content-box,
+        linear-gradient(#fff,#fff);
+    -webkit-mask-composite:xor;
+    mask:
+        linear-gradient(#fff,#fff) content-box,
+        linear-gradient(#fff,#fff);
+    mask-composite:exclude;
+    animation:rim-flow 9s linear infinite;
 }
+
+@keyframes rim-flow{
+    0%{background-position:-150% 0}
+    100%{background-position:250% 0}
+}
+
+html[data-theme="dark"] .hero-inner::before,
+html[data-theme="dark"] .pillars::before,
+html[data-theme="dark"] main > .section::before{
+    display:none;
+}
+
+/* sheen + spotlight now live in the background stack; ::after keeps the flecks */
 
 /* gold / sun flecks */
 .hero-inner::after,
@@ -1312,6 +1379,7 @@ html[data-theme="dark"] .ripple{
 <div id="progress"></div>
 <div class="cursor" id="cursor" aria-hidden="true"></div>
 <div class="paint" aria-hidden="true"></div>
+<div class="water" aria-hidden="true"></div>
 <canvas id="dust" aria-hidden="true"></canvas>
 
 <!-- ============================================ nav -->
