@@ -1,0 +1,379 @@
+/* =================================================================
+   folio-series.css — per-series identities.
+   Each AIGC series keeps its own palette, ground, plate shape and
+   hover behaviour; Architecture keeps a technical drawing-set look.
+   ================================================================= */
+
+body[data-series] {
+    background-color: transparent;
+    background-image: var(--s-bg);
+    background-attachment: fixed;
+    background-size: cover;
+    color: var(--ink);
+}
+
+
+/* the shared pointillist layer belongs to the main site; each series
+   brings its own atmosphere instead */
+body[data-series] .grain { display: none; }
+
+.series-fx {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+.series-fx::before,
+.series-fx::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+}
+
+/* ------------------------------------------------------- 1. Nine Songs */
+body[data-series="chuci"] {
+    --s-bg: radial-gradient(70% 50% at 20% 10%, #f4eee0 0%, rgba(244, 238, 224, 0) 70%),
+            linear-gradient(180deg, #ece3d0 0%, #e2d6bd 46%, #d3c2a2 100%);
+    --ink: #35301f;
+    --muted: rgba(53, 48, 31, .74);
+    --faint: rgba(53, 48, 31, .5);
+    --accent: #9a7b3c;
+    --hairline: rgba(122, 96, 48, .26);
+    --panel: rgba(255, 252, 243, .5);
+    --bar: rgba(240, 233, 217, .74);
+    --ring: rgba(154, 123, 60, .5);
+}
+html[data-theme="dark"] body[data-series="chuci"] {
+    --s-bg: radial-gradient(70% 50% at 20% 8%, #1d2a22 0%, rgba(29, 42, 34, 0) 72%),
+            linear-gradient(180deg, #0a0d0b 0%, #141a15 52%, #2a2314 100%);
+    --ink: #efe6d3;
+    --muted: rgba(239, 230, 211, .76);
+    --faint: rgba(239, 230, 211, .48);
+    --accent: #d8bd7c;
+    --hairline: rgba(216, 189, 124, .24);
+    --panel: rgba(255, 255, 255, .05);
+    --bar: rgba(10, 12, 10, .72);
+    --ring: rgba(216, 189, 124, .45);
+}
+body[data-series="chuci"] .series-fx::before {
+    background:
+        radial-gradient(46% 34% at 18% 22%, rgba(58, 84, 70, .16), transparent 70%),
+        radial-gradient(38% 30% at 82% 74%, rgba(122, 96, 48, .14), transparent 72%);
+    animation: ink-breathe 18s ease-in-out infinite alternate;
+}
+@keyframes ink-breathe {
+    from { transform: scale(1) translateY(0); opacity: .8; }
+    to   { transform: scale(1.08) translateY(-14px); opacity: 1; }
+}
+body[data-series="chuci"] .shot { border-radius: 3px; border-color: rgba(154, 123, 60, .45); }
+body[data-series="chuci"] .shot img { aspect-ratio: 3 / 4; }
+body[data-series="chuci"] .masthead h1 { letter-spacing: .01em; }
+
+/* ------------------------------------------------------- 2. Book of Poetry */
+body[data-series="shijing"] {
+    --s-bg: linear-gradient(180deg, #f4f1e6 0%, #eae3d1 55%, #ded3ba 100%);
+    --ink: #3a3a2c;
+    --muted: rgba(58, 58, 44, .72);
+    --faint: rgba(58, 58, 44, .48);
+    --accent: #6f7a4e;
+    --hairline: rgba(111, 122, 78, .28);
+    --panel: rgba(255, 254, 247, .55);
+    --bar: rgba(246, 243, 233, .76);
+    --ring: rgba(111, 122, 78, .45);
+}
+html[data-theme="dark"] body[data-series="shijing"] {
+    --s-bg: linear-gradient(180deg, #0b0c0a 0%, #171a14 50%, #2b2a1c 100%);
+    --ink: #ece9d9;
+    --muted: rgba(236, 233, 217, .74);
+    --faint: rgba(236, 233, 217, .46);
+    --accent: #b9c07f;
+    --hairline: rgba(185, 192, 127, .22);
+    --panel: rgba(255, 255, 255, .05);
+    --bar: rgba(8, 10, 8, .72);
+    --ring: rgba(185, 192, 127, .4);
+}
+body[data-series="shijing"] .series-fx::before {
+    background-image: repeating-linear-gradient(
+        180deg, transparent 0 27px, rgba(111, 122, 78, .10) 27px 28px);
+    opacity: .7;
+}
+body[data-series="shijing"] .shot { border-radius: 0; }
+body[data-series="shijing"] .shot:hover { transform: translateY(-3px); }
+body[data-series="shijing"] .kicker { letter-spacing: .42em; }
+
+/* ------------------------------------------------------- 3. Classic */
+body[data-series="classic"] {
+    --s-bg: radial-gradient(60% 45% at 78% 12%, #e8dcc2 0%, rgba(232, 220, 194, 0) 70%),
+            linear-gradient(180deg, #e6dfcd 0%, #dcd2ba 50%, #cbbd9e 100%);
+    --ink: #22322f;
+    --muted: rgba(34, 50, 47, .74);
+    --faint: rgba(34, 50, 47, .5);
+    --accent: #1c6b6f;
+    --hairline: rgba(28, 107, 111, .28);
+    --panel: rgba(255, 253, 246, .52);
+    --bar: rgba(233, 226, 210, .76);
+    --ring: rgba(176, 141, 63, .6);
+}
+html[data-theme="dark"] body[data-series="classic"] {
+    --s-bg: radial-gradient(60% 45% at 78% 10%, #123c3e 0%, rgba(18, 60, 62, 0) 72%),
+            linear-gradient(180deg, #05100f 0%, #0a2223 52%, #123634 100%);
+    --ink: #f0e8d4;
+    --muted: rgba(240, 232, 212, .76);
+    --faint: rgba(240, 232, 212, .46);
+    --accent: #d9b978;
+    --hairline: rgba(217, 185, 120, .26);
+    --panel: rgba(255, 255, 255, .05);
+    --bar: rgba(6, 14, 14, .74);
+    --ring: rgba(217, 185, 120, .48);
+}
+body[data-series="classic"] .series-fx::before {
+    background: linear-gradient(115deg, transparent 38%, rgba(255, 246, 214, .5) 48%,
+                rgba(255, 255, 255, .18) 52%, transparent 62%);
+    background-size: 260% 100%;
+    animation: gold-sweep 13s linear infinite;
+    mix-blend-mode: soft-light;
+}
+@keyframes gold-sweep {
+    from { background-position: -120% 0; }
+    to   { background-position: 220% 0; }
+}
+body[data-series="classic"] .shot {
+    border-radius: 0;
+    box-shadow: inset 0 0 0 1px rgba(28, 107, 111, .32),
+                inset 0 0 0 6px rgba(255, 253, 246, .5);
+}
+body[data-series="classic"] .shot:hover {
+    box-shadow: inset 0 0 0 1px rgba(176, 141, 63, .6),
+                inset 0 0 0 6px rgba(255, 253, 246, .6),
+                0 24px 50px rgba(20, 50, 48, .28);
+}
+body[data-series="classic"] .masthead h1 { letter-spacing: .04em; }
+
+/* ------------------------------------------------------- 4. Children */
+body[data-series="children"] {
+    --s-bg: radial-gradient(60% 40% at 15% 8%, #fff6e8 0%, rgba(255, 246, 232, 0) 70%),
+            linear-gradient(180deg, #fff2e4 0%, #ffe4ef 48%, #dcefff 100%);
+    --ink: #3b2b3a;
+    --muted: rgba(59, 43, 58, .74);
+    --faint: rgba(59, 43, 58, .5);
+    --accent: #e8608f;
+    --hairline: rgba(232, 96, 143, .26);
+    --panel: rgba(255, 255, 255, .6);
+    --bar: rgba(255, 246, 240, .8);
+    --ring: rgba(232, 96, 143, .55);
+}
+html[data-theme="dark"] body[data-series="children"] {
+    --s-bg: radial-gradient(60% 40% at 15% 8%, #2a1c33 0%, rgba(42, 28, 51, 0) 72%),
+            linear-gradient(180deg, #120b18 0%, #1e1230 50%, #241a3d 100%);
+    --ink: #fdeef3;
+    --muted: rgba(253, 238, 243, .78);
+    --faint: rgba(253, 238, 243, .48);
+    --accent: #ff9ec0;
+    --hairline: rgba(255, 158, 192, .26);
+    --panel: rgba(255, 255, 255, .06);
+    --bar: rgba(14, 9, 18, .74);
+    --ring: rgba(255, 158, 192, .5);
+}
+body[data-series="children"] .series-fx::before {
+    background-image:
+        radial-gradient(6px 6px at 12% 18%, rgba(255, 190, 60, .5), transparent 60%),
+        radial-gradient(5px 5px at 82% 12%, rgba(120, 200, 255, .5), transparent 60%),
+        radial-gradient(7px 7px at 68% 72%, rgba(255, 120, 170, .45), transparent 60%),
+        radial-gradient(5px 5px at 28% 78%, rgba(140, 220, 160, .45), transparent 60%);
+    background-size: 620px 620px, 540px 540px, 700px 700px, 480px 480px;
+    animation: confetti-drift 40s linear infinite;
+    opacity: .8;
+}
+@keyframes confetti-drift {
+    from { background-position: 0 0, 0 0, 0 0, 0 0; }
+    to   { background-position: 120px 220px, -90px 180px, 160px -140px, -60px 200px; }
+}
+body[data-series="children"] .shot {
+    border-radius: 24px;
+    border: 5px solid rgba(255, 255, 255, .92);
+    box-shadow: 0 16px 34px rgba(220, 140, 170, .28);
+    transition: transform .5s cubic-bezier(.34, 1.56, .64, 1), box-shadow .4s var(--ease);
+}
+body[data-series="children"] .shot:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 28px 54px rgba(220, 120, 160, .36);
+}
+body[data-series="children"] .masthead h1 { font-style: italic; }
+
+/* ------------------------------------------------------- 5. Novel — She */
+body[data-series="she"] {
+    --s-bg: radial-gradient(60% 45% at 80% 10%, #f3d9d9 0%, rgba(243, 217, 217, 0) 72%),
+            linear-gradient(180deg, #f7e9e8 0%, #ecd6d5 52%, #d8bcbb 100%);
+    --ink: #2c1d1e;
+    --muted: rgba(44, 29, 30, .74);
+    --faint: rgba(44, 29, 30, .5);
+    --accent: #b3252f;
+    --hairline: rgba(179, 37, 47, .24);
+    --panel: rgba(255, 250, 249, .54);
+    --bar: rgba(248, 236, 235, .78);
+    --ring: rgba(179, 37, 47, .5);
+}
+html[data-theme="dark"] body[data-series="she"] {
+    --s-bg: radial-gradient(60% 45% at 80% 8%, #3a1013 0%, rgba(58, 16, 19, 0) 70%),
+            linear-gradient(180deg, #0c0506 0%, #1c0a0c 52%, #33100f 100%);
+    --ink: #f7e6e4;
+    --muted: rgba(247, 230, 228, .76);
+    --faint: rgba(247, 230, 228, .46);
+    --accent: #ff6b6f;
+    --hairline: rgba(255, 107, 111, .26);
+    --panel: rgba(255, 255, 255, .05);
+    --bar: rgba(12, 5, 6, .76);
+    --ring: rgba(255, 107, 111, .5);
+}
+body[data-series="she"] .series-fx::before {
+    background: radial-gradient(120% 90% at 50% 50%, transparent 42%, rgba(90, 10, 16, .22) 100%);
+}
+body[data-series="she"] .shot { border-radius: 8px; }
+body[data-series="she"] .shot:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 0 1px rgba(179, 37, 47, .45), 0 22px 48px rgba(120, 20, 30, .3);
+}
+body[data-series="she"] .masthead h1 { font-style: italic; }
+
+/* ------------------------------------------------------- 6. Novel — The Best */
+body[data-series="thebest"] {
+    --s-bg: radial-gradient(55% 40% at 22% 6%, #dbe3ef 0%, rgba(219, 227, 239, 0) 72%),
+            linear-gradient(180deg, #e9edf4 0%, #d8dfeb 52%, #bfc9da 100%);
+    --ink: #1e2533;
+    --muted: rgba(30, 37, 51, .74);
+    --faint: rgba(30, 37, 51, .5);
+    --accent: #a3212b;
+    --hairline: rgba(42, 63, 107, .26);
+    --panel: rgba(252, 253, 255, .56);
+    --bar: rgba(236, 240, 247, .8);
+    --ring: rgba(163, 33, 43, .5);
+}
+html[data-theme="dark"] body[data-series="thebest"] {
+    --s-bg: radial-gradient(55% 40% at 22% 6%, #14203a 0%, rgba(20, 32, 58, 0) 72%),
+            linear-gradient(180deg, #05070d 0%, #0b1224 52%, #131c33 100%);
+    --ink: #e6ebf5;
+    --muted: rgba(230, 235, 245, .76);
+    --faint: rgba(230, 235, 245, .46);
+    --accent: #ff5f69;
+    --hairline: rgba(255, 95, 105, .24);
+    --panel: rgba(255, 255, 255, .05);
+    --bar: rgba(5, 8, 14, .76);
+    --ring: rgba(255, 95, 105, .48);
+}
+body[data-series="thebest"] .series-fx::before {
+    background-image: repeating-linear-gradient(
+        180deg, transparent 0 3px, rgba(42, 63, 107, .05) 3px 4px);
+}
+body[data-series="thebest"] .shot { border-radius: 4px; }
+body[data-series="thebest"] .shot:hover { transform: translateY(-6px) rotate(-.5deg); }
+body[data-series="thebest"] .kicker { color: var(--accent); }
+
+/* ------------------------------------------------------- 7. Sci-fi — People */
+body[data-series="scifi-people"] {
+    --s-bg: radial-gradient(60% 45% at 78% 8%, #cfebf6 0%, rgba(207, 235, 246, 0) 72%),
+            linear-gradient(180deg, #e4f1f7 0%, #cfe4ee 52%, #a9c9da 100%);
+    --ink: #10242e;
+    --muted: rgba(16, 36, 46, .74);
+    --faint: rgba(16, 36, 46, .5);
+    --accent: #1687b8;
+    --hairline: rgba(22, 135, 184, .26);
+    --panel: rgba(250, 254, 255, .54);
+    --bar: rgba(230, 243, 249, .8);
+    --ring: rgba(22, 135, 184, .5);
+}
+html[data-theme="dark"] body[data-series="scifi-people"] {
+    --s-bg: radial-gradient(60% 45% at 78% 6%, #08303f 0%, rgba(8, 48, 63, 0) 72%),
+            linear-gradient(180deg, #02080b 0%, #05161f 52%, #082836 100%);
+    --ink: #dff2fa;
+    --muted: rgba(223, 242, 250, .76);
+    --faint: rgba(223, 242, 250, .46);
+    --accent: #38d6ff;
+    --hairline: rgba(56, 214, 255, .26);
+    --panel: rgba(255, 255, 255, .05);
+    --bar: rgba(3, 9, 13, .76);
+    --ring: rgba(56, 214, 255, .5);
+}
+body[data-series="scifi-people"] .series-fx::before {
+    background-image: repeating-linear-gradient(
+        180deg, transparent 0 3px, rgba(22, 135, 184, .09) 3px 4px);
+}
+body[data-series="scifi-people"] .shot { border-radius: 2px; }
+body[data-series="scifi-people"] .shot:hover {
+    box-shadow: 0 0 0 1px rgba(22, 135, 184, .6), 0 0 34px rgba(22, 135, 184, .35);
+}
+
+/* ------------------------------------------------------- 8. Sci-fi — Scenes */
+body[data-series="scifi-scene"] {
+    --s-bg: radial-gradient(80% 40% at 50% 92%, #cfe3ec 0%, rgba(207, 227, 236, 0) 70%),
+            linear-gradient(180deg, #dfeaf1 0%, #cddfe8 56%, #aec7d4 100%);
+    --ink: #172932;
+    --muted: rgba(23, 41, 50, .74);
+    --faint: rgba(23, 41, 50, .5);
+    --accent: #3d78a8;
+    --hairline: rgba(61, 120, 168, .26);
+    --panel: rgba(250, 253, 255, .54);
+    --bar: rgba(228, 238, 244, .8);
+    --ring: rgba(61, 120, 168, .5);
+}
+html[data-theme="dark"] body[data-series="scifi-scene"] {
+    --s-bg: radial-gradient(80% 40% at 50% 94%, #123a4e 0%, rgba(18, 58, 78, 0) 72%),
+            linear-gradient(180deg, #03080c 0%, #061319 56%, #0a2431 100%);
+    --ink: #e2f0f7;
+    --muted: rgba(226, 240, 247, .76);
+    --faint: rgba(226, 240, 247, .46);
+    --accent: #6fc6f2;
+    --hairline: rgba(111, 198, 242, .24);
+    --panel: rgba(255, 255, 255, .05);
+    --bar: rgba(3, 8, 12, .76);
+    --ring: rgba(111, 198, 242, .48);
+}
+body[data-series="scifi-scene"] .series-fx::before {
+    background: linear-gradient(180deg, transparent 62%, rgba(120, 190, 225, .18) 100%);
+    filter: blur(2px);
+}
+body[data-series="scifi-scene"] .shot { border-radius: 12px; }
+body[data-series="scifi-scene"] .shot:hover { filter: brightness(1.06); }
+
+/* ------------------------------------------------------- Architecture */
+body[data-series^="arch"] {
+    --s-bg: linear-gradient(180deg, #eef1f4 0%, #e3e8ee 52%, #cfd8e2 100%);
+    --ink: #1d2733;
+    --muted: rgba(29, 39, 51, .74);
+    --faint: rgba(29, 39, 51, .5);
+    --accent: #3f6a8f;
+    --hairline: rgba(63, 106, 143, .24);
+    --panel: rgba(252, 253, 255, .56);
+    --bar: rgba(238, 242, 246, .82);
+    --ring: rgba(63, 106, 143, .45);
+}
+html[data-theme="dark"] body[data-series^="arch"] {
+    --s-bg: linear-gradient(180deg, #05080c 0%, #0a1119 54%, #131f2c 100%);
+    --ink: #e4edf5;
+    --muted: rgba(228, 237, 245, .76);
+    --faint: rgba(228, 237, 245, .46);
+    --accent: #7fb4dd;
+    --hairline: rgba(127, 180, 221, .24);
+    --panel: rgba(255, 255, 255, .05);
+    --bar: rgba(5, 9, 13, .78);
+    --ring: rgba(127, 180, 221, .45);
+}
+body[data-series^="arch"] .series-fx::before {
+    background-image:
+        repeating-linear-gradient(90deg, transparent 0 79px, rgba(63, 106, 143, .08) 79px 80px),
+        repeating-linear-gradient(180deg, transparent 0 79px, rgba(63, 106, 143, .08) 79px 80px);
+    -webkit-mask-image: radial-gradient(72% 62% at 50% 8%, #000 0%, transparent 78%);
+    mask-image: radial-gradient(72% 62% at 50% 8%, #000 0%, transparent 78%);
+}
+body[data-series="arch-transport"] { --accent: #3f6a8f; --hairline: rgba(63, 106, 143, .24); }
+body[data-series="arch-health"]    { --accent: #3f8a72; --hairline: rgba(63, 138, 114, .24); }
+body[data-series="arch-education"] { --accent: #9a6f3c; --hairline: rgba(154, 111, 60, .24); }
+body[data-series="arch-house"]     { --accent: #8a4a5e; --hairline: rgba(138, 74, 94, .24); }
+
+html[data-theme="dark"] body[data-series="arch-health"]    { --accent: #6fd3ab; }
+html[data-theme="dark"] body[data-series="arch-education"] { --accent: #e0b072; }
+html[data-theme="dark"] body[data-series="arch-house"]     { --accent: #e58aa4; }
+
+@media (prefers-reduced-motion: reduce) {
+    body[data-series] .series-fx::before { animation: none !important; }
+}
