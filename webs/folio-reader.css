@@ -1,0 +1,120 @@
+/* =================================================================
+   folio-reader — turns a .gallery.book-source into a single-page book.
+   One plate at a time, turned with the edges, the arrows or the keys.
+   ================================================================= */
+
+.book {
+    position: relative;
+    padding: clamp(10px, 2vh, 22px) 0 clamp(24px, 5vh, 46px);
+}
+
+.book-stage {
+    position: relative;
+    display: grid;
+    place-items: center;
+    perspective: 1700px;
+    perspective-origin: 50% 40%;
+}
+
+.book-page {
+    position: relative;
+    margin: 0;
+    max-width: min(86vw, 780px);
+    transform-origin: left center;
+    transform-style: preserve-3d;
+    transition: transform .46s cubic-bezier(.42, 0, .3, 1), opacity .46s var(--ease);
+    will-change: transform, opacity;
+    cursor: pointer;
+}
+
+.book-page img {
+    display: block;
+    max-width: 100%;
+    max-height: 74vh;
+    width: auto;
+    border: 1px solid rgba(255, 84, 58, .45);
+    background: #000;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, .55);
+}
+
+.book-page::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(90deg, rgba(0, 0, 0, .38), transparent 22%);
+    opacity: 0;
+    transition: opacity .3s var(--ease);
+}
+.book-page.is-turning::after { opacity: 1; }
+
+.book-page.turn-next { transform: rotateY(-74deg) translateZ(-30px); opacity: 0; }
+.book-page.turn-prev { transform: rotateY(74deg) translateZ(-30px); opacity: 0; }
+
+.book-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 54px;
+    height: 54px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(255, 84, 58, .5);
+    background: rgba(10, 4, 6, .55);
+    color: #f8f0e0;
+    font-size: 1.2rem;
+    cursor: pointer;
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    transition: background .25s var(--ease), transform .25s var(--ease);
+}
+.book-nav:hover { background: rgba(255, 84, 58, .28); }
+.book-nav.prev { left: max(2vw, 12px); }
+.book-nav.next { right: max(2vw, 12px); }
+
+.book-foot {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 20px;
+    font-size: .72rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: rgba(248, 240, 224, .6);
+}
+
+.book-rail {
+    flex: 1;
+    height: 2px;
+    background: rgba(248, 240, 224, .18);
+    overflow: hidden;
+}
+.book-rail i {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, #ff3b30, #ffc72e);
+    transition: width .4s var(--ease);
+}
+
+.book-hint { margin-left: auto; opacity: .6; }
+
+@media (max-width: 620px) {
+    .book-page { max-width: 92vw; }
+    .book-nav { width: 42px; height: 42px; font-size: 1rem; }
+    .book-hint { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .book-page { transition: none; }
+}
+
+
+/* while the book is open the masthead steps back so the page can breathe */
+body.has-book .masthead {
+    padding: clamp(18px, 3.4vh, 40px) 0 clamp(8px, 1.6vh, 16px);
+    margin-bottom: 8px;
+}
+body.has-book .masthead h1 { font-size: clamp(2.2rem, 5.4vw, 3.8rem); }
+body.has-book .masthead .lede { margin-top: 12px; }
+body.has-book .book-page img { max-height: 62vh; }

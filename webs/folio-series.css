@@ -31,76 +31,148 @@ body[data-series] .grain { display: none; }
     inset: 0;
 }
 
-/* ------------------------------------------------------- 1. Nine Songs */
+/* ------------------------------------------------------- 1. Nine Songs
+   sacred light. A dark chapel, a column of warm radiance from above,
+   rotating god-rays and a halo behind the title.                                 */
+
 body[data-series="chuci"] {
-    --s-bg: radial-gradient(70% 50% at 20% 10%, #f4eee0 0%, rgba(244, 238, 224, 0) 70%),
-            linear-gradient(180deg, #ece3d0 0%, #e2d6bd 46%, #d3c2a2 100%);
-    --ink: #35301f;
-    --muted: rgba(53, 48, 31, .74);
-    --faint: rgba(53, 48, 31, .5);
-    --accent: #9a7b3c;
-    --hairline: rgba(122, 96, 48, .26);
-    --panel: rgba(255, 252, 243, .5);
-    --bar: rgba(240, 233, 217, .74);
-    --ring: rgba(154, 123, 60, .5);
+    --s-bg:
+        radial-gradient(48% 38% at 50% -12%, rgba(255, 226, 158, .55) 0%, rgba(255, 226, 158, 0) 72%),
+        radial-gradient(70% 50% at 50% 108%, rgba(46, 92, 78, .5) 0%, rgba(46, 92, 78, 0) 70%),
+        linear-gradient(180deg, #0a100e 0%, #121a15 46%, #1d1a0f 100%);
+    --ink: #f7efdb;
+    --muted: rgba(247, 239, 219, .78);
+    --faint: rgba(247, 239, 219, .5);
+    --accent: #e9c87c;
+    --hairline: rgba(233, 200, 124, .3);
+    --panel: rgba(255, 248, 228, .06);
+    --bar: rgba(6, 10, 8, .72);
+    --ring: rgba(233, 200, 124, .55);
 }
 html[data-theme="dark"] body[data-series="chuci"] {
-    --s-bg: radial-gradient(70% 50% at 20% 8%, #1d2a22 0%, rgba(29, 42, 34, 0) 72%),
-            linear-gradient(180deg, #0a0d0b 0%, #141a15 52%, #2a2314 100%);
-    --ink: #efe6d3;
-    --muted: rgba(239, 230, 211, .76);
-    --faint: rgba(239, 230, 211, .48);
-    --accent: #d8bd7c;
-    --hairline: rgba(216, 189, 124, .24);
-    --panel: rgba(255, 255, 255, .05);
-    --bar: rgba(10, 12, 10, .72);
-    --ring: rgba(216, 189, 124, .45);
+    --s-bg:
+        radial-gradient(48% 38% at 50% -12%, rgba(255, 232, 170, .5) 0%, rgba(255, 232, 170, 0) 72%),
+        radial-gradient(70% 50% at 50% 108%, rgba(30, 70, 58, .55) 0%, rgba(30, 70, 58, 0) 70%),
+        linear-gradient(180deg, #050806 0%, #0b110d 46%, #16130b 100%);
 }
-body[data-series="chuci"] .series-fx::before {
-    background:
-        radial-gradient(46% 34% at 18% 22%, rgba(58, 84, 70, .16), transparent 70%),
-        radial-gradient(38% 30% at 82% 74%, rgba(122, 96, 48, .14), transparent 72%);
-    animation: ink-breathe 18s ease-in-out infinite alternate;
-}
-@keyframes ink-breathe {
-    from { transform: scale(1) translateY(0); opacity: .8; }
-    to   { transform: scale(1.08) translateY(-14px); opacity: 1; }
-}
-body[data-series="chuci"] .shot { border-radius: 3px; border-color: rgba(154, 123, 60, .45); }
-body[data-series="chuci"] .shot img { aspect-ratio: 3 / 4; }
-body[data-series="chuci"] .masthead h1 { letter-spacing: .01em; }
 
-/* ------------------------------------------------------- 2. Book of Poetry */
-body[data-series="shijing"] {
-    --s-bg: linear-gradient(180deg, #f4f1e6 0%, #eae3d1 55%, #ded3ba 100%);
-    --ink: #3a3a2c;
-    --muted: rgba(58, 58, 44, .72);
-    --faint: rgba(58, 58, 44, .48);
-    --accent: #6f7a4e;
-    --hairline: rgba(111, 122, 78, .28);
-    --panel: rgba(255, 254, 247, .55);
-    --bar: rgba(246, 243, 233, .76);
-    --ring: rgba(111, 122, 78, .45);
-}
-html[data-theme="dark"] body[data-series="shijing"] {
-    --s-bg: linear-gradient(180deg, #0b0c0a 0%, #171a14 50%, #2b2a1c 100%);
-    --ink: #ece9d9;
-    --muted: rgba(236, 233, 217, .74);
-    --faint: rgba(236, 233, 217, .46);
-    --accent: #b9c07f;
-    --hairline: rgba(185, 192, 127, .22);
-    --panel: rgba(255, 255, 255, .05);
-    --bar: rgba(8, 10, 8, .72);
-    --ring: rgba(185, 192, 127, .4);
-}
-body[data-series="shijing"] .series-fx::before {
-    background-image: repeating-linear-gradient(
-        180deg, transparent 0 27px, rgba(111, 122, 78, .10) 27px 28px);
+/* rotating shafts of light */
+body[data-series="chuci"] .series-fx::before {
+    background: repeating-conic-gradient(
+        from 0deg at 50% -6%,
+        rgba(255, 228, 156, .00) 0deg 5deg,
+        rgba(255, 228, 156, .13) 5deg 8deg,
+        rgba(255, 228, 156, .00) 8deg 15deg);
+    animation: rays-turn 90s linear infinite;
+    transform-origin: 50% -6%;
+    mix-blend-mode: screen;
+    filter: blur(7px);
     opacity: .7;
 }
-body[data-series="shijing"] .shot { border-radius: 0; }
-body[data-series="shijing"] .shot:hover { transform: translateY(-3px); }
+@keyframes rays-turn {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+/* a halo sitting behind the title */
+body[data-series="chuci"] .masthead::before {
+    content: "";
+    position: absolute;
+    left: 6%; top: 26%;
+    width: min(520px, 52vw);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 226, 158, .30) 0%, rgba(255, 226, 158, 0) 62%);
+    filter: blur(6px);
+    pointer-events: none;
+    animation: halo-breathe 9s ease-in-out infinite;
+}
+@keyframes halo-breathe {
+    0%, 100% { opacity: .55; transform: scale(1); }
+    50%      { opacity: 1;   transform: scale(1.06); }
+}
+
+body[data-series="chuci"] .masthead { position: relative; }
+body[data-series="chuci"] .masthead h1 {
+    text-shadow: 0 0 46px rgba(255, 216, 138, .35), 0 0 110px rgba(255, 200, 100, .18);
+}
+body[data-series="chuci"] .shot {
+    border-radius: 3px;
+    border-color: rgba(233, 200, 124, .45);
+    box-shadow: 0 18px 44px rgba(0, 0, 0, .45), 0 0 26px rgba(255, 214, 140, .10);
+}
+body[data-series="chuci"] .shot:hover {
+    box-shadow: 0 24px 54px rgba(0, 0, 0, .5), 0 0 40px rgba(255, 214, 140, .3);
+}
+
+/* ------------------------------------------------------- 2. Book of Poetry
+   beside water. Pale ripple bands drift upward, a caustic shimmer moves
+   under them, and the whole page stays cool and quiet.                          */
+
+body[data-series="shijing"] {
+    --s-bg:
+        radial-gradient(60% 40% at 50% 100%, rgba(126, 178, 176, .5) 0%, rgba(126, 178, 176, 0) 72%),
+        linear-gradient(180deg, #eef4f2 0%, #dce9e7 46%, #b9d3d1 100%);
+    --ink: #223634;
+    --muted: rgba(34, 54, 52, .74);
+    --faint: rgba(34, 54, 52, .48);
+    --accent: #4f8a86;
+    --hairline: rgba(79, 138, 134, .26);
+    --panel: rgba(255, 255, 255, .5);
+    --bar: rgba(240, 246, 245, .78);
+    --ring: rgba(79, 138, 134, .45);
+}
+html[data-theme="dark"] body[data-series="shijing"] {
+    --s-bg:
+        radial-gradient(60% 40% at 50% 100%, rgba(30, 78, 84, .6) 0%, rgba(30, 78, 84, 0) 72%),
+        linear-gradient(180deg, #050d0f 0%, #0a1a1d 46%, #103033 100%);
+    --ink: #e2f2ef;
+    --muted: rgba(226, 242, 239, .78);
+    --faint: rgba(226, 242, 239, .48);
+    --accent: #7fd3cb;
+    --hairline: rgba(127, 211, 203, .24);
+    --panel: rgba(255, 255, 255, .05);
+    --bar: rgba(4, 12, 14, .76);
+    --ring: rgba(127, 211, 203, .45);
+}
+
+/* water bands, drifting */
+body[data-series="shijing"] .series-fx::before {
+    background-image: repeating-linear-gradient(
+        180deg,
+        rgba(120, 180, 178, .00) 0 9px,
+        rgba(120, 180, 178, .13) 9px 10px,
+        rgba(120, 180, 178, .00) 10px 22px,
+        rgba(90, 150, 160, .10) 22px 23px);
+    animation: water-lift 22s linear infinite;
+}
+@keyframes water-lift {
+    from { background-position: 0 0; }
+    to   { background-position: 0 -92px; }
+}
+
+/* caustic light moving under the surface */
+body[data-series="shijing"] .series-fx::after {
+    background:
+        radial-gradient(28% 18% at 30% 62%, rgba(255, 255, 255, .35), transparent 70%),
+        radial-gradient(24% 14% at 68% 44%, rgba(255, 255, 255, .28), transparent 72%),
+        radial-gradient(30% 16% at 52% 82%, rgba(255, 255, 255, .24), transparent 70%);
+    filter: blur(10px);
+    animation: caustic-shift 14s ease-in-out infinite alternate;
+    mix-blend-mode: screen;
+}
+@keyframes caustic-shift {
+    from { transform: translate3d(-3%, 2%, 0) scale(1); }
+    to   { transform: translate3d(4%, -2%, 0) scale(1.1); }
+}
+
+body[data-series="shijing"] .shot {
+    border-radius: 2px;
+    border-color: rgba(79, 138, 134, .35);
+    box-shadow: 0 16px 38px rgba(30, 70, 72, .18);
+}
 body[data-series="shijing"] .kicker { letter-spacing: .42em; }
+body[data-series="shijing"] .masthead h1 { text-shadow: 0 1px 26px rgba(70, 130, 128, .18); }
 
 /* ------------------------------------------------------- 3. Classic */
 body[data-series="classic"] {
@@ -345,71 +417,72 @@ body[data-series="thebest"] .tally li::before { background: var(--accent); }
 body[data-series="she"] .foot,
 body[data-series="thebest"] .foot { border-top-color: rgba(255, 84, 58, .3); }
 
-/* ------------------------------------------------------- 7. Sci-fi — People */
-body[data-series="scifi-people"] {
-    --s-bg: radial-gradient(60% 45% at 78% 8%, #cfebf6 0%, rgba(207, 235, 246, 0) 72%),
-            linear-gradient(180deg, #e4f1f7 0%, #cfe4ee 52%, #a9c9da 100%);
-    --ink: #10242e;
-    --muted: rgba(16, 36, 46, .74);
-    --faint: rgba(16, 36, 46, .5);
-    --accent: #1687b8;
-    --hairline: rgba(22, 135, 184, .26);
-    --panel: rgba(250, 254, 255, .54);
-    --bar: rgba(230, 243, 249, .8);
-    --ring: rgba(22, 135, 184, .5);
-}
-html[data-theme="dark"] body[data-series="scifi-people"] {
-    --s-bg: radial-gradient(60% 45% at 78% 6%, #08303f 0%, rgba(8, 48, 63, 0) 72%),
-            linear-gradient(180deg, #02080b 0%, #05161f 52%, #082836 100%);
-    --ink: #dff2fa;
-    --muted: rgba(223, 242, 250, .76);
-    --faint: rgba(223, 242, 250, .46);
-    --accent: #38d6ff;
-    --hairline: rgba(56, 214, 255, .26);
+/* ------------------------------------------------------- 7. Sci-fi — People
+   the original cold blue, plus a flash and falling code.                         */
+
+body[data-series="scifi-people"],
+body[data-series="scifi-scene"] {
+    --ink: #dff4ff;
+    --muted: rgba(223, 244, 255, .78);
+    --faint: rgba(223, 244, 255, .48);
     --panel: rgba(255, 255, 255, .05);
-    --bar: rgba(3, 9, 13, .76);
-    --ring: rgba(56, 214, 255, .5);
+    --bar: rgba(2, 8, 14, .8);
 }
-body[data-series="scifi-people"] .series-fx::before {
-    background-image: repeating-linear-gradient(
-        180deg, transparent 0 3px, rgba(22, 135, 184, .09) 3px 4px);
+body[data-series="scifi-people"] {
+    --s-bg:
+        radial-gradient(55% 42% at 50% -8%, rgba(60, 200, 255, .32) 0%, rgba(60, 200, 255, 0) 70%),
+        linear-gradient(180deg, #02070d 0%, #04131f 50%, #062433 100%);
+    --accent: #3fd8ff;
+    --hairline: rgba(63, 216, 255, .3);
+    --ring: rgba(63, 216, 255, .55);
 }
-body[data-series="scifi-people"] .shot { border-radius: 2px; }
-body[data-series="scifi-people"] .shot:hover {
-    box-shadow: 0 0 0 1px rgba(22, 135, 184, .6), 0 0 34px rgba(22, 135, 184, .35);
+body[data-series="scifi-scene"] {
+    --s-bg:
+        radial-gradient(70% 40% at 50% 104%, rgba(60, 170, 230, .4) 0%, rgba(60, 170, 230, 0) 72%),
+        linear-gradient(180deg, #02070c 0%, #051219 48%, #0a2735 100%);
+    --accent: #6fc9f5;
+    --hairline: rgba(111, 201, 245, .28);
+    --ring: rgba(111, 201, 245, .5);
 }
 
-/* ------------------------------------------------------- 8. Sci-fi — Scenes */
-body[data-series="scifi-scene"] {
-    --s-bg: radial-gradient(80% 40% at 50% 92%, #cfe3ec 0%, rgba(207, 227, 236, 0) 70%),
-            linear-gradient(180deg, #dfeaf1 0%, #cddfe8 56%, #aec7d4 100%);
-    --ink: #172932;
-    --muted: rgba(23, 41, 50, .74);
-    --faint: rgba(23, 41, 50, .5);
-    --accent: #3d78a8;
-    --hairline: rgba(61, 120, 168, .26);
-    --panel: rgba(250, 253, 255, .54);
-    --bar: rgba(228, 238, 244, .8);
-    --ring: rgba(61, 120, 168, .5);
+/* falling code, drawn by folio-matrix.js */
+canvas.matrix {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: .38;
+    mix-blend-mode: screen;
 }
-html[data-theme="dark"] body[data-series="scifi-scene"] {
-    --s-bg: radial-gradient(80% 40% at 50% 94%, #123a4e 0%, rgba(18, 58, 78, 0) 72%),
-            linear-gradient(180deg, #03080c 0%, #061319 56%, #0a2431 100%);
-    --ink: #e2f0f7;
-    --muted: rgba(226, 240, 247, .76);
-    --faint: rgba(226, 240, 247, .46);
-    --accent: #6fc6f2;
-    --hairline: rgba(111, 198, 242, .24);
-    --panel: rgba(255, 255, 255, .05);
-    --bar: rgba(3, 8, 12, .76);
-    --ring: rgba(111, 198, 242, .48);
-}
+
+/* the blue flash that punctuates the page */
+body[data-series="scifi-people"] .series-fx::before,
 body[data-series="scifi-scene"] .series-fx::before {
-    background: linear-gradient(180deg, transparent 62%, rgba(120, 190, 225, .18) 100%);
-    filter: blur(2px);
+    background: radial-gradient(60% 40% at 50% 0%, rgba(140, 230, 255, .5), transparent 70%);
+    animation: blue-flash 7.5s ease-in-out infinite;
+    mix-blend-mode: screen;
 }
-body[data-series="scifi-scene"] .shot { border-radius: 12px; }
-body[data-series="scifi-scene"] .shot:hover { filter: brightness(1.06); }
+@keyframes blue-flash {
+    0%, 84%  { opacity: 0; }
+    88%      { opacity: .85; }
+    92%      { opacity: .15; }
+    96%, 100%{ opacity: 0; }
+}
+
+body[data-series="scifi-people"] .shot,
+body[data-series="scifi-scene"] .shot {
+    border-radius: 2px;
+    border-color: rgba(63, 216, 255, .4);
+    box-shadow: 0 0 0 1px rgba(63, 216, 255, .12), 0 18px 44px rgba(0, 20, 40, .6);
+}
+body[data-series="scifi-people"] .shot:hover,
+body[data-series="scifi-scene"] .shot:hover {
+    box-shadow: 0 0 0 1px rgba(63, 216, 255, .7), 0 0 44px rgba(63, 216, 255, .45);
+}
+body[data-series="scifi-people"] .masthead h1,
+body[data-series="scifi-scene"] .masthead h1 {
+    text-shadow: 0 0 40px rgba(80, 210, 255, .45);
+}
 
 /* ------------------------------------------------------- Architecture */
 body[data-series^="arch"] {
