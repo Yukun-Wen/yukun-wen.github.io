@@ -1292,6 +1292,13 @@ html[data-theme="dark"] .footer-inner a:hover{color:#0a1020}
 }
 html[data-theme="dark"] #dust{opacity:.9}
 
+/* gulls by day, crows by night — released on click */
+#birds{
+    position:fixed;inset:0;
+    z-index:125;
+    pointer-events:none;
+}
+
 /* hero aura */
 .hero::after{
     content:"";
@@ -1368,6 +1375,7 @@ html[data-theme="dark"] .ripple{
 
 @media (prefers-reduced-motion:reduce){
     #dust{display:none}
+    #birds{display:none}
     .hero::after{display:none}
     .hero h1 em{animation:none}
     .ripple{display:none}
@@ -1381,6 +1389,7 @@ html[data-theme="dark"] .ripple{
 <div class="paint" aria-hidden="true"></div>
 <div class="water" aria-hidden="true"></div>
 <canvas id="dust" aria-hidden="true"></canvas>
+<canvas id="birds" aria-hidden="true"></canvas>
 
 <!-- ============================================ nav -->
 <header class="nav" id="nav">
@@ -2510,6 +2519,146 @@ html[data-theme="dark"] .ripple{
 
         resize();
         tick();
+    })();
+
+    /* ---------------------------------------------------------- gulls & crows */
+    (function birds() {
+        var cv = document.getElementById("birds");
+        if (!cv || reduce) { return; }
+        var ctx = cv.getContext("2d");
+        if (!ctx) { return; }
+
+        var W = 0, H = 0, DPR = 1;
+        var list = [];
+        var MAX = 20;
+        var raf = 0, running = true, last = 0;
+
+        function resize() {
+            DPR = Math.min(window.devicePixelRatio || 1, 2);
+            W = window.innerWidth;
+            H = window.innerHeight;
+            cv.width = Math.round(W * DPR);
+            cv.height = Math.round(H * DPR);
+            cv.style.width = W + "px";
+            cv.style.height = H + "px";
+            ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+        }
+
+        function spawn(x, y) {
+            if (list.length >= MAX) { list.shift(); }
+            var angle = Math.random() * Math.PI * 2;
+            var speed = 78 + Math.random() * 96;
+            list.push({
+                x: x, y: y,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed,
+                s: 0.8 + Math.random() * 0.7,
+                flap: Math.random() * Math.PI * 2,
+                flapSp: 7 + Math.random() * 4.5,
+                bank: 0,
+                kind: document.documentElement.getAttribute("data-theme") === "dark" ? "crow" : "gull",
+                life: 0
+            });
+        }
+
+        function wingPath(span, tipY, s) {
+            var midY = tipY * 0.42;
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.quadraticCurveTo(-span * 0.5, midY - 1.6 * s, -span, tipY);
+            ctx.quadraticCurveTo(-span * 0.5, midY + 4.6 * s, 0, 2.7 * s);
+            ctx.quadraticCurveTo(span * 0.5, midY + 4.6 * s, span, tipY);
+            ctx.quadraticCurveTo(span * 0.5, midY - 1.6 * s, 0, 0);
+            ctx.closePath();
+        }
+
+        function draw(b) {
+            var s = b.s;
+            var span = 15 * s;
+            var tipY = -7.6 * s * Math.sin(b.flap);
+
+            ctx.save();
+            ctx.translate(b.x, b.y);
+            ctx.rotate(b.bank);
+
+            wingPath(span, tipY, s);
+
+            if (b.kind === "gull") {
+                ctx.fillStyle = "#fcfbf7";
+                ctx.fill();
+                ctx.lineWidth = 0.9;
+                ctx.strokeStyle = "rgba(92,100,124,.6)";
+                ctx.stroke();
+
+                /* dark primaries at the tips */
+                ctx.fillStyle = "#2c3039";
+                [-1, 1].forEach(function (d) {
+                    ctx.beginPath();
+                    ctx.moveTo(d * span, tipY);
+                    ctx.quadraticCurveTo(d * span * 0.88, tipY * 0.8 + 1.2 * s, d * span * 0.8, tipY * 0.66 + 1.7 * s);
+                    ctx.quadraticCurveTo(d * span * 0.92, tipY * 0.6, d * span, tipY);
+                    ctx.closePath();
+                    ctx.fill();
+                });
+            } else {
+                ctx.fillStyle = "#141419";
+                ctx.fill();
+                ctx.lineWidth = 0.8;
+                ctx.strokeStyle = "rgba(0,0,0,.5)";
+                ctx.stroke();
+            }
+
+            ctx.restore();
+        }
+
+        function tick(now) {
+            if (!running) { return; }
+            if (!last) { last = now; }
+            var dt = Math.min((now - last) / 1000, 0.05);
+            last = now;
+
+            ctx.clearRect(0, 0, W, H);
+
+            for (var i = list.length - 1; i >= 0; i--) {
+                var b = list[i];
+                b.life += dt;
+                b.x += b.vx * dt;
+                b.y += b.vy * dt;
+                b.flap += b.flapSp * dt;
+
+                var bankTarget = Math.max(-0.42, Math.min(0.42, b.vy / 230));
+                b.bank += (bankTarget - b.bank) * 0.09;
+
+                if (b.x < -90 || b.x > W + 90 || b.y < -90 || b.y > H + 90) {
+                    list.splice(i, 1);
+                    continue;
+                }
+                draw(b);
+            }
+
+            raf = requestAnimationFrame(tick);
+        }
+
+        window.addEventListener("resize", resize, { passive: true });
+
+        document.addEventListener("pointerdown", function (e) {
+            if (e.button !== 0) { return; }
+            spawn(e.clientX, e.clientY);
+        }, { passive: true });
+
+        document.addEventListener("visibilitychange", function () {
+            if (document.hidden) {
+                running = false;
+                cancelAnimationFrame(raf);
+            } else if (!running) {
+                running = true;
+                last = 0;
+                raf = requestAnimationFrame(tick);
+            }
+        });
+
+        resize();
+        raf = requestAnimationFrame(tick);
     })();
 
     /* ---------------------------------------------------------- cursor spotlight */
