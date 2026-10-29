@@ -17,6 +17,9 @@ body[data-series] {
    brings its own atmosphere instead */
 body[data-series] .grain { display: none; }
 
+/* colour orbs: only the Novel pages light them up */
+.orb { display: none; }
+
 .series-fx {
     position: fixed;
     inset: 0;
@@ -526,3 +529,106 @@ html[data-theme="dark"] body[data-series="arch-house"]     { --accent: #e58aa4; 
 @media (prefers-reduced-motion: reduce) {
     body[data-series] .series-fx::before { animation: none !important; }
 }
+
+/* three colours that keep meeting, blending and parting again.
+   screen keeps red and yellow luminous where they overlap (they turn
+   orange), and the black orb multiplies to carve voids back through it. */
+
+body[data-series="she"] .orb,
+body[data-series="thebest"] .orb {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    filter: blur(70px);
+    will-change: transform, opacity;
+}
+
+body[data-series="she"] .o1,
+body[data-series="thebest"] .o1 {
+    width: 66vmax; height: 66vmax; left: -16vmax; top: -20vmax;
+    background: radial-gradient(circle, rgba(255, 44, 38, .95) 0%, rgba(255, 44, 38, 0) 62%);
+    mix-blend-mode: screen;
+    animation: orb-a 17s ease-in-out infinite alternate;
+}
+
+body[data-series="she"] .o2,
+body[data-series="thebest"] .o2 {
+    width: 58vmax; height: 58vmax; right: -16vmax; bottom: -22vmax;
+    background: radial-gradient(circle, rgba(255, 200, 48, .9) 0%, rgba(255, 200, 48, 0) 60%);
+    mix-blend-mode: screen;
+    animation: orb-b 21s ease-in-out infinite alternate;
+}
+
+body[data-series="she"] .o3,
+body[data-series="thebest"] .o3 {
+    width: 74vmax; height: 74vmax; left: 8vmax; top: 4vmax;
+    background: radial-gradient(circle, rgba(196, 16, 30, .8) 0%, rgba(196, 16, 30, 0) 64%);
+    mix-blend-mode: screen;
+    animation: orb-c 26s ease-in-out infinite alternate;
+}
+
+body[data-series="she"] .o4,
+body[data-series="thebest"] .o4 {
+    width: 60vmax; height: 60vmax; left: 22vmax; top: -6vmax;
+    background: radial-gradient(circle, rgba(0, 0, 0, .85) 0%, rgba(0, 0, 0, 0) 66%);
+    mix-blend-mode: multiply;
+    animation: orb-d 19s ease-in-out infinite alternate;
+}
+
+body[data-series="she"] .o5,
+body[data-series="thebest"] .o5 {
+    width: 34vmax; height: 34vmax; left: 34vmax; top: 26vmax;
+    background: radial-gradient(circle, rgba(255, 214, 90, .85) 0%, rgba(255, 214, 90, 0) 58%);
+    mix-blend-mode: screen;
+    animation: orb-e 13s ease-in-out infinite alternate;
+}
+
+/* The Best leans gold: swap which colour leads */
+body[data-series="thebest"] .o1 {
+    background: radial-gradient(circle, rgba(255, 198, 40, .95) 0%, rgba(255, 198, 40, 0) 62%);
+}
+body[data-series="thebest"] .o2 {
+    background: radial-gradient(circle, rgba(255, 60, 40, .88) 0%, rgba(255, 60, 40, 0) 60%);
+}
+
+@keyframes orb-a {
+    0%   { transform: translate3d(-6%, -4%, 0) scale(1); }
+    50%  { transform: translate3d(14%, 6%, 0) scale(1.16); }
+    100% { transform: translate3d(4%, 16%, 0) scale(1.05); }
+}
+@keyframes orb-b {
+    0%   { transform: translate3d(8%, -6%, 0) scale(1.12); }
+    50%  { transform: translate3d(-10%, -14%, 0) scale(.96); }
+    100% { transform: translate3d(-16%, 4%, 0) scale(1.1); }
+}
+@keyframes orb-c {
+    0%   { transform: rotate(0deg) translate3d(0, 0, 0) scale(1); }
+    50%  { transform: rotate(14deg) translate3d(-6%, 10%, 0) scale(1.14); }
+    100% { transform: rotate(26deg) translate3d(8%, -6%, 0) scale(.94); }
+}
+@keyframes orb-d {
+    0%   { transform: translate3d(4%, 6%, 0) scale(1.18); }
+    50%  { transform: translate3d(-8%, -10%, 0) scale(.92); }
+    100% { transform: translate3d(-14%, 8%, 0) scale(1.06); }
+}
+@keyframes orb-e {
+    0%   { transform: translate3d(-4%, 2%, 0) scale(.85); opacity: .55; }
+    60%  { transform: translate3d(8%, -10%, 0) scale(1.25); opacity: 1; }
+    100% { transform: translate3d(16%, 4%, 0) scale(1); opacity: .7; }
+}
+
+/* the diagonal bands step back so the colour can lead */
+body[data-series="she"] .series-fx::before,
+body[data-series="thebest"] .series-fx::before { opacity: .55; }
+body[data-series="she"] .series-fx::after,
+body[data-series="thebest"] .series-fx::after { display: none; }
+
+/* the kicker sits on saturated colour, so give it a light edge */
+body[data-series="she"] .kicker,
+body[data-series="thebest"] .kicker {
+    color: #fff3dc;
+    text-shadow: 0 1px 12px rgba(0, 0, 0, .55);
+}
+body[data-series="she"] .lede,
+body[data-series="thebest"] .lede { text-shadow: 0 1px 14px rgba(0, 0, 0, .5); }
