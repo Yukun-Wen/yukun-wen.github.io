@@ -1056,12 +1056,126 @@ html[data-theme="dark"] .nav-links{background:rgba(5,7,14,.97)}
 .footer-inner{color:rgba(20,18,6,.72)}
 .footer-inner a{color:rgba(20,18,6,.72)}
 .footer-inner a:hover{color:#0a1020}
+
+/* =================================================================
+   GOLD SPECTACLE
+   Floating dust, a light that follows the cursor across the glass,
+   tilting cards, a shimmering name and a ripple on every click.
+   ================================================================= */
+
+/* ---------------------------------------------- floating gold dust */
+#dust{
+    position:fixed;inset:0;
+    z-index:3;
+    pointer-events:none;
+    opacity:.9;
+}
+
+/* ---------------------------------------------- hero aura */
+.hero::after{
+    content:"";
+    position:absolute;left:50%;top:38%;
+    width:min(1180px,130vw);aspect-ratio:1;
+    transform:translate(-50%,-50%);
+    pointer-events:none;z-index:0;
+    background:conic-gradient(from 0deg,
+        rgba(244,229,52,.13),
+        rgba(244,229,52,0) 22%,
+        rgba(205,139,14,.12) 47%,
+        rgba(244,229,52,0) 72%,
+        rgba(244,229,52,.13));
+    filter:blur(64px);
+    opacity:.55;
+    animation:aura-spin 46s linear infinite;
+}
+@keyframes aura-spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+
+/* ---------------------------------------------- cursor spotlight on glass */
+.hero-inner,
+.pillars,
+main > .section{ --mx:50%; --my:0%; }
+
+.hero-inner::before,
+.pillars::before,
+main > .section::before{
+    background:
+        radial-gradient(260px 260px at var(--mx) var(--my),
+            rgba(244,229,52,.17), rgba(244,229,52,0) 72%),
+        linear-gradient(148deg,
+            rgba(255,255,255,.13) 0%,
+            rgba(255,255,255,0) 34%,
+            rgba(255,255,255,0) 64%,
+            rgba(244,229,52,.09) 100%);
+}
+
+/* ---------------------------------------------- tilting cards */
+.card{perspective:1000px}
+.card .frame{
+    transform-style:preserve-3d;
+    transition:transform .5s var(--ease),box-shadow .5s var(--ease),border-color .5s var(--ease);
+}
+.card .frame::after{
+    content:"";
+    position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(300px 300px at var(--sx,50%) var(--sy,50%),
+        rgba(255,247,214,.34), rgba(255,247,214,0) 62%);
+    opacity:0;
+    transition:opacity .4s var(--ease);
+    mix-blend-mode:screen;
+}
+.card:hover .frame::after{opacity:1}
+
+/* ---------------------------------------------- shimmering name */
+@supports ((-webkit-background-clip:text) or (background-clip:text)){
+    .hero h1 em{
+        background:linear-gradient(100deg,
+            #CD8B0E 0%, #F4E534 20%, #FFF9CE 36%,
+            #F4E534 52%, #CD8B0E 74%, #F4E534 100%);
+        background-size:230% 100%;
+        -webkit-background-clip:text;background-clip:text;
+        -webkit-text-fill-color:transparent;color:transparent;
+        filter:drop-shadow(0 0 26px rgba(244,229,52,.34));
+        animation:gold-sheen 7.5s ease-in-out infinite;
+    }
+}
+@keyframes gold-sheen{
+    0%,100%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+}
+
+/* ---------------------------------------------- click ripple */
+.ripple{
+    position:fixed;pointer-events:none;z-index:190;
+    width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;
+    border:1px solid rgba(244,229,52,.95);
+    box-shadow:0 0 22px rgba(244,229,52,.75), inset 0 0 14px rgba(244,229,52,.5);
+    animation:ripple-out .85s cubic-bezier(.2,.7,.3,1) forwards;
+}
+@keyframes ripple-out{
+    from{transform:scale(.35);opacity:.95}
+    to{transform:scale(7.5);opacity:0}
+}
+
+/* ---------------------------------------------- glowing progress bar */
+#progress{
+    height:3px;
+    background:linear-gradient(90deg,#CD8B0E,#F4E534 45%,#FFF9CE 70%,#F4E534);
+    box-shadow:0 0 16px rgba(244,229,52,.65), 0 0 34px rgba(205,139,14,.45);
+}
+
+@media (prefers-reduced-motion:reduce){
+    #dust{display:none}
+    .hero::after{display:none}
+    .hero h1 em{animation:none}
+    .ripple{display:none}
+}
 </style>
 </head>
 <body>
 
 <div id="progress"></div>
 <div class="cursor" id="cursor" aria-hidden="true"></div>
+<canvas id="dust" aria-hidden="true"></canvas>
 
 <!-- ============================================ nav -->
 <header class="nav" id="nav">
@@ -2052,6 +2166,168 @@ html[data-theme="dark"] .nav-links{background:rgba(5,7,14,.97)}
             img.style.transform = "scale(1.06) translate(" + (-dx) + "px," + (-dy) + "px)";
         });
         fig.addEventListener("mouseleave", function () { img.style.transform = ""; });
+    }
+
+    /* ---------------------------------------------------------- gold dust */
+    (function dust() {
+        var cv = document.getElementById("dust");
+        if (!cv || reduce) { return; }
+        var ctx = cv.getContext("2d");
+        if (!ctx) { return; }
+
+        var W = 0, H = 0, DPR = 1;
+        var parts = [];
+        var pointer = { x: -9999, y: -9999 };
+        var running = true;
+        var rafId = 0;
+
+        var TONES = ["255,247,200", "244,229,52", "205,139,14"];
+
+        function make(seed) {
+            return {
+                x: Math.random() * W,
+                y: seed ? Math.random() * H : H + 12,
+                r: Math.random() * 1.4 + 0.4,
+                vy: -(Math.random() * 0.26 + 0.07),
+                vx: (Math.random() - 0.5) * 0.16,
+                a: Math.random() * 0.45 + 0.22,
+                tw: Math.random() * Math.PI * 2,
+                ts: Math.random() * 0.02 + 0.006,
+                tone: TONES[(Math.random() * TONES.length) | 0]
+            };
+        }
+
+        function resize() {
+            DPR = Math.min(window.devicePixelRatio || 1, 2);
+            W = window.innerWidth;
+            H = window.innerHeight;
+            cv.width = Math.round(W * DPR);
+            cv.height = Math.round(H * DPR);
+            cv.style.width = W + "px";
+            cv.style.height = H + "px";
+            ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+
+            var want = Math.round(Math.min(110, Math.max(34, (W * H) / 16000)));
+            parts = [];
+            for (var i = 0; i < want; i++) { parts.push(make(true)); }
+        }
+
+        function tick() {
+            if (!running) { return; }
+            ctx.clearRect(0, 0, W, H);
+
+            for (var i = 0; i < parts.length; i++) {
+                var p = parts[i];
+                p.tw += p.ts;
+
+                var dx = p.x - pointer.x, dy = p.y - pointer.y;
+                var d2 = dx * dx + dy * dy;
+                if (d2 < 16000 && d2 > 0.01) {
+                    var push = (1 - d2 / 16000) * 0.55;
+                    var d = Math.sqrt(d2);
+                    p.x += (dx / d) * push;
+                    p.y += (dy / d) * push;
+                }
+
+                p.x += p.vx;
+                p.y += p.vy;
+
+                if (p.y < -14 || p.x < -16 || p.x > W + 16) {
+                    var n = make(false);
+                    p.x = n.x; p.y = n.y; p.r = n.r;
+                    p.vy = n.vy; p.vx = n.vx; p.a = n.a; p.tone = n.tone;
+                }
+
+                var glow = 0.55 + Math.sin(p.tw) * 0.45;
+
+                ctx.beginPath();
+                ctx.fillStyle = "rgba(" + p.tone + "," + (p.a * glow * 0.16).toFixed(3) + ")";
+                ctx.arc(p.x, p.y, p.r * 3.6, 0, 6.2832);
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.fillStyle = "rgba(" + p.tone + "," + (p.a * glow).toFixed(3) + ")";
+                ctx.arc(p.x, p.y, p.r, 0, 6.2832);
+                ctx.fill();
+            }
+
+            rafId = requestAnimationFrame(tick);
+        }
+
+        window.addEventListener("resize", resize, { passive: true });
+        window.addEventListener("pointermove", function (e) {
+            pointer.x = e.clientX; pointer.y = e.clientY;
+        }, { passive: true });
+        window.addEventListener("pointerleave", function () {
+            pointer.x = -9999; pointer.y = -9999;
+        });
+
+        document.addEventListener("visibilitychange", function () {
+            if (document.hidden) {
+                running = false;
+                cancelAnimationFrame(rafId);
+            } else if (!running) {
+                running = true;
+                tick();
+            }
+        });
+
+        resize();
+        tick();
+    })();
+
+    /* ---------------------------------------------------------- cursor spotlight */
+    if (finePointer && !reduce) {
+        document.querySelectorAll(".hero-inner, .pillars, main > .section").forEach(function (panel) {
+            panel.addEventListener("pointermove", function (e) {
+                var r = panel.getBoundingClientRect();
+                panel.style.setProperty("--mx", (((e.clientX - r.left) / r.width) * 100).toFixed(2) + "%");
+                panel.style.setProperty("--my", (((e.clientY - r.top) / r.height) * 100).toFixed(2) + "%");
+            }, { passive: true });
+        });
+    }
+
+    /* ---------------------------------------------------------- tilting cards */
+    if (finePointer && !reduce) {
+        document.querySelectorAll(".card").forEach(function (card) {
+            var frame = card.querySelector(".frame");
+            if (!frame) { return; }
+
+            card.addEventListener("pointerenter", function () {
+                frame.style.transition = "box-shadow .4s ease, border-color .4s ease";
+            });
+
+            card.addEventListener("pointermove", function (e) {
+                var r = card.getBoundingClientRect();
+                var px = (e.clientX - r.left) / r.width - 0.5;
+                var py = (e.clientY - r.top) / r.height - 0.5;
+                frame.style.transform =
+                    "rotateX(" + (-py * 7).toFixed(2) + "deg) " +
+                    "rotateY(" + (px * 9).toFixed(2) + "deg)";
+                frame.style.setProperty("--sx", ((px + 0.5) * 100).toFixed(1) + "%");
+                frame.style.setProperty("--sy", ((py + 0.5) * 100).toFixed(1) + "%");
+            }, { passive: true });
+
+            card.addEventListener("pointerleave", function () {
+                frame.style.transition = "";
+                frame.style.transform = "";
+            });
+        });
+    }
+
+    /* ---------------------------------------------------------- click ripple */
+    if (!reduce) {
+        document.addEventListener("pointerdown", function (e) {
+            if (e.button !== 0) { return; }
+            var s = document.createElement("span");
+            s.className = "ripple";
+            s.style.left = e.clientX + "px";
+            s.style.top = e.clientY + "px";
+            document.body.appendChild(s);
+            setTimeout(function () {
+                if (s.parentNode) { s.parentNode.removeChild(s); }
+            }, 880);
+        }, { passive: true });
     }
 })();
 </script>
