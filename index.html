@@ -1379,7 +1379,7 @@ html[data-theme="dark"] .ripple{
    PERCHED BIRDS
    A gull (day) or crow (night) painted on the top edge of every panel.
    Click it: the eye moves, a line about this panel appears, and both
-   reset after five seconds.
+   reset after six seconds.
    ================================================================= */
 
 .perch{
@@ -3195,7 +3195,7 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
             perch.classList.add("talk");
             timer = setTimeout(function () {
                 perch.classList.remove("talk");
-            }, 5000);                            /* bubble and eye reset together */
+            }, 6000);                            /* bubble and eye reset together */
         }
 
         perch.addEventListener("pointerdown", function (e) {
