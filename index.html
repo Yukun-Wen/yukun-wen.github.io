@@ -773,6 +773,276 @@ html[data-theme="dark"] .pillar:hover{background:rgba(124,187,192,.07)}
     .reveal{opacity:1;transform:none}
     .cursor{display:none}
 }
+
+/* =================================================================
+   WHEATFIELD THEME
+   Palette lifted from Van Gogh's "Wheatfield with Crows":
+   #050509  #243F81  #415FC1  #F4E534  #CD8B0E
+   Night-blue sky at the top of the page, wheat gold at the bottom,
+   with every block set in a gold-flecked frosted glass panel.
+   ================================================================= */
+
+:root{
+    --night:#050509;
+    --sky-deep:#243F81;
+    --sky:#415FC1;
+    --wheat:#F4E534;
+    --gold:#CD8B0E;
+
+    /* remapped so existing rules invert correctly */
+    --paper:#080b14;
+    --paper-2:rgba(255,255,255,.06);
+    --ink:#f7f4ea;
+    --muted:rgba(247,244,234,.70);
+    --line:rgba(247,244,234,.16);
+    --line-strong:rgba(247,244,234,.40);
+    --accent:#F4E534;
+    --plate:#ffffff;
+
+    --glass:rgba(6,9,18,.52);
+    --gold-line:rgba(244,229,52,.28);
+    --gold-glow:rgba(205,139,14,.16);
+}
+
+html{background:#050509}
+
+html[data-theme="dark"]{
+    --ink:#f2efe4;
+    --muted:rgba(242,239,228,.64);
+    --glass:rgba(3,5,11,.62);
+    --gold-line:rgba(244,229,52,.22);
+    --accent:#F4E534;
+}
+
+/* ---------------------------------------------- the page gradient */
+body{
+    min-height:100vh;
+    background:
+        radial-gradient(120% 55% at 50% 0%,   rgba(65,95,193,.38) 0%, rgba(65,95,193,0) 62%),
+        radial-gradient(100% 45% at 50% 100%, rgba(244,229,52,.34) 0%, rgba(244,229,52,0) 66%),
+        linear-gradient(180deg,
+            #050509 0%,
+            #0b1130 7%,
+            #16224a 15%,
+            #243F81 25%,
+            #33499e 34%,
+            #415FC1 44%,
+            #4a5a8a 56%,
+            #8a7433 68%,
+            #b08110 78%,
+            #CD8B0E 86%,
+            #e9d020 94%,
+            #F4E534 100%);
+    background-repeat:no-repeat;
+    background-attachment:scroll;
+    transition:background .6s var(--ease);
+}
+
+html[data-theme="dark"] body{
+    background:
+        radial-gradient(120% 55% at 50% 0%,   rgba(65,95,193,.24) 0%, rgba(65,95,193,0) 62%),
+        radial-gradient(100% 45% at 50% 100%, rgba(244,229,52,.18) 0%, rgba(244,229,52,0) 66%),
+        linear-gradient(180deg,
+            #030406 0%,
+            #070b1c 8%,
+            #0e1734 17%,
+            #16234f 27%,
+            #1e2f68 36%,
+            #27386f 45%,
+            #2f3a58 57%,
+            #5a4c20 69%,
+            #7a5c0c 79%,
+            #8a6409 87%,
+            #a87c0c 95%,
+            #b98d10 100%);
+}
+
+/* ---------------------------------------------- glass panels */
+.hero-inner,
+.pillars,
+main > .section{
+    position:relative;
+    isolation:isolate;
+    overflow:hidden;
+    border-radius:22px;
+    border:1px solid var(--gold-line);
+    background:
+        linear-gradient(180deg, rgba(255,255,255,.05) 0%, rgba(0,0,0,.14) 100%),
+        rgba(7,10,20,.22);
+    -webkit-backdrop-filter:blur(26px) saturate(1.30) brightness(.52);
+    backdrop-filter:blur(26px) saturate(1.30) brightness(.52);
+    box-shadow:
+        0 30px 80px rgba(3,5,12,.50),
+        0 0 90px rgba(205,139,14,.22),
+        inset 0 1px 0 rgba(255,255,255,.18),
+        inset 0 -1px 0 rgba(205,139,14,.14);
+}
+
+/* no backdrop-filter? fall back to a solid dark panel */
+@supports not ((backdrop-filter: blur(4px)) or (-webkit-backdrop-filter: blur(4px))){
+    .hero-inner,
+    .pillars,
+    main > .section{
+        background:
+            linear-gradient(180deg, rgba(255,255,255,.05) 0%, rgba(0,0,0,.16) 100%),
+            rgba(7,10,20,.90);
+    }
+}
+
+/* soft top-edge sheen */
+.hero-inner::before,
+.pillars::before,
+main > .section::before{
+    content:"";
+    position:absolute;inset:0;z-index:0;pointer-events:none;
+    background:linear-gradient(148deg,
+        rgba(255,255,255,.13) 0%,
+        rgba(255,255,255,0) 34%,
+        rgba(255,255,255,0) 64%,
+        rgba(244,229,52,.09) 100%);
+}
+
+/* gold flecks */
+.hero-inner::after,
+.pillars::after,
+main > .section::after{
+    content:"";
+    position:absolute;inset:0;z-index:0;pointer-events:none;
+    background-image:
+        radial-gradient(circle at 12% 18%, rgba(255,247,196,.95) 0 1.3px, transparent 2.1px),
+        radial-gradient(circle at 68% 42%, rgba(244,229,52,.90) 0 1.5px, transparent 2.3px),
+        radial-gradient(circle at 34% 74%, rgba(205,139,14,.95) 0 1.2px, transparent 2.0px),
+        radial-gradient(circle at 86% 9%,  rgba(255,241,175,.85) 0 1.3px, transparent 2.0px),
+        radial-gradient(circle at 52% 92%, rgba(244,229,52,.80) 0 1.5px, transparent 2.3px),
+        radial-gradient(circle at 22% 55%, rgba(205,139,14,.70) 0 1.1px, transparent 1.8px);
+    background-size:150px 150px, 214px 214px, 182px 182px, 246px 246px, 205px 205px, 168px 168px;
+    background-position:0 0, 42px 58px, 92px 22px, 128px 104px, 18px 142px, 70px 96px;
+    opacity:.68;
+    mix-blend-mode:screen;
+    animation:fleck-drift 30s linear infinite;
+}
+
+@keyframes fleck-drift{
+    to{
+        background-position:150px 150px, 256px 272px, 274px 204px, 374px 350px, 223px 347px, 238px 264px;
+    }
+}
+
+/* keep content above the overlays */
+.hero-inner > *,
+.pillars > *,
+main > .section > *{
+    position:relative;
+    z-index:1;
+}
+
+/* panel geometry */
+.hero{padding:clamp(88px,11vh,132px) 0 clamp(12px,2.4vh,28px)}
+.hero-inner{padding:clamp(22px,3.2vw,46px) clamp(20px,3vw,48px)}
+
+.pillars-sec{padding-bottom:clamp(14px,2.6vh,30px)}
+.pillars{border-radius:18px}
+
+main > .section{
+    margin:clamp(24px,3.6vw,50px) auto;
+    padding:clamp(28px,3.8vw,56px) clamp(18px,3vw,48px);
+}
+.section:last-of-type{padding-bottom:clamp(28px,3.8vw,56px)}
+
+/* ---------------------------------------------- gold detailing */
+.sec-head{border-bottom:2px solid rgba(244,229,52,.38)}
+.sec-num{color:var(--wheat)}
+.pub .yr{color:var(--wheat)}
+.pub h3 a:hover{color:var(--wheat)}
+.sec-more:hover{color:var(--wheat)}
+.contact-row:hover{color:var(--wheat)}
+.pillar .num{color:var(--wheat)}
+
+.pillars{border-top:1px solid var(--gold-line);border-bottom:1px solid var(--gold-line)}
+.pillar{border-right:1px solid rgba(244,229,52,.16)}
+.pillar:hover{background:rgba(244,229,52,.06)}
+html[data-theme="dark"] .pillar:hover{background:rgba(244,229,52,.05)}
+
+/* buttons pick up the wheat gold */
+.btn{
+    background:linear-gradient(180deg,#F8F06E,#F4E534);
+    color:#0a1020;
+    border-color:rgba(244,229,52,.85);
+    box-shadow:0 10px 26px rgba(205,139,14,.34);
+}
+.btn:hover{
+    background:linear-gradient(180deg,#F4E534,#CD8B0E);
+    color:#0a1020;
+    border-color:#CD8B0E;
+    box-shadow:0 12px 32px rgba(205,139,14,.50);
+}
+
+.chip.active{
+    background:var(--wheat);
+    color:#0a1020;
+    border-color:var(--wheat);
+}
+.chip:hover{border-color:rgba(244,229,52,.6);color:var(--ink)}
+
+.react:hover,.react[aria-pressed="true"]{color:var(--wheat)}
+
+/* ---------------------------------------------- media framing */
+.hero-figure{
+    border-radius:14px;
+    border:1px solid rgba(244,229,52,.30);
+    box-shadow:0 22px 60px rgba(3,5,12,.55), 0 0 40px rgba(205,139,14,.14);
+}
+
+.card .frame{
+    border-radius:12px;
+    border:1px solid rgba(244,229,52,.20);
+    box-shadow:0 14px 36px rgba(3,5,12,.44);
+    transition:box-shadow .5s var(--ease),border-color .5s var(--ease);
+}
+.card:hover .frame{
+    border-color:rgba(244,229,52,.50);
+    box-shadow:0 22px 52px rgba(3,5,12,.55), 0 0 38px rgba(244,229,52,.28);
+}
+
+.fig-open{
+    border-radius:10px;
+    border:1px solid rgba(244,229,52,.32);
+    box-shadow:0 12px 30px rgba(3,5,12,.50), 0 0 0 1px rgba(244,229,52,.08);
+}
+.fig-open:hover{
+    border-color:rgba(244,229,52,.55);
+    box-shadow:0 18px 42px rgba(3,5,12,.58), 0 0 34px rgba(244,229,52,.30);
+}
+
+/* ---------------------------------------------- nav + toast */
+.nav.scrolled{
+    background:rgba(6,9,18,.62);
+    border-bottom-color:rgba(244,229,52,.22);
+}
+html[data-theme="dark"] .nav.scrolled{background:rgba(3,4,9,.74)}
+
+html[data-theme="dark"] .nav-links{background:rgba(5,7,14,.97)}
+@media (max-width:880px){
+    .nav-links{background:rgba(6,9,18,.97)}
+}
+
+.toast{
+    background:linear-gradient(180deg,#F8F06E,#F4E534);
+    color:#0a1020;
+    box-shadow:0 12px 34px rgba(205,139,14,.40);
+}
+
+.pub-acts a:hover,.pub-acts button:hover{
+    background:var(--wheat);
+    color:#0a1020;
+    border-color:var(--wheat);
+}
+
+/* footer sits on the brightest wheat — keep it legible */
+.footer{border-top:1px solid rgba(30,26,10,.30)}
+.footer-inner{color:rgba(20,18,6,.72)}
+.footer-inner a{color:rgba(20,18,6,.72)}
+.footer-inner a:hover{color:#0a1020}
 </style>
 </head>
 <body>
