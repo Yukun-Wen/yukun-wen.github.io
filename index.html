@@ -1731,9 +1731,9 @@ html[data-theme="dark"] .perch .p-shade{opacity:.28}
 /* the first panel sits at the very top of the page, so its bird drops
    down inside the panel to give the bubble room above its head */
 .perch.p1{
-    /* sits under the un of Yukun, ground line on the baseline, behind the type */
+    /* to the right of Yukun, ground line on the baseline.
+       No negative z-index here - the headline box would swallow the click. */
     top:262px;
-    z-index:-1;
 }
 .perch.p1 .perch-say{
     /* lift the bubble clear of the headline so the letters never cover it */
