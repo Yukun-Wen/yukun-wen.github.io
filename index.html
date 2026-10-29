@@ -1617,6 +1617,22 @@ html[data-theme="dark"] .perch .p-shade{opacity:.28}
     border:6px solid transparent;
     border-top-color:rgba(255,253,248,.95);
 }
+/* if the panel sits near the top of the viewport the bubble flips below */
+.perch.below .perch-say{
+    bottom:auto;
+    top:calc(100% + 6px);
+    transform:translate(-50%,-10px) scale(.96);
+    transform-origin:top center;
+}
+.perch.below .perch-say::after{
+    top:auto;
+    bottom:100%;
+    border-top-color:transparent;
+    border-bottom-color:rgba(255,253,248,.95);
+}
+html[data-theme="dark"] .perch.below .perch-say::after{
+    border-bottom-color:rgba(17,19,27,.96);
+}
 .perch.talk .perch-say{
     opacity:1;
     transform:translate(-50%,0) scale(1);
@@ -1794,7 +1810,7 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
                         </g>
                     </g>
                 </svg>
-                <span class="perch-say">Start here — architecture, generative art and multimodal AI in one practice.</span>
+                <span class="perch-say">Go on, click something. It&rsquo;s not a trap. Probably.</span>
             </button>
 
         <div class="hero-copy">
@@ -1882,7 +1898,7 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
                         </g>
                     </g>
                 </svg>
-                <span class="perch-say">Three doors into the work: the papers, the buildings, the generated worlds.</span>
+                <span class="perch-say">Three doors. Pick the one you&rsquo;d be embarrassed to admit you liked.</span>
             </button>
 
 
@@ -1970,7 +1986,7 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
                         </g>
                     </g>
                 </svg>
-                <span class="perch-say">Seven peer-reviewed papers and preprints — multimodal VQA, biomedical ML and clustering.</span>
+                <span class="perch-say">Seven papers. Skim them and nod wisely &mdash; he&rsquo;ll never know the difference.</span>
             </button>
 
     <div class="sec-head reveal">
@@ -2307,7 +2323,7 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
                         </g>
                     </g>
                 </svg>
-                <span class="perch-say">Airports, hospitals, schools and houses, from concept sketch through to delivery.</span>
+                <span class="perch-say">Airports, hospitals, schools, houses. Yes, he designs all of it. No, you can&rsquo;t have one.</span>
             </button>
 
     <div class="sec-head reveal">
@@ -2395,7 +2411,7 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
                         </g>
                     </g>
                 </svg>
-                <span class="perch-say">Six illustration series — novels, sci-fi, classical Chinese themes and children's books.</span>
+                <span class="perch-say">Six series of pictures a machine made for him. Stare too long and you&rsquo;ll start calling it art.</span>
             </button>
 
     <div class="sec-head reveal">
@@ -2491,7 +2507,7 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
                         </g>
                     </g>
                 </svg>
-                <span class="perch-say">How to reach me: email, ORCID, GitHub, and the CV as a PDF.</span>
+                <span class="perch-say">Email, ORCID, GitHub, CV. Write to him &mdash; I dare you.</span>
             </button>
 
     <div class="sec-head reveal">
@@ -3029,6 +3045,8 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
 
         function speak() {
             clearTimeout(timer);
+            /* keep the bubble on screen when the panel is near the top */
+            perch.classList.toggle("below", perch.getBoundingClientRect().top < 150);
             perch.classList.remove("talk");
             void perch.offsetWidth;              /* restart the eye animation */
             perch.classList.add("talk");
