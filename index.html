@@ -1407,6 +1407,7 @@ html[data-theme="dark"] .ripple{
     --p-stroke:#c3ccd4;
     --p-fuzz:#f4f1e7;
     --land-img:url(./assets/textures/track-day.png);
+    --stone:#9d9188;
 }
 html[data-theme="dark"] .perch{
     --p-body:#31313f;
@@ -1422,6 +1423,7 @@ html[data-theme="dark"] .perch{
     --p-stroke:#3c3c4a;
     --p-fuzz:#31313f;
     --land-img:url(./assets/textures/track-night.png);
+    --stone:#8a8478;
 }
 
 .perch-art{
@@ -1656,6 +1658,44 @@ html[data-theme="dark"] .perch .p-shade{opacity:.28}
 .perch.p5 .perch-track{animation-duration:11.2s;animation-delay:-6s}
 .perch.p6 .perch-track{animation-duration:13.0s;animation-delay:-9s}
 
+/* a pebble rolls in, the bird stops, cocks its head, and boots it away */
+.perch-stone{
+    position:absolute;
+    left:50%;
+    bottom:2px;
+    width:8px;
+    height:6px;
+    margin-left:-4px;
+    border-radius:48% 52% 45% 55% / 60% 58% 42% 40%;
+    background:var(--stone);
+    opacity:0;
+    pointer-events:none;
+    z-index:3;
+    will-change:transform,opacity;
+}
+.perch.kick .p-idle,
+.perch.kick .p-legA,
+.perch.kick .p-legB,
+.perch.kick .perch-track{animation-play-state:paused}
+
+.perch.kick .p-laugh{
+    animation:none;
+    transform:rotate(-14deg);
+    transition:transform .22s var(--ease);
+}
+.perch.kick.kick2 .p-laugh{
+    transform:rotate(-2deg);
+    transition:transform .16s var(--ease);
+}
+.perch.kick.kick2 .p-legB{animation:kick-swing .55s cubic-bezier(.3,0,.2,1) both}
+
+@keyframes kick-swing{
+    0%  {transform:rotate(0deg)}
+    28% {transform:rotate(-26deg)}
+    62% {transform:rotate(76deg)}
+    100%{transform:rotate(0deg)}
+}
+
 /* if the panel sits near the top of the viewport the bubble flips below */
 .perch.below .perch-say{
     bottom:auto;
@@ -1805,6 +1845,7 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
             <button class="perch p1" data-say="My master, this is all yours: papers, buildings, strange pictures. A tour? I can't fly and you can't perch.|At your service, my master. Research, architecture, generated art. My only note was 'more worms'.|My master, you built an empire of tabs. I've read three. Don't tell the other birds." type="button" style="--perch-x:16%"
                 aria-label="What this section tells you about Yukun Wen">
                 <span class="perch-land" aria-hidden="true"><span class="perch-track"></span></span>
+                <span class="perch-stone" aria-hidden="true"></span>
                 <svg class="perch-art" viewBox="0 0 120 118" aria-hidden="true" focusable="false">
                     <g class="paint-rough">
                         <g class="p-tilt">
@@ -1894,6 +1935,7 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
             <button class="perch p2 flip" data-say="Three doors, my master: papers, buildings, pictures. I tried the middle one and hit my beak. Again.|My master, the sections are labelled. Reading them is optional. I judge no one — out loud.|Pick a door, my master. Any door. Except the one I'm standing on — that one is load-bearing." type="button" style="--perch-x:76%"
                 aria-label="What this section tells you about Yukun Wen">
                 <span class="perch-land" aria-hidden="true"><span class="perch-track"></span></span>
+                <span class="perch-stone" aria-hidden="true"></span>
                 <svg class="perch-art" viewBox="0 0 120 118" aria-hidden="true" focusable="false">
                     <g class="paint-rough">
                         <g class="p-tilt">
@@ -1983,6 +2025,7 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
             <button class="perch p3" data-say="Seven papers, my master — multimodal VQA, biomedical ML. I have seven opinions and no degree.|Peer-reviewed, my master. Unlike my singing, which remains unreviewed and largely banned.|My master's seven papers. I read the abstracts and now nod at things I don't understand." type="button" style="--perch-x:9%"
                 aria-label="What this section tells you about Yukun Wen">
                 <span class="perch-land" aria-hidden="true"><span class="perch-track"></span></span>
+                <span class="perch-stone" aria-hidden="true"></span>
                 <svg class="perch-art" viewBox="0 0 120 118" aria-hidden="true" focusable="false">
                     <g class="paint-rough">
                         <g class="p-tilt">
@@ -2321,6 +2364,7 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
             <button class="perch p4 flip" data-say="My master designs airports, hospitals, schools, houses. I built a nest once. It is a cautionary tale.|All his, my master. I asked for a birdhouse. He said 'budget'.|My master builds buildings people walk into. I build ones I immediately walk out of." type="button" style="--perch-x:61%"
                 aria-label="What this section tells you about Yukun Wen">
                 <span class="perch-land" aria-hidden="true"><span class="perch-track"></span></span>
+                <span class="perch-stone" aria-hidden="true"></span>
                 <svg class="perch-art" viewBox="0 0 120 118" aria-hidden="true" focusable="false">
                     <g class="paint-rough">
                         <g class="p-tilt">
@@ -2410,6 +2454,7 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
             <button class="perch p5" data-say="My master paints with machines. I make a mess with one foot. Both get called generative.|Six series, my master. I felt something looking at them. Probably jealousy. Or a worm.|My master taught a machine to paint. I taught a worm to run. Only one of us got a series." type="button" style="--perch-x:24%"
                 aria-label="What this section tells you about Yukun Wen">
                 <span class="perch-land" aria-hidden="true"><span class="perch-track"></span></span>
+                <span class="perch-stone" aria-hidden="true"></span>
                 <svg class="perch-art" viewBox="0 0 120 118" aria-hidden="true" focusable="false">
                     <g class="paint-rough">
                         <g class="p-tilt">
@@ -2507,6 +2552,7 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
             <button class="perch p6 flip" data-say="My master's email, ORCID, GitHub, CV. He replies faster than I flap, and that is a low bar.|Contact details, my master. I have no email and exactly one ambition: your sandwich.|My master invites collaboration. I invite worms. We are both networking, technically." type="button" style="--perch-x:80%"
                 aria-label="What this section tells you about Yukun Wen">
                 <span class="perch-land" aria-hidden="true"><span class="perch-track"></span></span>
+                <span class="perch-stone" aria-hidden="true"></span>
                 <svg class="perch-art" viewBox="0 0 120 118" aria-hidden="true" focusable="false">
                     <g class="paint-rough">
                         <g class="p-tilt">
@@ -3125,6 +3171,49 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
             }
         });
     });
+
+    /* ---------------------------------------------------------- pebbles */
+    (function pebbles() {
+        if (reduce) { return; }
+        document.querySelectorAll(".perch").forEach(function (perch, idx) {
+            var stone = perch.querySelector(".perch-stone");
+            if (!stone) { return; }
+
+            function boot() {
+                stone.style.transition = "transform .6s cubic-bezier(.25,.6,.35,1), opacity .6s";
+                stone.style.transform = "translate(-98px,-40px) rotate(-260deg)";
+                stone.style.opacity = "0";
+            }
+
+            function react() {
+                perch.classList.add("kick");
+                setTimeout(function () {
+                    perch.classList.add("kick2");
+                    boot();
+                }, 340);
+                setTimeout(function () {
+                    perch.classList.remove("kick", "kick2");
+                    schedule();
+                }, 1260);
+            }
+
+            function roll() {
+                stone.style.transition = "none";
+                stone.style.opacity = "1";
+                stone.style.transform = "translate(-108px,0)";
+                void stone.offsetWidth;
+                stone.style.transition = "transform 2.4s linear";
+                stone.style.transform = "translate(0,0)";
+                setTimeout(react, 2400);
+            }
+
+            function schedule() {
+                setTimeout(roll, 6200 + Math.random() * 7200);
+            }
+
+            setTimeout(schedule, 2400 + idx * 850);
+        });
+    })();
 
     /* ---------------------------------------------------------- gold dust */
     (function dust() {
