@@ -1595,11 +1595,11 @@ html[data-theme="dark"] .perch .p-shade{opacity:.28}
 /* speech bubble */
 .perch-say{
     position:absolute;
-    bottom:calc(100% + 7px);
+    bottom:calc(100% + 3px);
     left:50%;
     width:max-content;
     max-width:min(250px,58vw);
-    padding:9px 13px;
+    padding:8px 12px;
     transform:translate(-50%,10px) scale(.96);
     transform-origin:bottom center;
     background:rgba(255,253,248,.95);
@@ -1675,10 +1675,16 @@ html[data-theme="dark"] .perch .p-shade{opacity:.28}
     will-change:transform,opacity;
 }
 .perch.stop .p-idle,
-.perch.stop .p-legA,
-.perch.stop .p-legB,
 .perch.stop .p-laugh,
 .perch.stop .perch-track{animation-play-state:paused}
+
+/* both feet plant themselves the instant it stops - no kicking from mid-air */
+.perch.stop .p-legA,
+.perch.stop .p-legB{animation:leg-down .3s ease-out both}
+
+@keyframes leg-down{
+    100%{transform:rotate(0deg)}
+}
 
 /* the head goes down and stays down, all three seconds of it */
 .perch.bow .p-laugh{
@@ -1725,8 +1731,7 @@ html[data-theme="dark"] .perch .p-shade{opacity:.28}
 /* the pebble bubble only ever holds one mark, so park it beside the bird
    instead of over the ground where the pebble sits */
 .perch.beat .perch-say{
-    margin-left:58px;
-    padding:7px 13px;
+    padding:7px 16px;
     font-size:.95rem;
     font-weight:700;
 }
@@ -1880,7 +1885,7 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
                 aria-label="What this section tells you about Yukun Wen">
                 <span class="perch-land" aria-hidden="true"><span class="perch-track"></span></span>
                 <span class="perch-stone" aria-hidden="true"></span>
-                <svg class="perch-art" viewBox="0 0 120 118" aria-hidden="true" focusable="false">
+                <svg class="perch-art" viewBox="0 15 120 103" aria-hidden="true" focusable="false">
                     <g class="paint-rough">
                         <g class="p-tilt">
                             <g class="p-idle">
@@ -1970,7 +1975,7 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
                 aria-label="What this section tells you about Yukun Wen">
                 <span class="perch-land" aria-hidden="true"><span class="perch-track"></span></span>
                 <span class="perch-stone" aria-hidden="true"></span>
-                <svg class="perch-art" viewBox="0 0 120 118" aria-hidden="true" focusable="false">
+                <svg class="perch-art" viewBox="0 15 120 103" aria-hidden="true" focusable="false">
                     <g class="paint-rough">
                         <g class="p-tilt">
                             <g class="p-idle">
@@ -2060,7 +2065,7 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
                 aria-label="What this section tells you about Yukun Wen">
                 <span class="perch-land" aria-hidden="true"><span class="perch-track"></span></span>
                 <span class="perch-stone" aria-hidden="true"></span>
-                <svg class="perch-art" viewBox="0 0 120 118" aria-hidden="true" focusable="false">
+                <svg class="perch-art" viewBox="0 15 120 103" aria-hidden="true" focusable="false">
                     <g class="paint-rough">
                         <g class="p-tilt">
                             <g class="p-idle">
@@ -2399,7 +2404,7 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
                 aria-label="What this section tells you about Yukun Wen">
                 <span class="perch-land" aria-hidden="true"><span class="perch-track"></span></span>
                 <span class="perch-stone" aria-hidden="true"></span>
-                <svg class="perch-art" viewBox="0 0 120 118" aria-hidden="true" focusable="false">
+                <svg class="perch-art" viewBox="0 15 120 103" aria-hidden="true" focusable="false">
                     <g class="paint-rough">
                         <g class="p-tilt">
                             <g class="p-idle">
@@ -2489,7 +2494,7 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
                 aria-label="What this section tells you about Yukun Wen">
                 <span class="perch-land" aria-hidden="true"><span class="perch-track"></span></span>
                 <span class="perch-stone" aria-hidden="true"></span>
-                <svg class="perch-art" viewBox="0 0 120 118" aria-hidden="true" focusable="false">
+                <svg class="perch-art" viewBox="0 15 120 103" aria-hidden="true" focusable="false">
                     <g class="paint-rough">
                         <g class="p-tilt">
                             <g class="p-idle">
@@ -2587,7 +2592,7 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
                 aria-label="What this section tells you about Yukun Wen">
                 <span class="perch-land" aria-hidden="true"><span class="perch-track"></span></span>
                 <span class="perch-stone" aria-hidden="true"></span>
-                <svg class="perch-art" viewBox="0 0 120 118" aria-hidden="true" focusable="false">
+                <svg class="perch-art" viewBox="0 15 120 103" aria-hidden="true" focusable="false">
                     <g class="paint-rough">
                         <g class="p-tilt">
                             <g class="p-idle">
@@ -3176,7 +3181,6 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
         function speak() {
             clearTimeout(timer);
             /* keep the bubble on screen when the panel is near the top */
-            perch.classList.toggle("below", perch.getBoundingClientRect().top < 150);
             /* a different line every click, never the same one twice running */
             if (say && lines.length > 1) {
                 var pick = lastLine;
@@ -3226,8 +3230,6 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
                 /* first meeting earns a question mark, every one after a bang */
                 if (say) {
                     say.textContent = met ? "!" : "?";
-                    perch.classList.toggle("below",
-                        perch.getBoundingClientRect().top < 150);
                     perch.classList.add("talk", "beat");
                 }
                 met = true;
