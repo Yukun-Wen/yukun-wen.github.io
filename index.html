@@ -2548,11 +2548,15 @@ html[data-theme="dark"] .ripple{
             if (list.length >= MAX) { list.shift(); }
             var angle = Math.random() * Math.PI * 2;
             var speed = 78 + Math.random() * 96;
+            var jit = [];
+            for (var i = 0; i < 16; i++) { jit.push(0.55 + Math.random() * 0.9); }
             list.push({
                 x: x, y: y,
                 vx: Math.cos(angle) * speed,
                 vy: Math.sin(angle) * speed,
-                s: 0.8 + Math.random() * 0.7,
+                heading: angle,
+                jit: jit,
+                s: 0.6 + Math.random() * 0.5,
                 flap: Math.random() * Math.PI * 2,
                 flapSp: 7 + Math.random() * 4.5,
                 bank: 0,
@@ -2561,51 +2565,159 @@ html[data-theme="dark"] .ripple{
             });
         }
 
-        function wingPath(span, tipY, s) {
-            var midY = tipY * 0.42;
+        /* quadratic through a, b, c at t */
+        function quad(a, b, c, t) {
+            var u = 1 - t;
+            return u * u * a + 2 * u * t * b + t * t * c;
+        }
+
+        /* One wing: leading edge swept back to a point, trailing edge made of
+           uneven feather scallops so the outline never reads as a smooth leaf. */
+        function drawWing(b, dir, span, s, gull) {
+            var jit = b.jit;
+
+            var rx = 6.5 * s, ry = dir * 1.0 * s;
+            var tx = -7.0 * s, ty = dir * span;
+            var bx = -10.5 * s, by = dir * 1.7 * s;
+
             ctx.beginPath();
-            ctx.moveTo(0, 0);
-            ctx.quadraticCurveTo(-span * 0.5, midY - 1.6 * s, -span, tipY);
-            ctx.quadraticCurveTo(-span * 0.5, midY + 4.6 * s, 0, 2.7 * s);
-            ctx.quadraticCurveTo(span * 0.5, midY + 4.6 * s, span, tipY);
-            ctx.quadraticCurveTo(span * 0.5, midY - 1.6 * s, 0, 0);
+            ctx.moveTo(rx, ry);
+            ctx.quadraticCurveTo(1.5 * s, dir * span * 0.42, tx, ty);
+            ctx.lineTo(tx - 1.2 * s, dir * span * 0.93);
+
+            var n = gull ? 5 : 6;
+            var px = tx - 1.2 * s, py = dir * span * 0.93;
+            var ctrlX = -3.6 * s, ctrlY = dir * span * 0.34;
+            for (var i = 1; i <= n; i++) {
+                var t = i / n;
+                var j = 0.55 + jit[i] * 0.55;
+                var qx = quad(px, ctrlX + (j - 1) * 3.6 * s, bx, t);
+                var qy = quad(py, ctrlY + dir * (j - 1) * 3.8 * s, by, t);
+                var mx = (px + qx) / 2 + (j - 1) * 2.8 * s;
+                var my = (py + qy) / 2 + dir * (j - 1) * 3.2 * s;
+                ctx.quadraticCurveTo(mx, my, qx, qy);
+                px = qx; py = qy;
+            }
+            ctx.quadraticCurveTo(bx + 2.4 * s, dir * by * 0.4, rx, ry);
             ctx.closePath();
+
+            var g = ctx.createLinearGradient(rx, 0, tx, dir * span);
+            if (gull) {
+                g.addColorStop(0.00, "#fcfaf5");
+                g.addColorStop(0.34, "#eceded");
+                g.addColorStop(0.60, "#c2cbca");
+                g.addColorStop(0.80, "#5b6a77");
+                g.addColorStop(1.00, "#20252f");
+            } else {
+                g.addColorStop(0.00, "#2b2b34");
+                g.addColorStop(0.45, "#17171e");
+                g.addColorStop(1.00, "#06060a");
+            }
+            ctx.fillStyle = g;
+            ctx.fill();
+            if (gull) {
+                ctx.lineWidth = 0.85;
+                ctx.strokeStyle = "rgba(64,76,96,.72)";
+                ctx.stroke();
+            }
+
+            /* feather separations give the layered, uneven surface */
+            ctx.save();
+            ctx.clip();
+            ctx.strokeStyle = gull ? "rgba(88,102,118,.30)" : "rgba(150,152,172,.16)";
+            ctx.lineWidth = 0.8;
+            var m = gull ? 6 : 7;
+            for (var k = 1; k <= m; k++) {
+                var f = k / (m + 1);
+                ctx.beginPath();
+                ctx.moveTo(rx * (1 - f) + bx * f, dir * (ry * (1 - f) + by * f));
+                ctx.quadraticCurveTo(
+                    (-3.0 * s) * (1 - f) + tx * f, dir * span * (0.34 + 0.28 * f),
+                    tx * (1 - f) + bx * f, dir * span * (0.80 + 0.14 * f)
+                );
+                ctx.stroke();
+            }
+            ctx.restore();
         }
 
         function draw(b) {
             var s = b.s;
-            var span = 15 * s;
-            var tipY = -7.6 * s * Math.sin(b.flap);
+            var gull = b.kind === "gull";
+            var L = (gull ? 21 : 22.5) * s;
+            var flap = Math.sin(b.flap);
+            var span = (gull ? 17.5 : 19) * s * (0.70 + 0.30 * (0.5 + 0.5 * flap));
 
             ctx.save();
             ctx.translate(b.x, b.y);
+            ctx.rotate(b.heading);
             ctx.rotate(b.bank);
 
-            wingPath(span, tipY, s);
-
-            if (b.kind === "gull") {
-                ctx.fillStyle = "#fcfbf7";
-                ctx.fill();
-                ctx.lineWidth = 0.9;
-                ctx.strokeStyle = "rgba(92,100,124,.6)";
-                ctx.stroke();
-
-                /* dark primaries at the tips */
-                ctx.fillStyle = "#2c3039";
-                [-1, 1].forEach(function (d) {
-                    ctx.beginPath();
-                    ctx.moveTo(d * span, tipY);
-                    ctx.quadraticCurveTo(d * span * 0.88, tipY * 0.8 + 1.2 * s, d * span * 0.8, tipY * 0.66 + 1.7 * s);
-                    ctx.quadraticCurveTo(d * span * 0.92, tipY * 0.6, d * span, tipY);
-                    ctx.closePath();
-                    ctx.fill();
-                });
+            /* tail */
+            ctx.beginPath();
+            if (gull) {
+                ctx.moveTo(-L * 0.34, 0);
+                ctx.quadraticCurveTo(-L * 0.68, -3.6 * s, -L * 1.04, -5.0 * s);
+                ctx.quadraticCurveTo(-L * 0.86, 0, -L * 1.04, 5.0 * s);
+                ctx.quadraticCurveTo(-L * 0.68, 3.6 * s, -L * 0.34, 0);
             } else {
-                ctx.fillStyle = "#141419";
-                ctx.fill();
+                ctx.moveTo(-L * 0.34, 0);
+                ctx.lineTo(-L * 1.12, -5.2 * s);
+                ctx.lineTo(-L * 0.80, 0);
+                ctx.lineTo(-L * 1.12, 5.2 * s);
+            }
+            ctx.closePath();
+            ctx.fillStyle = gull ? "#f8f6f0" : "#0c0c11";
+            ctx.fill();
+            if (gull) {
+                ctx.strokeStyle = "rgba(78,90,108,.55)";
                 ctx.lineWidth = 0.8;
-                ctx.strokeStyle = "rgba(0,0,0,.5)";
                 ctx.stroke();
+            }
+
+            drawWing(b, -1, span, s, gull);
+            drawWing(b, 1, span, s, gull);
+
+            /* body — tapers from the shoulder into the tail */
+            ctx.beginPath();
+            ctx.moveTo(L * 0.52, 0);
+            ctx.quadraticCurveTo(L * 0.34, -L * 0.21, -L * 0.14, -L * 0.155);
+            ctx.quadraticCurveTo(-L * 0.40, -L * 0.085, -L * 0.36, 0);
+            ctx.quadraticCurveTo(-L * 0.40, L * 0.085, -L * 0.14, L * 0.155);
+            ctx.quadraticCurveTo(L * 0.34, L * 0.21, L * 0.52, 0);
+            ctx.closePath();
+            ctx.fillStyle = gull ? "#fdfcf9" : "#131319";
+            ctx.fill();
+            if (gull) {
+                ctx.strokeStyle = "rgba(78,90,108,.55)";
+                ctx.lineWidth = 0.8;
+                ctx.stroke();
+            }
+
+            /* head */
+            ctx.beginPath();
+            ctx.arc(L * 0.46, 0, 3.8 * s, 0, Math.PI * 2);
+            ctx.fillStyle = gull ? "#ffffff" : "#111117";
+            ctx.fill();
+            if (gull) {
+                ctx.strokeStyle = "rgba(78,90,108,.5)";
+                ctx.lineWidth = 0.6;
+                ctx.stroke();
+            }
+
+            /* beak */
+            ctx.beginPath();
+            ctx.moveTo(L * 0.49, -1.35 * s);
+            ctx.lineTo(L * 0.70, 0);
+            ctx.lineTo(L * 0.49, 1.35 * s);
+            ctx.closePath();
+            ctx.fillStyle = gull ? "#e8a33e" : "#1c1c23";
+            ctx.fill();
+
+            if (gull) {
+                ctx.beginPath();
+                ctx.arc(L * 0.48, -1.7 * s, 0.85 * s, 0, Math.PI * 2);
+                ctx.fillStyle = "#2b2f38";
+                ctx.fill();
             }
 
             ctx.restore();
@@ -2626,7 +2738,7 @@ html[data-theme="dark"] .ripple{
                 b.y += b.vy * dt;
                 b.flap += b.flapSp * dt;
 
-                var bankTarget = Math.max(-0.42, Math.min(0.42, b.vy / 230));
+                var bankTarget = Math.max(-0.18, Math.min(0.18, b.vy / 620));
                 b.bank += (bankTarget - b.bank) * 0.09;
 
                 if (b.x < -90 || b.x > W + 90 || b.y < -90 || b.y > H + 90) {
