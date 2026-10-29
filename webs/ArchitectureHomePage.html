@@ -1,307 +1,132 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Architecture Homepage</title>
-    <!-- Font Awesome Icons-->
-    <link rel="stylesheet" href="../css/all.css">
-
-    <!--Custom Style-->
-    <link rel="stylesheet" href="../css/Style.css">
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            flex-direction: column;
-            height: 100vh;
-            overflow: hidden;
-        }
-        .image-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-grow: 1;
-            perspective: 1000px; 
-            width: 100vw; /* 宽度为页面的100% */
-            flex-wrap: wrap;
-            background: linear-gradient(to bottom, white 50%, #144a74 50%);
-            height:500px;
-        }
-        .circle {
-            position: relative;
-            width: 30vh; /* Adjust size as needed */
-            height: 30vh; /* Adjust size as needed */
-            border-radius: 50%;
-            margin: 0 10px;
-            background-color: #ffffff07; /* Optional: adds a white background to the circle */
-            transform-style: preserve-3d;
-            transition: transform 0.5s;
-        }
-        .circle .front,
-        .circle .back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .circle .front {
-            background-color: #000000;
-        }
-        .circle .back {
-            background-color: rgba(20, 74, 116, 0.185); /* Semi-transparent background */
-            color: rgba(255, 255, 255);
-            transform: rotateY(180deg);
-            font-size: 1.5em;
-            backdrop-filter: blur(10px); /* Adds frosted glass effect */
-        }
-        .circle:hover {
-            transform: rotateY(180deg);
-        }
-        .circle img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-        }
-        .swirl {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 5px solid transparent;
-            border-top: 5px solid #1F1641;
-            border-right: 5px solid #012172;
-            border-bottom: 5px solid #0486DB;
-            border-left: 5px solid #05ACD3;
-            animation: swirl 5s infinite linear, colorChange 12s infinite;
-            box-shadow: 0 0 20px rgba(31, 22, 65, 0.8); /* Glowing effect */
-        }
-        footer.footer{
-            height:280px;
-        }
-        @keyframes swirl {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-        @keyframes colorChange {
-            0% {
-                border-color: #1F1641 #012172 #0486DB #05ACD3;
-            }
-            14% {
-                border-color: #012172 #0486DB #05ACD3 #5C868D;
-            }
-            28% {
-                border-color: #0486DB #05ACD3 #5C868D #99BFAA;
-            }
-            42% {
-                border-color: #05ACD3 #5C868D #99BFAA #C8D6CA;
-            }
-            56% {
-                border-color: #5C868D #99BFAA #C8D6CA #1F1641;
-            }
-            70% {
-                border-color: #99BFAA #C8D6CA #1F1641 #012172;
-            }
-            84% {
-                border-color: #C8D6CA #1F1641 #012172 #0486DB;
-            }
-            100% {
-                border-color: #1F1641 #012172 #0486DB #05ACD3;
-            }
-        }
-        @media (max-width: 1000px) {
-            body{
-                overflow: visible;
-            }
-            .image-container {
-                flex-direction: column;
-            }
-            .circle {
-                margin: 10px 0; /* 调整垂直方向的间距 */
-            }
-            .image-container {
-                display:grid;
-                background: linear-gradient(to right, white 50%, #144a74 50%);
-                height:1200px;
-            }
-            .footer.footer{
-                height:1100px;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Architecture — Yukun Wen</title>
+<meta name="description" content="Architecture and concept design across transport, healthcare, education and residential work, with a focus on BIM and parametric form.">
+<link rel="stylesheet" href="./folio.css">
 </head>
 <body>
-    <!----------------------Navigation----------------->
 
-    <nav class="nav" style="background-color:lightgrey">
-        <div class="nav-menu flex-row" style="margin-top:0px">
-            <div class="nav-brand">
-                <!-- <a href="#" class="text-gary">Blog</a> -->
-                <img src="../assets/logo.png" alt="Blog Title" class="small-image" style="height:85px">
-            </div>
-            <div class="toggle-collapse">
-                <div class="toggle-icons">
-                    <i class="fas fa-bars"></i>
-                </div>
-            </div>
-            <div>
-                <ul class="nav-items" style="margin-top:0px">
-                    <li class="nav-link">
-                        <a href="../index.html">Home</a>
-                    </li>
-                    <li class="nav-link">
-                        <a href="#Category">AIGC</a>
-                    </li>
-                    <li class="nav-link">
-                        <a href="#Picture">Architecture</a>
-                    </li>
-                    <li class="nav-link">
-                        <a href="../index.html#publications">Publications</a>
-                    </li>
-                    <li class="nav-link">
-                        <a href="#Contact">Contact Me</a>
-                    </li>
-                </ul>
-            </div>
-            <div>
-                <div class="social text-gary" style="margin-top:10px">
-                    <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2632292881&site=qq&menu=yes"><i class="fab fa-qq"></i></a>
-                    <a href="#"><i class="fab fa-weixin"></i></a>
-                    <a href="#"><i class="fab fa-weibo"></i></a>
-                    <a href="#"><i class="fab fa-tiktok"></i></a>
-                </div>
-            </div>
-        </div>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="bar">
+    <a class="brand" href="../index.html">Yukun <span>Wen</span></a>
+    <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="../index.html">Index</a>
+        <a href="./AIGCHome.html">AIGC</a>
+        <span>Architecture</span>
     </nav>
-    <!--X--------------------Navigation----------------->
+    <button class="icon-btn" id="theme" type="button" aria-label="Switch theme">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.6" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+    </button>
+</header>
 
-    <div class="image-container">
-        <a href="./Architecture-Hospital.html">
-            <div class="circle">
-                <div class="swirl"></div>
-                <div class="front">
-                    <img src="../assets/Architecture/HomePage/P1.png" alt="Image 1">
-                </div>
-                <div class="back">Hospital</div>
+<main class="wrap">
+
+    <section class="masthead">
+        <p class="kicker">Part Two</p>
+        <h1>Architecture</h1>
+        <p class="lede">
+            Concept design and delivery across transport, healthcare, education and
+            residential work — large public buildings and small houses, drawn the same
+            way: a strong section, a clear route through, and daylight doing most of the work.
+        </p>
+        <ul class="tally">
+            <li>Four portfolios</li>
+            <li>Transport · Healthcare · Education · Residential</li>
+            <li>Sketch to delivery</li>
+        </ul>
+    </section>
+
+    <section class="grid two" aria-label="Architecture portfolios">
+
+        <a class="card" href="./Architecture-Airport.html">
+            <div class="frame">
+                <span class="idx">01</span>
+                <img src="../assets/home/arch-airport.jpg" alt="Airport terminal design"
+                     loading="eager" width="1200" height="753">
+            </div>
+            <div class="meta">
+                <h2>Airport Projects</h2>
+                <p>Transport</p>
+                <p class="note">
+                    Nanning Wuxu T3 and related work — a sweeping shell roof carried over a
+                    landside plaza, with the terminal section doing the structural talking.
+                </p>
             </div>
         </a>
-        <a href="./Architecture-House.html">
-            <div class="circle">
-                <div class="swirl"></div>
-                <div class="front">
-                    <img src="../assets/Architecture/HomePage/P2.png" alt="Image 2">
-                </div>
-                <div class="back">Residence</div>
+
+        <a class="card" href="./Architecture-Hospital.html">
+            <div class="frame">
+                <span class="idx">02</span>
+                <img src="../assets/home/arch-hospital.jpg" alt="Hospital complex design"
+                     loading="lazy" width="1200" height="672">
+            </div>
+            <div class="meta">
+                <h2>Hospital Projects</h2>
+                <p>Healthcare</p>
+                <p class="note">
+                    Bed towers set around a daylight court, so that every ward corridor has
+                    something worth looking at.
+                </p>
             </div>
         </a>
-        <a href="./Architecture-School.html">
-            <div class="circle">
-                <div class="swirl"></div>
-                <div class="front">
-                    <img src="../assets/Architecture/HomePage/P3.png" alt="Image 3">
-                </div>
-                <div class="back">School</div>
+
+        <a class="card" href="./Architecture-School.html">
+            <div class="frame">
+                <span class="idx">03</span>
+                <img src="../assets/home/arch-school.jpg" alt="School campus design"
+                     loading="lazy" width="1200" height="733">
+            </div>
+            <div class="meta">
+                <h2>School Projects</h2>
+                <p>Education</p>
+                <p class="note">
+                    Classrooms stacked and stepped back into a planted terrace, keeping the
+                    playground in the sun.
+                </p>
             </div>
         </a>
-        <a href="./Architecture-Airport.html">
-            <div class="circle">
-                <div class="swirl"></div>
-                <div class="front">
-                    <img src="../assets/Architecture/HomePage/P4.png" alt="Image 4">
-                </div>
-                <div class="back">Airport</div>
+
+        <a class="card" href="./Architecture-House.html">
+            <div class="frame">
+                <span class="idx">04</span>
+                <img src="../assets/home/arch-house.jpg" alt="House and residential design"
+                     loading="lazy" width="1200" height="720">
+            </div>
+            <div class="meta">
+                <h2>House Projects</h2>
+                <p>Residential</p>
+                <p class="note">
+                    Timber, stone and a deep eave — smaller buildings where the details do
+                    the work instead of the span.
+                </p>
             </div>
         </a>
-    </div>
 
-    <footer class="footer">
-        <div class="container">
-            <div class="about-us" data-aos="fade-right" data-aos-delay="200">
-                <h2>About the blog</h2>
-                <p>This blog is used to share my projects. You can find my latest works on it.</p>
-            </div>
-            <div class="newletter" data-aos="fade-right" data-aos-delay="200">
-                <h2>Page Views</h2>
-                <a href="https://clustrmaps.com/site/1c0ex"  title="Visit tracker"><img src="//www.clustrmaps.com/map_v2.png?d=X8vRNXhs_-yNq52z4QEx724MBHsJS1UMqCVq0JZOytI&cl=ffffff" /></a>
-            </div>
-            <div class="pixiv" data-aos="fade-left" data-aos-delay="200">
-                <h2>My Projects</h2>
-                <div class="flex-row">
-                    <img src="../assets/Architecture/HomePage/P1.png" alt="pix1">
-                    <img src="../assets/Architecture/HomePage/P2.png" alt="pix2">
-                    <img src="../assets/Architecture/HomePage/P3.png" alt="pix3">
-                </div>
-                <div class="flex-row">
-                    <img src="../assets/Architecture/Hospital/ChildrenHospital.png" alt="pix4">
-                    <img src="../assets/Architecture/Hospital/Jinxiu.png" alt="pix5">
-                    <img src="../assets/Architecture/Hospital/LaibinChinese.png" alt="pix6">
-                </div>
-            </div>
-            <div class="follow" data-aos="fade-left" data-aos-delay="200">
-                <h2 id="Contact">Contact Me</h2>
-                <p>wenyukun.edu@gmail.com</p>
-                <div>
-                    <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2632292881&site=qq&menu=yes"><i class="fab fa-qq"></i></a>
-                    <a href="#"><i class="fab fa-weixin"></i></a>
-                    <a href="#"><i class="fab fa-weibo"></i></a>
-                    <a href="#"><i class="fab fa-tiktok"></i></a>
-                </div>
-            </div>
-        </div>
-        <div class="move-up">
-            <span><i class="fas fa-arrow-circle-up fa-2x"></i></span>
-        </div>
-    </footer>
-    <!--Jquery Library file-->
-    <script src="../js/Jquery3.5.1.min.js"></script>
+    </section>
+</main>
 
+<footer class="foot">
+    <a href="../index.html">← Back to index</a>
+    <a href="./AIGCHome.html">AIGC</a>
+    <span class="spacer">Yukun Wen — selected work</span>
+</footer>
 
-    <!------------ Owl-Carousel ------------>
-    <script src="../js/owl.carousel.min.js"></script>
-
-
-
-
-    <!--------------------- AOS js Library---------------->
-    <script src="../js/aos.js"></script>
-
-
-
-    <!--Custom Javascript file-->
-    <script src="../js/main.js"></script>
-    <script>
-        const circles = document.querySelectorAll('.circle');
-        let currentIndex = 0;
-
-        function flipImages() {
-            circles[currentIndex].style.transform = 'rotateY(180deg)';
-            setTimeout(() => {
-                circles[currentIndex].style.transform = 'rotateY(0deg)';
-                currentIndex = (currentIndex + 1) % circles.length;
-            }, 4500); // To ensure previous image flips back before the next flip
-        }
-
-        setInterval(flipImages, 5000);
-
-        circles.forEach(circle => {
-            circle.addEventListener('mouseover', () => {
-                circle.style.transform = 'rotateY(180deg)';
-            });
-            circle.addEventListener('mouseout', () => {
-                circle.style.transform = 'rotateY(0deg)';
-            });
+<script>
+    (function () {
+        var root = document.documentElement;
+        var saved = localStorage.getItem("theme");
+        if (saved === "dark") { root.setAttribute("data-theme", "dark"); }
+        document.getElementById("theme").addEventListener("click", function () {
+            var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+            root.setAttribute("data-theme", next);
+            localStorage.setItem("theme", next);
         });
-    </script>
+    })();
+</script>
 </body>
 </html>

@@ -1,0 +1,374 @@
+/* =================================================================
+   folio.css — shared shell for the AIGC and Architecture index pages.
+   Deliberately mirrors the main site: Monet daylight, Van Gogh night,
+   Times New Roman throughout, glass panels over a painted ground.
+   ================================================================= */
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+:root {
+    --maxw: 1180px;
+    --gap: clamp(16px, 2.2vw, 26px);
+    --ease: cubic-bezier(.22, .61, .36, 1);
+
+    --ink: #3c3547;
+    --muted: rgba(60, 53, 71, .72);
+    --faint: rgba(60, 53, 71, .5);
+    --accent: #c9664a;
+    --accent-2: #ee9078;
+    --hairline: rgba(150, 116, 126, .22);
+    --panel: rgba(255, 252, 249, .55);
+    --panel-solid: rgba(255, 253, 250, .82);
+    --bar: rgba(255, 252, 248, .72);
+    --ring: rgba(255, 255, 255, .8);
+}
+
+html[data-theme="dark"] {
+    --ink: #f2efe4;
+    --muted: rgba(242, 239, 228, .74);
+    --faint: rgba(242, 239, 228, .48);
+    --accent: #F4E534;
+    --accent-2: #ffe97a;
+    --hairline: rgba(244, 229, 52, .26);
+    --panel: rgba(255, 255, 255, .05);
+    --panel-solid: rgba(10, 12, 20, .78);
+    --bar: rgba(8, 10, 18, .70);
+    --ring: rgba(244, 229, 52, .5);
+}
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Times New Roman", Times, "Liberation Serif", "DejaVu Serif", Georgia, serif;
+    color: var(--ink);
+    background-color: #b3b9dd;
+    background-image:
+        url(../assets/textures/clouds.png),
+        radial-gradient(72% 26% at 50% 40%, rgba(255, 203, 178, .26) 0%, rgba(255, 203, 178, 0) 72%),
+        radial-gradient(130% 60% at 50% -5%, rgba(170, 180, 225, .40) 0%, rgba(170, 180, 225, 0) 66%),
+        linear-gradient(180deg,
+            #b0b7e1 0%, #aab2dd 8%, #b6b8dd 17%, #cdc3da 26%,
+            #e2ccd2 35%, #f0d0c6 44%, #f3bfae 53%, #eda791 61%,
+            #d9a596 68%, #bda9a8 74%, #9fb2ac 81%, #82a3a9 88%,
+            #63899d 95%, #4e7488 100%);
+    background-attachment: fixed, fixed, fixed, fixed;
+    background-repeat: no-repeat;
+    background-size: 100% 900px, auto, auto, cover;
+    -webkit-font-smoothing: antialiased;
+}
+
+html[data-theme="dark"] body {
+    background-color: #05060a;
+    background-image:
+        radial-gradient(120% 55% at 50% -8%, rgba(40, 58, 110, .55) 0%, rgba(40, 58, 110, 0) 62%),
+        linear-gradient(180deg,
+            #030406 0%, #070b1c 12%, #0e1734 24%, #16234f 36%,
+            #1e2f68 48%, #27386f 58%, #2f3a58 68%, #5a4c20 78%,
+            #7a5c0c 86%, #8a6409 92%, #a87c0c 97%, #b98d10 100%);
+    background-attachment: fixed, fixed;
+    background-size: auto, cover;
+}
+
+/* painted ground, hidden at night like the main site */
+.grain {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image: url(../assets/textures/dabs.png);
+    background-size: 512px 512px;
+    opacity: .5;
+    filter: blur(.45px);
+}
+html[data-theme="dark"] .grain { display: none; }
+
+/* ---------------------------------------------------------------- bar */
+.bar {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 14px clamp(16px, 4vw, 40px);
+    background: var(--bar);
+    -webkit-backdrop-filter: blur(18px) saturate(1.1);
+    backdrop-filter: blur(18px) saturate(1.1);
+    border-bottom: 1px solid var(--hairline);
+}
+
+.bar a { color: inherit; text-decoration: none; }
+
+.brand {
+    font-size: .78rem;
+    letter-spacing: .26em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.brand span { color: var(--accent); }
+
+.crumbs {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: .74rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.crumbs a {
+    padding-bottom: 2px;
+    border-bottom: 1px solid transparent;
+    transition: border-color .25s var(--ease), color .25s var(--ease);
+}
+.crumbs a:hover { color: var(--ink); border-bottom-color: var(--accent); }
+
+.icon-btn {
+    width: 36px; height: 36px;
+    display: grid; place-items: center;
+    border-radius: 50%;
+    border: 1px solid var(--hairline);
+    background: none;
+    color: var(--ink);
+    cursor: pointer;
+    transition: transform .3s var(--ease), border-color .25s var(--ease);
+}
+.icon-btn:hover { transform: rotate(-18deg); border-color: var(--accent); }
+
+/* ---------------------------------------------------------------- shell */
+.wrap {
+    position: relative;
+    z-index: 1;
+    width: calc(100% - 2 * clamp(16px, 4vw, 40px));
+    max-width: var(--maxw);
+    margin: 0 auto;
+}
+
+/* ---------------------------------------------------------------- masthead */
+.masthead {
+    padding: clamp(48px, 9vh, 96px) 0 clamp(26px, 5vh, 44px);
+    border-bottom: 1px solid var(--hairline);
+    margin-bottom: clamp(30px, 5vh, 54px);
+}
+
+.kicker {
+    margin: 0 0 18px;
+    font-size: .72rem;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+
+.masthead h1 {
+    margin: 0;
+    font-weight: 400;
+    font-size: clamp(3rem, 9vw, 6.4rem);
+    line-height: .92;
+    letter-spacing: -.015em;
+}
+
+.masthead h1 em {
+    font-style: italic;
+    color: var(--accent);
+}
+
+.lede {
+    margin: 22px 0 0;
+    max-width: 56ch;
+    font-size: clamp(1rem, 1.5vw, 1.16rem);
+    line-height: 1.62;
+    color: var(--muted);
+}
+
+.tally {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 26px;
+    margin: 26px 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: .74rem;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--faint);
+}
+
+.tally li { position: relative; padding-left: 16px; }
+.tally li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: .5em;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: .7;
+}
+
+/* ---------------------------------------------------------------- grid */
+.grid {
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat(3, 1fr);
+    padding-bottom: clamp(40px, 8vh, 90px);
+}
+
+.grid.two { grid-template-columns: repeat(2, 1fr); }
+
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid var(--hairline);
+    background: var(--panel);
+    -webkit-backdrop-filter: blur(22px) saturate(1.05);
+    backdrop-filter: blur(22px) saturate(1.05);
+    box-shadow: 0 14px 36px rgba(52, 44, 68, .13);
+    transition: transform .4s var(--ease), box-shadow .4s var(--ease), border-color .3s var(--ease);
+}
+
+.card:hover,
+.card:focus-visible {
+    transform: translateY(-6px);
+    border-color: var(--ring);
+    box-shadow: 0 26px 54px rgba(52, 44, 68, .22);
+    outline: none;
+}
+
+.frame {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    background: rgba(120, 110, 130, .12);
+}
+
+.grid.two .frame { aspect-ratio: 4 / 3; }
+
+.frame img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transform: scale(1.02);
+    transition: transform .8s var(--ease), filter .6s var(--ease);
+}
+
+.card:hover .frame img { transform: scale(1.07); }
+
+.frame::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(20, 14, 26, 0) 46%, rgba(20, 14, 26, .42) 100%);
+    opacity: .8;
+    transition: opacity .4s var(--ease);
+}
+.card:hover .frame::after { opacity: 1; }
+
+.idx {
+    position: absolute;
+    top: 12px; left: 14px;
+    z-index: 2;
+    font-size: .68rem;
+    letter-spacing: .22em;
+    color: #fdfbf6;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, .45);
+}
+
+.meta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 16px 18px 18px;
+}
+
+.meta h2 {
+    margin: 0;
+    font-weight: 400;
+    font-size: clamp(1.05rem, 1.5vw, 1.24rem);
+    line-height: 1.28;
+}
+
+.meta p {
+    margin: 0;
+    font-size: .72rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--faint);
+}
+
+.meta .note {
+    margin-top: 6px;
+    font-size: .86rem;
+    line-height: 1.5;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--muted);
+}
+
+/* wide feature card */
+.card.feature { grid-column: span 2; }
+.card.feature .frame { aspect-ratio: 16 / 9; }
+.card.feature .meta h2 { font-size: clamp(1.3rem, 2.2vw, 1.7rem); }
+
+/* ---------------------------------------------------------------- footer */
+.foot {
+    position: relative;
+    z-index: 1;
+    width: calc(100% - 2 * clamp(16px, 4vw, 40px));
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 30px 0 46px;
+    border-top: 1px solid var(--hairline);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 22px;
+    align-items: baseline;
+    font-size: .78rem;
+    letter-spacing: .1em;
+    color: var(--faint);
+}
+
+.foot a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color .25s var(--ease), color .25s var(--ease);
+}
+.foot a:hover { color: var(--ink); border-bottom-color: var(--accent); }
+
+.foot .spacer { margin-left: auto; }
+
+/* ---------------------------------------------------------------- motion */
+@media (prefers-reduced-motion: reduce) {
+    .card, .frame img, .icon-btn, .crumbs a, .foot a { transition: none; }
+    .card:hover { transform: none; }
+    .card:hover .frame img { transform: scale(1.02); }
+}
+
+/* ---------------------------------------------------------------- narrow */
+@media (max-width: 900px) {
+    .grid { grid-template-columns: repeat(2, 1fr); }
+    .card.feature { grid-column: span 2; }
+}
+
+@media (max-width: 620px) {
+    .grid,
+    .grid.two { grid-template-columns: 1fr; }
+    .card.feature { grid-column: span 1; }
+    .card.feature .frame { aspect-ratio: 4 / 3; }
+    .crumbs { font-size: .66rem; gap: 10px; }
+    .brand { font-size: .7rem; letter-spacing: .18em; }
+}
