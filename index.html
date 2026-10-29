@@ -1460,42 +1460,45 @@ html[data-theme="dark"] .perch .p-shade{opacity:.28}
 .perch .p-legB{
     transform-box:view-box;
 }
-.perch .p-idle{transform-origin:62px 116px;animation:perch-sway 4.8s ease-in-out infinite}
-.perch .p-legA{transform-origin:58px 76px;animation:step-a 2.4s ease-in-out infinite}
-.perch .p-legB{transform-origin:70px 75px;animation:step-b 2.4s ease-in-out infinite}
+.perch .p-idle{transform-origin:62px 116px;animation:perch-hop 2.4s cubic-bezier(.42,0,.35,1) infinite}
+.perch .p-legA{transform-origin:56px 72px;animation:step-a 2.4s cubic-bezier(.42,0,.35,1) infinite}
+.perch .p-legB{transform-origin:68px 71px;animation:step-b 2.4s cubic-bezier(.42,0,.35,1) infinite}
 
-@keyframes perch-sway{
-    0%,100%{transform:rotate(0deg) translateY(0)}
-    20%    {transform:rotate(-3.2deg) translateY(-1.9px)}
-    40%    {transform:rotate(-1deg) translateY(-0.6px)}
-    60%    {transform:rotate(3.2deg) translateY(-1.9px)}
-    80%    {transform:rotate(1deg) translateY(-0.6px)}
+/* a springy two-beat hop: crouch, spring, land squashed, again.
+   The body squashes against the feet; the legs alternate, swinging across
+   the centre line and back down onto their own spot. */
+@keyframes perch-hop{
+    0%   {transform:translateY(0)    scaleY(1)}
+    10%  {transform:translateY(1.4px) scaleY(0.93) scaleX(1.05)}
+    26%  {transform:translateY(-4.4px) scaleY(1.08) scaleX(0.95)}
+    38%  {transform:translateY(0)    scaleY(0.94) scaleX(1.04)}
+    48%  {transform:translateY(0)    scaleY(1)}
+    60%  {transform:translateY(1.4px) scaleY(0.93) scaleX(1.05)}
+    76%  {transform:translateY(-4.4px) scaleY(1.08) scaleX(0.95)}
+    88%  {transform:translateY(0)    scaleY(0.94) scaleX(1.04)}
+    100% {transform:translateY(0)    scaleY(1)}
 }
 @keyframes step-a{
-    0%,100%{transform:rotate(0deg)}
-    25%    {transform:rotate(-5.2deg)}
-    50%    {transform:rotate(0.6deg)}
-    75%    {transform:rotate(1.4deg)}
+    0%,10%  {transform:translateX(0) translateY(0) rotate(0deg)}
+    26%     {transform:translateX(17px) translateY(-8px) rotate(-12deg)}
+    38%     {transform:translateX(3px) translateY(0) rotate(-2deg)}
+    48%,100%{transform:translateX(0) translateY(0) rotate(0deg)}
 }
 @keyframes step-b{
-    0%,100%{transform:rotate(0deg)}
-    25%    {transform:rotate(1.4deg)}
-    50%    {transform:rotate(0.6deg)}
-    75%    {transform:rotate(-5.2deg)}
+    0%,60%  {transform:translateX(0) translateY(0) rotate(0deg)}
+    76%     {transform:translateX(-17px) translateY(-8px) rotate(12deg)}
+    88%     {transform:translateX(-3px) translateY(0) rotate(2deg)}
+    100%    {transform:translateX(0) translateY(0) rotate(0deg)}
 }
 
-/* offsets so the six birds never move in lockstep */
-.perch.p1 .p-idle{animation-delay:-0.2s}
-.perch.p2 .p-idle{animation-delay:-1.5s}
-.perch.p2 .p-legA,.perch.p2 .p-legB{animation-delay:-0.8s}
-.perch.p3 .p-idle{animation-delay:-2.7s}
-.perch.p3 .p-legA,.perch.p3 .p-legB{animation-delay:-1.3s}
-.perch.p4 .p-idle{animation-delay:-0.9s}
-.perch.p4 .p-legA,.perch.p4 .p-legB{animation-delay:-0.4s}
-.perch.p5 .p-idle{animation-delay:-3.4s}
-.perch.p5 .p-legA,.perch.p5 .p-legB{animation-delay:-1.9s}
-.perch.p6 .p-idle{animation-delay:-2.1s}
-.perch.p6 .p-legA,.perch.p6 .p-legB{animation-delay:-1.1s}
+/* each bird runs the same 2.4s beat but from its own starting point,
+   so the page opens already in motion and the six never lock together */
+.perch.p1 .p-idle,.perch.p1 .p-legA,.perch.p1 .p-legB{animation-delay:-0.15s}
+.perch.p2 .p-idle,.perch.p2 .p-legA,.perch.p2 .p-legB{animation-delay:-0.55s}
+.perch.p3 .p-idle,.perch.p3 .p-legA,.perch.p3 .p-legB{animation-delay:-1.05s}
+.perch.p4 .p-idle,.perch.p4 .p-legA,.perch.p4 .p-legB{animation-delay:-1.5s}
+.perch.p5 .p-idle,.perch.p5 .p-legA,.perch.p5 .p-legB{animation-delay:-1.85s}
+.perch.p6 .p-idle,.perch.p6 .p-legA,.perch.p6 .p-legB{animation-delay:-0.35s}
 
 /* pose variation */
 .perch .p-tilt,
@@ -1691,6 +1694,16 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
                 <svg class="perch-art" viewBox="0 0 120 118" aria-hidden="true" focusable="false">
                     <g class="paint-rough">
                         <g class="p-tilt">
+                            <g class="p-legs">
+                                <g class="p-legA">
+                                    <path class="p-leg" d="M56 68 L54 115"/>
+                                    <path class="p-foot" d="M48 117 L54 115 L61 117"/>
+                                </g>
+                                <g class="p-legB">
+                                    <path class="p-leg" d="M68 67 L70 115"/>
+                                    <path class="p-foot" d="M64 117 L70 115 L77 117"/>
+                                </g>
+                            </g>
                             <g class="p-idle">
                                 <path class="p-tail" d="M90 50 C98 53 105 56 110 58 C105 59 98 60 92 62 Z"/>
                                 <path class="p-body" d="M20 46 C25 40 28 33 37 29 C46 25 54 27 62 30 C74 34 86 40 97 47 C104 51 108 54 111 57 C104 58 98 59 92 61 C80 66 66 73 54 74 C46 75 40 69 37 61 C33 56 26 51 20 46 Z"/>
@@ -1715,16 +1728,7 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
                                     </g>
                                 </g>
                             </g>
-                            <g class="p-legs">
-                                <g class="p-legA">
-                                    <path class="p-leg" d="M56 74 L54 115"/>
-                                    <path class="p-foot" d="M48 117 L54 115 L61 117"/>
-                                </g>
-                                <g class="p-legB">
-                                    <path class="p-leg" d="M68 73 L70 115"/>
-                                    <path class="p-foot" d="M64 117 L70 115 L77 117"/>
-                                </g>
-                            </g>
+                            
                         </g>
                     </g>
                 </svg>
@@ -1773,6 +1777,16 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
                 <svg class="perch-art" viewBox="0 0 120 118" aria-hidden="true" focusable="false">
                     <g class="paint-rough">
                         <g class="p-tilt">
+                            <g class="p-legs">
+                                <g class="p-legA">
+                                    <path class="p-leg" d="M56 68 L54 115"/>
+                                    <path class="p-foot" d="M48 117 L54 115 L61 117"/>
+                                </g>
+                                <g class="p-legB">
+                                    <path class="p-leg" d="M68 67 L70 115"/>
+                                    <path class="p-foot" d="M64 117 L70 115 L77 117"/>
+                                </g>
+                            </g>
                             <g class="p-idle">
                                 <path class="p-tail" d="M90 50 C98 53 105 56 110 58 C105 59 98 60 92 62 Z"/>
                                 <path class="p-body" d="M20 46 C25 40 28 33 37 29 C46 25 54 27 62 30 C74 34 86 40 97 47 C104 51 108 54 111 57 C104 58 98 59 92 61 C80 66 66 73 54 74 C46 75 40 69 37 61 C33 56 26 51 20 46 Z"/>
@@ -1797,16 +1811,7 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
                                     </g>
                                 </g>
                             </g>
-                            <g class="p-legs">
-                                <g class="p-legA">
-                                    <path class="p-leg" d="M56 74 L54 115"/>
-                                    <path class="p-foot" d="M48 117 L54 115 L61 117"/>
-                                </g>
-                                <g class="p-legB">
-                                    <path class="p-leg" d="M68 73 L70 115"/>
-                                    <path class="p-foot" d="M64 117 L70 115 L77 117"/>
-                                </g>
-                            </g>
+                            
                         </g>
                     </g>
                 </svg>
@@ -1855,6 +1860,16 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
                 <svg class="perch-art" viewBox="0 0 120 118" aria-hidden="true" focusable="false">
                     <g class="paint-rough">
                         <g class="p-tilt">
+                            <g class="p-legs">
+                                <g class="p-legA">
+                                    <path class="p-leg" d="M56 68 L54 115"/>
+                                    <path class="p-foot" d="M48 117 L54 115 L61 117"/>
+                                </g>
+                                <g class="p-legB">
+                                    <path class="p-leg" d="M68 67 L70 115"/>
+                                    <path class="p-foot" d="M64 117 L70 115 L77 117"/>
+                                </g>
+                            </g>
                             <g class="p-idle">
                                 <path class="p-tail" d="M90 50 C98 53 105 56 110 58 C105 59 98 60 92 62 Z"/>
                                 <path class="p-body" d="M20 46 C25 40 28 33 37 29 C46 25 54 27 62 30 C74 34 86 40 97 47 C104 51 108 54 111 57 C104 58 98 59 92 61 C80 66 66 73 54 74 C46 75 40 69 37 61 C33 56 26 51 20 46 Z"/>
@@ -1879,16 +1894,7 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
                                     </g>
                                 </g>
                             </g>
-                            <g class="p-legs">
-                                <g class="p-legA">
-                                    <path class="p-leg" d="M56 74 L54 115"/>
-                                    <path class="p-foot" d="M48 117 L54 115 L61 117"/>
-                                </g>
-                                <g class="p-legB">
-                                    <path class="p-leg" d="M68 73 L70 115"/>
-                                    <path class="p-foot" d="M64 117 L70 115 L77 117"/>
-                                </g>
-                            </g>
+                            
                         </g>
                     </g>
                 </svg>
@@ -2186,6 +2192,16 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
                 <svg class="perch-art" viewBox="0 0 120 118" aria-hidden="true" focusable="false">
                     <g class="paint-rough">
                         <g class="p-tilt">
+                            <g class="p-legs">
+                                <g class="p-legA">
+                                    <path class="p-leg" d="M56 68 L54 115"/>
+                                    <path class="p-foot" d="M48 117 L54 115 L61 117"/>
+                                </g>
+                                <g class="p-legB">
+                                    <path class="p-leg" d="M68 67 L70 115"/>
+                                    <path class="p-foot" d="M64 117 L70 115 L77 117"/>
+                                </g>
+                            </g>
                             <g class="p-idle">
                                 <path class="p-tail" d="M90 50 C98 53 105 56 110 58 C105 59 98 60 92 62 Z"/>
                                 <path class="p-body" d="M20 46 C25 40 28 33 37 29 C46 25 54 27 62 30 C74 34 86 40 97 47 C104 51 108 54 111 57 C104 58 98 59 92 61 C80 66 66 73 54 74 C46 75 40 69 37 61 C33 56 26 51 20 46 Z"/>
@@ -2210,16 +2226,7 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
                                     </g>
                                 </g>
                             </g>
-                            <g class="p-legs">
-                                <g class="p-legA">
-                                    <path class="p-leg" d="M56 74 L54 115"/>
-                                    <path class="p-foot" d="M48 117 L54 115 L61 117"/>
-                                </g>
-                                <g class="p-legB">
-                                    <path class="p-leg" d="M68 73 L70 115"/>
-                                    <path class="p-foot" d="M64 117 L70 115 L77 117"/>
-                                </g>
-                            </g>
+                            
                         </g>
                     </g>
                 </svg>
@@ -2268,6 +2275,16 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
                 <svg class="perch-art" viewBox="0 0 120 118" aria-hidden="true" focusable="false">
                     <g class="paint-rough">
                         <g class="p-tilt">
+                            <g class="p-legs">
+                                <g class="p-legA">
+                                    <path class="p-leg" d="M56 68 L54 115"/>
+                                    <path class="p-foot" d="M48 117 L54 115 L61 117"/>
+                                </g>
+                                <g class="p-legB">
+                                    <path class="p-leg" d="M68 67 L70 115"/>
+                                    <path class="p-foot" d="M64 117 L70 115 L77 117"/>
+                                </g>
+                            </g>
                             <g class="p-idle">
                                 <path class="p-tail" d="M90 50 C98 53 105 56 110 58 C105 59 98 60 92 62 Z"/>
                                 <path class="p-body" d="M20 46 C25 40 28 33 37 29 C46 25 54 27 62 30 C74 34 86 40 97 47 C104 51 108 54 111 57 C104 58 98 59 92 61 C80 66 66 73 54 74 C46 75 40 69 37 61 C33 56 26 51 20 46 Z"/>
@@ -2292,16 +2309,7 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
                                     </g>
                                 </g>
                             </g>
-                            <g class="p-legs">
-                                <g class="p-legA">
-                                    <path class="p-leg" d="M56 74 L54 115"/>
-                                    <path class="p-foot" d="M48 117 L54 115 L61 117"/>
-                                </g>
-                                <g class="p-legB">
-                                    <path class="p-leg" d="M68 73 L70 115"/>
-                                    <path class="p-foot" d="M64 117 L70 115 L77 117"/>
-                                </g>
-                            </g>
+                            
                         </g>
                     </g>
                 </svg>
@@ -2358,6 +2366,16 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
                 <svg class="perch-art" viewBox="0 0 120 118" aria-hidden="true" focusable="false">
                     <g class="paint-rough">
                         <g class="p-tilt">
+                            <g class="p-legs">
+                                <g class="p-legA">
+                                    <path class="p-leg" d="M56 68 L54 115"/>
+                                    <path class="p-foot" d="M48 117 L54 115 L61 117"/>
+                                </g>
+                                <g class="p-legB">
+                                    <path class="p-leg" d="M68 67 L70 115"/>
+                                    <path class="p-foot" d="M64 117 L70 115 L77 117"/>
+                                </g>
+                            </g>
                             <g class="p-idle">
                                 <path class="p-tail" d="M90 50 C98 53 105 56 110 58 C105 59 98 60 92 62 Z"/>
                                 <path class="p-body" d="M20 46 C25 40 28 33 37 29 C46 25 54 27 62 30 C74 34 86 40 97 47 C104 51 108 54 111 57 C104 58 98 59 92 61 C80 66 66 73 54 74 C46 75 40 69 37 61 C33 56 26 51 20 46 Z"/>
@@ -2382,16 +2400,7 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
                                     </g>
                                 </g>
                             </g>
-                            <g class="p-legs">
-                                <g class="p-legA">
-                                    <path class="p-leg" d="M56 74 L54 115"/>
-                                    <path class="p-foot" d="M48 117 L54 115 L61 117"/>
-                                </g>
-                                <g class="p-legB">
-                                    <path class="p-leg" d="M68 73 L70 115"/>
-                                    <path class="p-foot" d="M64 117 L70 115 L77 117"/>
-                                </g>
-                            </g>
+                            
                         </g>
                     </g>
                 </svg>
