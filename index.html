@@ -885,6 +885,15 @@ html[data-theme="dark"]{
 
 html{background:var(--html-bg)}
 
+/* swapping themes: cut transitions so no colour transition can stall on
+   a custom-property change */
+html.theme-swap,
+html.theme-swap *,
+html.theme-swap *::before,
+html.theme-swap *::after{
+    transition:none !important;
+}
+
 /* ---------------------------------------------- page gradients */
 body{
     min-height:100vh;
@@ -1931,7 +1940,17 @@ html[data-theme="dark"] .ripple{
     if (themeBtn) {
         themeBtn.addEventListener("click", function () {
             var next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
-            document.documentElement.setAttribute("data-theme", next);
+            var root = document.documentElement;
+
+            /* Suppress transitions for the swap. Colour is driven by custom
+               properties, and Chrome can stall a running colour transition
+               when the driving variable changes — which left dark ink on the
+               dark background. Swapping without transitions avoids it. */
+            root.classList.add("theme-swap");
+            root.setAttribute("data-theme", next);
+            void root.offsetWidth;
+            setTimeout(function () { root.classList.remove("theme-swap"); }, 80);
+
             try { localStorage.setItem("theme", next); } catch (e) {}
             paintTheme();
             toast(next === "dark" ? "Dark mode" : "Light mode");
