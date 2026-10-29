@@ -1,174 +1,135 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SciFI People</title>
-    <style>
-        /* 设置body样式，使内容居中显示 */
-        body {
-            margin: 0;
-            overflow: hidden;
-            background: black;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            position: relative;
-        }
-
-        /* 设置canvas覆盖整个屏幕 */
-        canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
-
-        /* 设置图片容器，包含闪烁效果 */
-        .slideshow-container {
-            z-index: 2;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: absolute;
-            width: 25%; /* 默认情况下缩小闪光范围 */
-            height: auto;
-            animation: flash 2s infinite;
-        }
-
-        /* 在手机上设置图片容器 */
-        @media (max-width: 600px) {
-            .slideshow-container {
-                width: auto;
-                height: 70%; /* 高度占屏幕的70% */
-            }
-            img {
-                width: auto;
-                height: 100%; /* 宽度自动调整 */
-            }
-        }
-
-        /* 定义闪烁效果 */
-        @keyframes flash {
-            0% { background-color: rgba(173, 216, 230, 0.2); } /* 浅蓝色 */
-            50% { background-color: rgba(0, 0, 139, 0.2); }   /* 深蓝色 */
-            75% { background-color: rgba(255, 255, 255, 0.2); } /* 白色 */
-            100% { background-color: rgba(173, 216, 230, 0.2); } /* 浅蓝色 */
-        }
-
-        /* 设置图片样式 */
-        img {
-            max-width: 100%;
-            max-height: 100%;
-            opacity: 0.85;
-        }
-
-        /* 按钮相关代码 */
-        .button-container {
-            position: absolute;
-            top: -60px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 2;
-        }
-
-        .return-button {
-            padding: 10px 30px;
-            background-color: rgba(0, 0, 0, 0.13);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 15vh;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sci-fi — People — Yukun Wen</title>
+<meta name="description" content="Figures for a future that looks lived in: worn uniforms, patched hardware and faces that have been outside too long.">
+<link rel="stylesheet" href="./folio.css">
+<link rel="stylesheet" href="./folio-detail.css">
 </head>
 <body>
-    <!-- 新增顶部按钮 -->
-    <div class="button-container">
-        <button class="return-button" onclick="window.open('../Index.html')">Return AIGC</button>
-    </div>
-    <canvas id="canvas"></canvas>
-    <div class="slideshow-container">
-        <img id="slideshow" src="../assets/AIGC/SciFi/people/people_01.png" alt="Slideshow Image">
-    </div>
 
-    <script>
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
+<div class="grain" aria-hidden="true"></div>
 
-        // 设置canvas大小为窗口大小
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+<header class="bar">
+    <a class="brand" href="../index.html">Yukun <span>Wen</span></a>
+    <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="../index.html">Index</a>
+        <a href="./AIGCHome.html">AIGC</a>
+        <span>People</span>
+    </nav>
+    <button class="icon-btn" id="theme" type="button" aria-label="Switch theme">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.6" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+    </button>
+</header>
 
-        const fontSize = 16;
-        const columns = canvas.width / fontSize;
-        const drops = [];
+<main class="wrap">
 
-        // 初始化每一列的起始点
-        for (let x = 0; x < columns; x++) {
-            drops[x] = 1;
-        }
+    <section class="masthead">
+        <p class="kicker">Sci-Fi · Character</p>
+        <h1>Sci-fi — People</h1>
+        <p class="lede">Figures for a future that looks lived in: worn uniforms, patched hardware and faces that have been outside too long.</p>
+        <ul class="tally"><li>7 images</li></ul>
+    </section>
 
-        // 绘制下落字符的动画
-        function draw() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+    <section class="gallery" aria-label="Sci-fi — People">
+        <button class="shot" type="button" data-full="../assets/AIGC/SciFi/people/people_01.png" data-alt="Sci-fi — People 1">
+            <span class="n">01</span>
+            <img src="../assets/AIGC/SciFi/people/people_01.png" alt="Sci-fi — People 1" loading="eager" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/SciFi/people/people_02.png" data-alt="Sci-fi — People 2">
+            <span class="n">02</span>
+            <img src="../assets/AIGC/SciFi/people/people_02.png" alt="Sci-fi — People 2" loading="eager" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/SciFi/people/people_03.png" data-alt="Sci-fi — People 3">
+            <span class="n">03</span>
+            <img src="../assets/AIGC/SciFi/people/people_03.png" alt="Sci-fi — People 3" loading="eager" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/SciFi/people/people_04.png" data-alt="Sci-fi — People 4">
+            <span class="n">04</span>
+            <img src="../assets/AIGC/SciFi/people/people_04.png" alt="Sci-fi — People 4" loading="lazy" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/SciFi/people/people_05.png" data-alt="Sci-fi — People 5">
+            <span class="n">05</span>
+            <img src="../assets/AIGC/SciFi/people/people_05.png" alt="Sci-fi — People 5" loading="lazy" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/SciFi/people/people_06.png" data-alt="Sci-fi — People 6">
+            <span class="n">06</span>
+            <img src="../assets/AIGC/SciFi/people/people_06.png" alt="Sci-fi — People 6" loading="lazy" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/SciFi/people/people_07.png" data-alt="Sci-fi — People 7">
+            <span class="n">07</span>
+            <img src="../assets/AIGC/SciFi/people/people_07.png" alt="Sci-fi — People 7" loading="lazy" width="800" height="1067">
+        </button>
+    </section>
 
-            ctx.fillStyle = '#00ffff';
-            ctx.font = fontSize + 'px monospace';
-            
-            for (let i = 0; i < drops.length; i++) {
-                const text = String.fromCharCode(Math.random() * 128);
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+    <nav class="pager" aria-label="Series navigation">
+        <a href="./AIGCHome.html"><span class="lbl">Back</span><span class="t">All AIGC series</span></a>
+        <a class="next" href="../index.html"><span class="lbl">Home</span><span class="t">Yukun Wen</span></a>
+    </nav>
+<div class="lightbox" id="lightbox" role="dialog" aria-label="Image viewer">
+    <img id="lb-img" alt="">
+    <button class="close" type="button" aria-label="Close">✕</button>
+    <button class="nav prev" type="button" aria-label="Previous">‹</button>
+    <button class="nav next" type="button" aria-label="Next">›</button>
+    <span class="cap" id="lb-cap"></span>
+</div>
+</main>
 
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    drops[i] = 0;
-                }
+<footer class="foot">
+    <a href="../index.html">← Back to index</a>
+    <a href="./AIGCHome.html">← AIGC</a>
+    <span class="spacer">Yukun Wen — selected work</span>
+</footer>
 
-                drops[i]++;
-            }
-        }
-
-        // 设置动画刷新率
-        setInterval(draw, 33);
-
-        // 当窗口大小改变时，调整canvas大小
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+<script>
+    (function () {
+        var root = document.documentElement;
+        if (localStorage.getItem("theme") === "dark") { root.setAttribute("data-theme", "dark"); }
+        document.getElementById("theme").addEventListener("click", function () {
+            var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+            root.setAttribute("data-theme", next);
+            localStorage.setItem("theme", next);
         });
+    })();
+</script>
+<script>
+    (function () {
+        var box = document.getElementById("lightbox");
+        var img = document.getElementById("lb-img");
+        var cap = document.getElementById("lb-cap");
+        var shots = Array.prototype.slice.call(document.querySelectorAll(".shot"));
+        var at = 0;
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const totalImages = 7;
-            const imageFolderPath = "../assets/AIGC/SciFi/people";
-            let currentImageIndex = 0;
+        function show(i) {
+            at = (i + shots.length) % shots.length;
+            var s = shots[at];
+            img.src = s.getAttribute("data-full");
+            img.alt = s.getAttribute("data-alt") || "";
+            cap.textContent = (at + 1) + " / " + shots.length;
+            box.classList.add("on");
+        }
+        function hide() { box.classList.remove("on"); img.src = ""; }
 
-            const slideshowImage = document.getElementById('slideshow');
-
-            // 更新图片
-            function updateImage() {
-                const imageNumber = (currentImageIndex + 1).toString().padStart(2, '0');
-                slideshowImage.src = `${imageFolderPath}/people_${imageNumber}.png`;
-                currentImageIndex = (currentImageIndex + 1) % totalImages;
-            }
-
-            // 开始幻灯片放映
-            function startSlideshow() {
-                setTimeout(() => {
-                    updateImage();
-                    setInterval(updateImage, 3000);
-                }, 1000); // 首次显示图片1秒
-            }
-
-            startSlideshow();
-
-            // 点击图片时切换到下一张
-            slideshowImage.addEventListener('click', updateImage);
+        shots.forEach(function (s, i) {
+            s.addEventListener("click", function () { show(i); });
         });
-    </script>
+        box.addEventListener("click", function (e) {
+            if (e.target === box) { hide(); }
+        });
+        box.querySelector(".close").addEventListener("click", hide);
+        box.querySelector(".prev").addEventListener("click", function (e) { e.stopPropagation(); show(at - 1); });
+        box.querySelector(".next").addEventListener("click", function (e) { e.stopPropagation(); show(at + 1); });
+        document.addEventListener("keydown", function (e) {
+            if (!box.classList.contains("on")) { return; }
+            if (e.key === "Escape") { hide(); }
+            if (e.key === "ArrowLeft") { show(at - 1); }
+            if (e.key === "ArrowRight") { show(at + 1); }
+        });
+    })();
+</script>
+
 </body>
 </html>

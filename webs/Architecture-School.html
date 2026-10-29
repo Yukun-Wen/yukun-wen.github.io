@@ -1,118 +1,101 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Projects</title>
-    <style>
-        body {
-            background: linear-gradient(45deg, #f7f0ed, #f6ddd9, #f5ac97, #97887a, #9aad8a, #ede8c4);
-            font-family: Arial, sans-serif;
-            color: #fff;
-            padding: 20px;
-        }
-        .content {
-            background: rgba(255, 255, 255, 0.096);
-            padding: 20px;
-            border-radius: 20px;
-            box-shadow: 0 0 10px rgba(27, 27, 27, 0.1);
-            margin-bottom: 40px;
-            border: 2px solid transparent;
-            background-clip: padding-box;
-            position: relative;
-        }
-        .content::before {
-            content: '';
-            position: absolute;
-            top: -5px; bottom: -5px; left: -5px; right: -5px;
-            background: linear-gradient(45deg, #9aad8a, #f5ac97,#9aad8a, #97887a);
-            z-index: -1;
-            border-radius: 20px;
-            filter: blur(20px);
-        }
-        h1 {
-            color: #fff;
-        }
-        h2 {
-            color: #fff;
-        }
-        p {
-            line-height: 1.6;
-        }
-        .image-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            grid-template-rows: auto auto;
-            gap: 20px;
-            justify-items: center;
-        }
-        .image-grid img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-        .image-grid img:first-child {
-            grid-column: 1 / 3;
-        }
-        .centered-image {
-            display: flex;
-            justify-content: center;
-        }
-        .centered-image img {
-            width: 100%;
-            height: auto;
-            max-width: 600px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>School Projects — Yukun Wen</title>
+<meta name="description" content="In my completed school projects, I covered different types and scales of projects from primary schools to vocational technical schools, each with its ">
+<link rel="stylesheet" href="./folio.css">
+<link rel="stylesheet" href="./folio-detail.css">
 </head>
 <body>
-    <div class="content">
+
+<div class="grain" aria-hidden="true"></div>
+
+<header class="bar">
+    <a class="brand" href="../index.html">Yukun <span>Wen</span></a>
+    <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="../index.html">Index</a>
+        <a href="./ArchitectureHomePage.html">Architecture</a>
+        <span>Education</span>
+    </nav>
+    <button class="icon-btn" id="theme" type="button" aria-label="Switch theme">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.6" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+    </button>
+</header>
+
+<main class="wrap">
+
+    <section class="masthead">
+        <p class="kicker">Architecture · Education</p>
         <h1>School Projects</h1>
-        <h1>学校项目</h1>
-        <p>In my completed school projects, I covered different types and scales of projects from primary schools to vocational technical schools, each with its unique characteristics requiring different considerations and challenges. These projects have made me deeply aware of the importance of functionality, practicality, aesthetics, and sustainability. I strictly adhered to relevant regulations and standards, thoroughly researched the laws regarding architectural layout, building structure, fire exits, and site planning, ensuring the legality and feasibility of the designs. At the same time, I emphasized communication with clients, better grasping the project direction by understanding their needs and feedback. During the project implementation process, I submitted design plans that underwent multiple revisions and optimizations, timely adjusting according to client feedback to ensure the practicality and aesthetics of the plans were gradually improved.</p>
-        <p>在完成的学校项目中，涵盖了从小学到职业技术学校的不同类型和规模的项目，每个项目都独具特色，需考虑不同的要求和挑战。这些项目让我深刻认识到功能性、实用性、美观性和可持续性的重要性。我严格遵守相关规范和标准，深入研究建筑平面布局、建筑结构、消防通道和场地规划等方面的法规，确保设计的合法性和可行性。同时，我注重与客户的沟通，通过了解他们的需求和意见，更好地把握项目方向。在项目实施过程中，我提交的设计方案经过多次修改和优化，及时根据客户反馈调整，确保方案的实用性和美观性逐步提升。</p>
-    </div>
+        <p class="lede">In my completed school projects, I covered different types and scales of projects from primary schools to vocational technical schools, each with its unique characteristics requiring different considerations and challenges. These projects have made me deeply aware of the importance of functionality, practicality, aesthetics, and sustainability. I strictly adhered to relevant regulations and standards, thoroughly researched the laws regarding architectural layout, building structure, fire exits, and site planning, ensuring the legality and feasibility of the designs. At the same time, I emphasized communication with clients, better grasping the project direction by understanding their needs and feedback. During the project implementation process, I submitted design plans that underwent multiple revisions and optimizations, timely adjusting according to client feedback to ensure the practicality and aesthetics of the plans were gradually improved.</p>
+        <p class="lede zh-line">在完成的学校项目中，涵盖了从小学到职业技术学校的不同类型和规模的项目，每个项目都独具特色，需考虑不同的要求和挑战。这些项目让我深刻认识到功能性、实用性、美观性和可持续性的重要性。我严格遵守相关规范和标准，深入研究建筑平面布局、建筑结构、消防通道和场地规划等方面的法规，确保设计的合法性和可行性。同时，我注重与客户的沟通，通过了解他们的需求和意见，更好地把握项目方向。在项目实施过程中，我提交的设计方案经过多次修改和优化，及时根据客户反馈调整，确保方案的实用性和美观性逐步提升。</p>
+    </section>
 
-    <div class="content">
-        <h2>Guilin City Lingui District Zhongyin Experimental Primary School Project</h2>
-        <h2>桂林市临桂区中隐实验小学项目</h2>
-        <p>In this project, I undertook several key tasks to ensure the project's smooth progress and high-quality standards. First, I conducted site SketchUp modeling, providing an intuitive visual display through 3D modeling to help all parties better understand and evaluate the design plan. Next, I carried out a preliminary analysis of the plan, thoroughly researching project needs to ensure a scientific and feasible design scheme. In terms of text layout, I organized and formatted relevant text materials, making the information transmission clearer and more orderly. I also drew floor plans and section drawings for each building unit, providing detailed design references for each building unit. Specifically for teaching buildings 3#, 4#, 5#, 6#, and 7#, I completed the floor plans, section drawings, interior decoration tables, and energy-saving calculation tables, providing complete technical information for the preliminary design of these buildings. Additionally, I was responsible for the preliminary design drawings of the 1# canteen comprehensive building and the 2# teaching building, covering floor plans, section drawings, and interior decoration tables. Through these tasks, I not only demonstrated my professional skills and attention to detail but also ensured the comprehensiveness and accuracy of the project design. My work laid a solid foundation for the smooth implementation of the project, highlighting the core role and importance of design in construction projects. Through scientific design and meticulous work, I made a significant contribution to achieving a high-quality educational building project.</p>
-        <p>在桂林市临桂区中隐实验小学项目中，我承担了多项关键任务，确保项目顺利推进并达到高质量标准。首先，我进行了场地SU建模，通过三维建模为项目提供了直观的视觉展示，帮助各方更好地理解和评估设计方案。接着，我进行了方案前期分析，深入研究项目需求，确保设计方案的科学性和可行性。在ID文本排版方面，我整理和排版了相关文本资料，使信息传达更为清晰有序。我还负责绘制了各单体的平面图和剖面图，为每个建筑单体提供了详细的设计参考。特别是对于3#、4#、5#、6#、7#教学楼子项目，我完成了平面图、剖面图、室内装修表和节能计算表等初设图纸的绘制，为这些建筑的初步设计提供了完整的技术资料。此外，我还负责了1#食堂综合楼和2#教学楼子项目的初设图纸绘制，涵盖平面图、剖面图和室内装修表等内容。通过这些工作，不仅展示了我的专业技能和对细节的关注，也确保了项目设计的全面性和精确性。我的工作为项目的顺利实施奠定了坚实的基础，体现了设计在建筑项目中的核心作用和重要性。通过科学的设计和细致的工作，我为实现一个高品质的教育建筑项目做出了重要贡献。</p>
-        <div class="centered-image">
-            <img src="..\assets\Architecture\School\ZYL.png" alt="School Project Image 1">
+    <article class="work">
+        <div class="text">
+            <h2>Guilin City Lingui District Zhongyin Experimental Primary School Project</h2>
+            <p class="zh">桂林市临桂区中隐实验小学项目</p>
+            <p class="en">In this project, I undertook several key tasks to ensure the project&#x27;s smooth progress and high-quality standards. First, I conducted site SketchUp modeling, providing an intuitive visual display through 3D modeling to help all parties better understand and evaluate the design plan. Next, I carried out a preliminary analysis of the plan, thoroughly researching project needs to ensure a scientific and feasible design scheme. In terms of text layout, I organized and formatted relevant text materials, making the information transmission clearer and more orderly. I also drew floor plans and section drawings for each building unit, providing detailed design references for each building unit. Specifically for teaching buildings 3#, 4#, 5#, 6#, and 7#, I completed the floor plans, section drawings, interior decoration tables, and energy-saving calculation tables, providing complete technical information for the preliminary design of these buildings. Additionally, I was responsible for the preliminary design drawings of the 1# canteen comprehensive building and the 2# teaching building, covering floor plans, section drawings, and interior decoration tables. Through these tasks, I not only demonstrated my professional skills and attention to detail but also ensured the comprehensiveness and accuracy of the project design. My work laid a solid foundation for the smooth implementation of the project, highlighting the core role and importance of design in construction projects. Through scientific design and meticulous work, I made a significant contribution to achieving a high-quality educational building project.</p>
+            <p class="zh-body">在桂林市临桂区中隐实验小学项目中，我承担了多项关键任务，确保项目顺利推进并达到高质量标准。首先，我进行了场地SU建模，通过三维建模为项目提供了直观的视觉展示，帮助各方更好地理解和评估设计方案。接着，我进行了方案前期分析，深入研究项目需求，确保设计方案的科学性和可行性。在ID文本排版方面，我整理和排版了相关文本资料，使信息传达更为清晰有序。我还负责绘制了各单体的平面图和剖面图，为每个建筑单体提供了详细的设计参考。特别是对于3#、4#、5#、6#、7#教学楼子项目，我完成了平面图、剖面图、室内装修表和节能计算表等初设图纸的绘制，为这些建筑的初步设计提供了完整的技术资料。此外，我还负责了1#食堂综合楼和2#教学楼子项目的初设图纸绘制，涵盖平面图、剖面图和室内装修表等内容。通过这些工作，不仅展示了我的专业技能和对细节的关注，也确保了项目设计的全面性和精确性。我的工作为项目的顺利实施奠定了坚实的基础，体现了设计在建筑项目中的核心作用和重要性。通过科学的设计和细致的工作，我为实现一个高品质的教育建筑项目做出了重要贡献。</p>
         </div>
-    </div>
-    
-    <div class="content">
-        <h2>Guangxi Vocational and Technical College (Xiangsi Lake Campus) Project</h2>
-        <h2>交通职业技术学院（相思湖校区）项目</h2>
-        <p>In this project, I undertook several key tasks to ensure the smooth progress and high-quality completion of the project. First, I was responsible for drawing the floor plans and section drawings, which are the basis of the project design, providing detailed guidance and reference for subsequent design and construction. In addition, I conducted an intention analysis, thoroughly studying the project's needs and goals, proposing feasible design ideas. On this basis, I carried out the SketchUp model modeling of the scheme, transforming the design scheme from two-dimensional drawings to three-dimensional models, more intuitively displaying the design effect and facilitating understanding and evaluation by all parties. To comprehensively showcase the design scheme, I also drew various analysis diagrams, detailing the design ideas and technical details. Finally, I created PPT texts, organizing all design results and analysis content into an intuitive and understandable presentation, providing strong support for the project's report and display. Through these tasks, I not only demonstrated my professional skills and meticulous work attitude but also ensured a scientific and feasible design scheme, greatly improving the overall quality and implementation effect of the project. My work laid a solid foundation for the project's success, highlighting the core role of design in the project.</p>
-        <p>在交通职业技术学院（相思湖校区）项目中，我承担了多项关键任务，确保项目的顺利进行和高质量完成。首先，我负责了平面图和剖面图的绘制工作，这些图纸是项目设计的基础，为后续的设计和施工提供了详细的指导和参考。此外，我进行了意向分析，通过深入研究项目需求和目标，提出了切实可行的设计思路。在此基础上，我进行了方案SU模型建模，将设计方案从二维图纸转化为三维模型，更直观地展示设计效果，并便于各方理解和评估。为了更全面地展示设计方案，我还绘制了多种分析图，详细解释了设计思路和各项技术细节。最后，我制作了PPT文本，将所有设计成果和分析内容整理成直观易懂的演示文稿，为项目的汇报和展示提供了有力支持。通过这些工作，不仅展示了我的专业技能和细致的工作态度，也确保了项目设计的科学性和可行性，极大地提升了项目的整体质量和实施效果。我的工作为项目的成功奠定了坚实的基础，体现了设计在项目中的核心作用。</p>
-        <div class="image-grid">
-            <img src="..\assets\Architecture\School\JTJS01.png" alt="School Project Image 1">
-            <img src="..\assets\Architecture\School\JTJS02.png" alt="School Project Image 2">
-            <img src="..\assets\Architecture\School\JTJS03.png" alt="School Project Image 3">
-        </div>
-    </div>
+        <figure><img src="../assets/Architecture/School/ZYL.png" alt="Guilin City Lingui District Zhongyin Experimental Primary School Project" loading="lazy"></figure>
+    </article>
 
-    <div class="content">
-        <h2>Canteen Project at the Yiling Campus of the Transportation College</h2>
-        <h2>交通学院伊岭校区食堂项目</h2>
-        <p>In this project, I undertook the important tasks of facade design and modeling, first submitting multiple design schemes showcasing diverse creativity and design ideas. Based on the preliminary schemes, according to feedback from all parties and combined with the actual situation of the surrounding environment, I submitted five versions of the design scheme. This process fully demonstrated my design flexibility and attention to detail, ensuring the harmony and unity of the scheme with the actual environment. Finally, I made multiple revisions to the design drafts and organized detailed renderings, striving to present every detail perfectly. Through these tasks, I not only demonstrated my professional skills and design capabilities but also significantly improved the overall quality and feasibility of the project, making an important contribution to the smooth progress of the project. This process was not only about design iteration but also about solving and optimizing practical problems, fully reflecting the importance of combining design with practice. My work not only ensured the aesthetics and functionality of the project but also played a key role in advancing the project, laying a solid foundation for ultimately achieving a high-quality, high-standard canteen project.</p>
-        <p>在交通学院伊岭校区食堂项目中，我承担了立面设计与建模的重要任务，首先提交了多个设计方案，展示了多样的创意和设计思路。在初步方案的基础上，根据各方反馈，结合周边环境的实际情况，再次提交了五版设计方案。这一过程充分体现了我的设计灵活性和对细节的关注，确保方案与实际环境的和谐统一。最终，我对设计稿进行了多次修改，并整理了详细的效果图，力求每一个细节都完美呈现。通过这些工作，不仅展示了我的专业技能和设计能力，也在很大程度上提升了项目的整体品质和可行性，为项目的顺利推进做出了重要贡献。这个过程不仅仅是设计的迭代，更是对实际问题的解决和优化，充分体现了设计与实践相结合的重要性。我的工作不仅确保了项目的美观性和功能性，更在项目推进中起到了关键的推动作用，为最终实现一个高质量、高标准的食堂项目奠定了坚实基础。</p>
-        <div class="centered-image">
-            <img src="..\assets\Architecture\School\YL01.png" alt="School Project Image 3">
+    <article class="work">
+        <div class="text">
+            <h2>Guangxi Vocational and Technical College (Xiangsi Lake Campus) Project</h2>
+            <p class="zh">交通职业技术学院（相思湖校区）项目</p>
+            <p class="en">In this project, I undertook several key tasks to ensure the smooth progress and high-quality completion of the project. First, I was responsible for drawing the floor plans and section drawings, which are the basis of the project design, providing detailed guidance and reference for subsequent design and construction. In addition, I conducted an intention analysis, thoroughly studying the project&#x27;s needs and goals, proposing feasible design ideas. On this basis, I carried out the SketchUp model modeling of the scheme, transforming the design scheme from two-dimensional drawings to three-dimensional models, more intuitively displaying the design effect and facilitating understanding and evaluation by all parties. To comprehensively showcase the design scheme, I also drew various analysis diagrams, detailing the design ideas and technical details. Finally, I created PPT texts, organizing all design results and analysis content into an intuitive and understandable presentation, providing strong support for the project&#x27;s report and display. Through these tasks, I not only demonstrated my professional skills and meticulous work attitude but also ensured a scientific and feasible design scheme, greatly improving the overall quality and implementation effect of the project. My work laid a solid foundation for the project&#x27;s success, highlighting the core role of design in the project.</p>
+            <p class="zh-body">在交通职业技术学院（相思湖校区）项目中，我承担了多项关键任务，确保项目的顺利进行和高质量完成。首先，我负责了平面图和剖面图的绘制工作，这些图纸是项目设计的基础，为后续的设计和施工提供了详细的指导和参考。此外，我进行了意向分析，通过深入研究项目需求和目标，提出了切实可行的设计思路。在此基础上，我进行了方案SU模型建模，将设计方案从二维图纸转化为三维模型，更直观地展示设计效果，并便于各方理解和评估。为了更全面地展示设计方案，我还绘制了多种分析图，详细解释了设计思路和各项技术细节。最后，我制作了PPT文本，将所有设计成果和分析内容整理成直观易懂的演示文稿，为项目的汇报和展示提供了有力支持。通过这些工作，不仅展示了我的专业技能和细致的工作态度，也确保了项目设计的科学性和可行性，极大地提升了项目的整体质量和实施效果。我的工作为项目的成功奠定了坚实的基础，体现了设计在项目中的核心作用。</p>
         </div>
-        <div class="centered-image">
-            <img src="..\assets\Architecture\School\YL02.png" alt="School Project Image 4">
-        </div>
-    </div>
+        <figure><img src="../assets/Architecture/School/JTJS01.png" alt="Guangxi Vocational and Technical College (Xiangsi Lake Campus) Project" loading="lazy"><img src="../assets/Architecture/School/JTJS02.png" alt="Guangxi Vocational and Technical College (Xiangsi Lake Campus) Project" loading="lazy"><img src="../assets/Architecture/School/JTJS03.png" alt="Guangxi Vocational and Technical College (Xiangsi Lake Campus) Project" loading="lazy"></figure>
+    </article>
 
-    <div class="content">
-        <h2>Additional Projects</h2>
-        <h2>其他项目</h2>
-        <p>In multiple projects, I have demonstrated outstanding design and technical capabilities. In the Guangxi Vocational and Technical College Wushe New Campus project, I created a gate model, submitted four versions of the scheme, and completed the main bid CAD files for canteens 11 and 12 during the bidding stage, as well as modifications to the main bid CAD files for teacher apartments 10 and student apartments 14-20. I also created the design description for scheme 4 and modified and compiled the CAD files for buildings 1, 2, and 10-20, in addition to collecting and categorizing various professional drawings. In the Guangxi Arts Institute National Arts Practice Education Complex project, I completed the Rhino model modeling of the scheme. Additionally, in the Canteen Project at the Yiling Campus of the Transportation College and the Guangxi Vocational and Technical College (Xiangsi Lake Campus) project, I was responsible for drawing floor plans and section drawings, SketchUp model modeling, intention analysis, and PPT text production. These tasks demonstrated my comprehensive abilities in design, modeling, project management, and coordination, ensuring the high-quality completion of projects and laying a solid foundation for the success of various projects. Through these experiences, I continuously improved my professional level, becoming an indispensable core force in the projects.</p>
-        <p>在多个项目中，我展现了卓越的设计和技术能力。在广西经贸职业技术学校五合新校区项目中，我制作了大门模型，提交四版方案，并在投标阶段完成了11、12#食堂主标CAD文件和10#教师公寓、14~20#学生公寓主标CAD文件的修改，同时制作了4号方案设计说明，并对1#、2#、10~20#楼栋的CAD文件进行了修改和汇总，还收集和分类了各专业图纸。在广西艺术学院民族艺术实践教育综合楼项目中，我完成了方案的rhino模型建模。此外，在交通学院伊岭校区食堂和交通职业技术学院（相思湖校区）项目中，我负责了平面图、剖面图绘制、SU模型建模、意向分析和PPT文本制作。这些工作展示了我在设计、建模、项目管理和协调方面的全面能力，确保了项目的高质量完成，为各个项目的成功奠定了坚实的基础。通过这些经验，我不断提升自己的专业水平，成为项目中不可或缺的核心力量。</p>
-    </div>
+    <article class="work">
+        <div class="text">
+            <h2>Canteen Project at the Yiling Campus of the Transportation College</h2>
+            <p class="zh">交通学院伊岭校区食堂项目</p>
+            <p class="en">In this project, I undertook the important tasks of facade design and modeling, first submitting multiple design schemes showcasing diverse creativity and design ideas. Based on the preliminary schemes, according to feedback from all parties and combined with the actual situation of the surrounding environment, I submitted five versions of the design scheme. This process fully demonstrated my design flexibility and attention to detail, ensuring the harmony and unity of the scheme with the actual environment. Finally, I made multiple revisions to the design drafts and organized detailed renderings, striving to present every detail perfectly. Through these tasks, I not only demonstrated my professional skills and design capabilities but also significantly improved the overall quality and feasibility of the project, making an important contribution to the smooth progress of the project. This process was not only about design iteration but also about solving and optimizing practical problems, fully reflecting the importance of combining design with practice. My work not only ensured the aesthetics and functionality of the project but also played a key role in advancing the project, laying a solid foundation for ultimately achieving a high-quality, high-standard canteen project.</p>
+            <p class="zh-body">在交通学院伊岭校区食堂项目中，我承担了立面设计与建模的重要任务，首先提交了多个设计方案，展示了多样的创意和设计思路。在初步方案的基础上，根据各方反馈，结合周边环境的实际情况，再次提交了五版设计方案。这一过程充分体现了我的设计灵活性和对细节的关注，确保方案与实际环境的和谐统一。最终，我对设计稿进行了多次修改，并整理了详细的效果图，力求每一个细节都完美呈现。通过这些工作，不仅展示了我的专业技能和设计能力，也在很大程度上提升了项目的整体品质和可行性，为项目的顺利推进做出了重要贡献。这个过程不仅仅是设计的迭代，更是对实际问题的解决和优化，充分体现了设计与实践相结合的重要性。我的工作不仅确保了项目的美观性和功能性，更在项目推进中起到了关键的推动作用，为最终实现一个高质量、高标准的食堂项目奠定了坚实基础。</p>
+        </div>
+        <figure><img src="../assets/Architecture/School/YL01.png" alt="Canteen Project at the Yiling Campus of the Transportation College" loading="lazy"><img src="../assets/Architecture/School/YL02.png" alt="Canteen Project at the Yiling Campus of the Transportation College" loading="lazy"></figure>
+    </article>
+
+    <article class="work noart">
+        <div class="text">
+            <h2>Additional Projects</h2>
+            <p class="zh">其他项目</p>
+            <p class="en">In multiple projects, I have demonstrated outstanding design and technical capabilities. In the Guangxi Vocational and Technical College Wushe New Campus project, I created a gate model, submitted four versions of the scheme, and completed the main bid CAD files for canteens 11 and 12 during the bidding stage, as well as modifications to the main bid CAD files for teacher apartments 10 and student apartments 14-20. I also created the design description for scheme 4 and modified and compiled the CAD files for buildings 1, 2, and 10-20, in addition to collecting and categorizing various professional drawings. In the Guangxi Arts Institute National Arts Practice Education Complex project, I completed the Rhino model modeling of the scheme. Additionally, in the Canteen Project at the Yiling Campus of the Transportation College and the Guangxi Vocational and Technical College (Xiangsi Lake Campus) project, I was responsible for drawing floor plans and section drawings, SketchUp model modeling, intention analysis, and PPT text production. These tasks demonstrated my comprehensive abilities in design, modeling, project management, and coordination, ensuring the high-quality completion of projects and laying a solid foundation for the success of various projects. Through these experiences, I continuously improved my professional level, becoming an indispensable core force in the projects.</p>
+            <p class="zh-body">在多个项目中，我展现了卓越的设计和技术能力。在广西经贸职业技术学校五合新校区项目中，我制作了大门模型，提交四版方案，并在投标阶段完成了11、12#食堂主标CAD文件和10#教师公寓、14~20#学生公寓主标CAD文件的修改，同时制作了4号方案设计说明，并对1#、2#、10~20#楼栋的CAD文件进行了修改和汇总，还收集和分类了各专业图纸。在广西艺术学院民族艺术实践教育综合楼项目中，我完成了方案的rhino模型建模。此外，在交通学院伊岭校区食堂和交通职业技术学院（相思湖校区）项目中，我负责了平面图、剖面图绘制、SU模型建模、意向分析和PPT文本制作。这些工作展示了我在设计、建模、项目管理和协调方面的全面能力，确保了项目的高质量完成，为各个项目的成功奠定了坚实的基础。通过这些经验，我不断提升自己的专业水平，成为项目中不可或缺的核心力量。</p>
+        </div>
+        <div class="blank"></div>
+    </article>
+
+    <nav class="pager" aria-label="Project navigation">
+        <a href="./Architecture-Hospital.html"><span class="lbl">Previous</span><span class="t">Hospital Projects</span></a>
+        <a class="next" href="./Architecture-House.html"><span class="lbl">Next</span><span class="t">House Projects</span></a>
+    </nav>
+</main>
+
+<footer class="foot">
+    <a href="../index.html">← Back to index</a>
+    <a href="./ArchitectureHomePage.html">← Architecture</a>
+    <span class="spacer">Yukun Wen — selected work</span>
+</footer>
+
+<script>
+    (function () {
+        var root = document.documentElement;
+        if (localStorage.getItem("theme") === "dark") { root.setAttribute("data-theme", "dark"); }
+        document.getElementById("theme").addEventListener("click", function () {
+            var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+            root.setAttribute("data-theme", next);
+            localStorage.setItem("theme", next);
+        });
+    })();
+</script>
 </body>
 </html>

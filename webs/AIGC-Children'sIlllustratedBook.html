@@ -1,137 +1,179 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Children's Illlustrated Book</title>
-    <style>
-        body {
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #144a74;
-            overflow: hidden;
-        }
-
-        .slideshow-container {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80%;
-            max-width: 400px;
-            text-align: center;
-            z-index: 10; /* Ensure the slideshow is on top */
-        }
-
-        .slideshow-container img {
-            width: 100%;
-            border: 1px solid white;
-            border-radius: 10px;
-        }
-
-        .button-container {
-            position: absolute;
-            top: -60px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 20; /* Ensure the button is on top */
-        }
-
-        .return-button {
-            padding: 10px 30px;
-            background-color: rgba(0, 0, 0, 0.13);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 15vh;
-        }
-
-        .star {
-            position: absolute;
-            color: white;
-            font-size: calc(10px + 2vmin);
-            animation: twinkle 1.5s infinite;
-            text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 15px #ffd700, 0 0 20px #ffd700;
-            z-index: 5; /* Ensure stars are below the slideshow */
-        }
-
-        @keyframes twinkle {
-            0%, 100% {
-                opacity: 1;
-                text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 15px #ffd700, 0 0 20px #ffd700;
-            }
-            50% {
-                opacity: 0.5;
-                text-shadow: 0 0 3px #ffffff, 0 0 6px #ffffff, 0 0 9px #ffd700, 0 0 12px #ffd700;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Children&#x27;s Illustrated Book — Yukun Wen</title>
+<meta name="description" content="Soft line and flat colour for young readers — a bear, a lantern and a procession that keeps growing.">
+<link rel="stylesheet" href="./folio.css">
+<link rel="stylesheet" href="./folio-detail.css">
 </head>
 <body>
-    <div class="button-container">
-        <button class="return-button" onclick="window.open('../Index.html')">Return AIGC</button>
-    </div>
-    <div class="slideshow-container">
-        <img id="slideshow" src="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_01.png" alt="Slideshow Image">
-    </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const totalImages = 18;
-            const imageFolderPath = "../assets/AIGC/Children'sIlllustratedBook";
-            let currentImageIndex = 0;
+<div class="grain" aria-hidden="true"></div>
 
-            const slideshowImage = document.getElementById('slideshow');
-            const starCount = 50; // Number of stars
-            const starEmoji = "⭐";
+<header class="bar">
+    <a class="brand" href="../index.html">Yukun <span>Wen</span></a>
+    <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="../index.html">Index</a>
+        <a href="./AIGCHome.html">AIGC</a>
+        <span>Children</span>
+    </nav>
+    <button class="icon-btn" id="theme" type="button" aria-label="Switch theme">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.6" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+    </button>
+</header>
 
-            function getRandomInt(min, max) {
-                return Math.floor(Math.random() * (max - min)) + min;
-            }
+<main class="wrap">
 
-            function createStar() {
-                const star = document.createElement("div");
-                star.className = "star";
-                star.style.left = getRandomInt(0, window.innerWidth) + "px";
-                star.style.top = getRandomInt(0, window.innerHeight) + "px";
-                star.style.fontSize = getRandomInt(10, 50) + "px"; // Random size between 10px and 50px
-                star.innerText = starEmoji;
-                document.body.appendChild(star);
-            }
+    <section class="masthead">
+        <p class="kicker">Children</p>
+        <h1>Children&#x27;s Illustrated Book</h1>
+        <p class="lede">Soft line and flat colour for young readers — a bear, a lantern and a procession that keeps growing.</p>
+        <ul class="tally"><li>18 images</li></ul>
+    </section>
 
-            function updateStars() {
-                document.querySelectorAll('.star').forEach(star => star.remove());
-                for (let i = 0; i < starCount; i++) {
-                    createStar();
-                }
-            }
+    <section class="gallery" aria-label="Children&#x27;s Illustrated Book">
+        <button class="shot" type="button" data-full="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_01.png" data-alt="Children&#x27;s Illustrated Book 1">
+            <span class="n">01</span>
+            <img src="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_01.png" alt="Children&#x27;s Illustrated Book 1" loading="eager" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_02.png" data-alt="Children&#x27;s Illustrated Book 2">
+            <span class="n">02</span>
+            <img src="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_02.png" alt="Children&#x27;s Illustrated Book 2" loading="eager" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_03.png" data-alt="Children&#x27;s Illustrated Book 3">
+            <span class="n">03</span>
+            <img src="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_03.png" alt="Children&#x27;s Illustrated Book 3" loading="eager" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_04.png" data-alt="Children&#x27;s Illustrated Book 4">
+            <span class="n">04</span>
+            <img src="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_04.png" alt="Children&#x27;s Illustrated Book 4" loading="lazy" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_05.png" data-alt="Children&#x27;s Illustrated Book 5">
+            <span class="n">05</span>
+            <img src="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_05.png" alt="Children&#x27;s Illustrated Book 5" loading="lazy" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_06.png" data-alt="Children&#x27;s Illustrated Book 6">
+            <span class="n">06</span>
+            <img src="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_06.png" alt="Children&#x27;s Illustrated Book 6" loading="lazy" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_07.png" data-alt="Children&#x27;s Illustrated Book 7">
+            <span class="n">07</span>
+            <img src="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_07.png" alt="Children&#x27;s Illustrated Book 7" loading="lazy" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_08.png" data-alt="Children&#x27;s Illustrated Book 8">
+            <span class="n">08</span>
+            <img src="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_08.png" alt="Children&#x27;s Illustrated Book 8" loading="lazy" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_09.png" data-alt="Children&#x27;s Illustrated Book 9">
+            <span class="n">09</span>
+            <img src="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_09.png" alt="Children&#x27;s Illustrated Book 9" loading="lazy" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_10.png" data-alt="Children&#x27;s Illustrated Book 10">
+            <span class="n">10</span>
+            <img src="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_10.png" alt="Children&#x27;s Illustrated Book 10" loading="lazy" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_11.png" data-alt="Children&#x27;s Illustrated Book 11">
+            <span class="n">11</span>
+            <img src="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_11.png" alt="Children&#x27;s Illustrated Book 11" loading="lazy" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_12.png" data-alt="Children&#x27;s Illustrated Book 12">
+            <span class="n">12</span>
+            <img src="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_12.png" alt="Children&#x27;s Illustrated Book 12" loading="lazy" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_13.png" data-alt="Children&#x27;s Illustrated Book 13">
+            <span class="n">13</span>
+            <img src="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_13.png" alt="Children&#x27;s Illustrated Book 13" loading="lazy" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_14.png" data-alt="Children&#x27;s Illustrated Book 14">
+            <span class="n">14</span>
+            <img src="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_14.png" alt="Children&#x27;s Illustrated Book 14" loading="lazy" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_15.png" data-alt="Children&#x27;s Illustrated Book 15">
+            <span class="n">15</span>
+            <img src="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_15.png" alt="Children&#x27;s Illustrated Book 15" loading="lazy" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_16.png" data-alt="Children&#x27;s Illustrated Book 16">
+            <span class="n">16</span>
+            <img src="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_16.png" alt="Children&#x27;s Illustrated Book 16" loading="lazy" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_17.png" data-alt="Children&#x27;s Illustrated Book 17">
+            <span class="n">17</span>
+            <img src="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_17.png" alt="Children&#x27;s Illustrated Book 17" loading="lazy" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_18.png" data-alt="Children&#x27;s Illustrated Book 18">
+            <span class="n">18</span>
+            <img src="../assets/AIGC/Children'sIlllustratedBook/Children'sIlllustratedBook_18.png" alt="Children&#x27;s Illustrated Book 18" loading="lazy" width="800" height="1067">
+        </button>
+    </section>
 
-            function updateImage() {
-                const imageNumber = (currentImageIndex + 1).toString().padStart(2, '0');
-                slideshowImage.src = `${imageFolderPath}/Children'sIlllustratedBook_${imageNumber}.png`;
-                currentImageIndex = (currentImageIndex + 1) % totalImages;
-                updateStars(); // Update stars position on each image change
-            }
+    <nav class="pager" aria-label="Series navigation">
+        <a href="./AIGCHome.html"><span class="lbl">Back</span><span class="t">All AIGC series</span></a>
+        <a class="next" href="../index.html"><span class="lbl">Home</span><span class="t">Yukun Wen</span></a>
+    </nav>
+<div class="lightbox" id="lightbox" role="dialog" aria-label="Image viewer">
+    <img id="lb-img" alt="">
+    <button class="close" type="button" aria-label="Close">✕</button>
+    <button class="nav prev" type="button" aria-label="Previous">‹</button>
+    <button class="nav next" type="button" aria-label="Next">›</button>
+    <span class="cap" id="lb-cap"></span>
+</div>
+</main>
 
-            function startSlideshow() {
-                setTimeout(() => {
-                    updateImage();
-                    setInterval(updateImage, 3000);
-                }, 1000); // Initial display 1 second
-            }
+<footer class="foot">
+    <a href="../index.html">← Back to index</a>
+    <a href="./AIGCHome.html">← AIGC</a>
+    <span class="spacer">Yukun Wen — selected work</span>
+</footer>
 
-            startSlideshow();
-
-            // Click image to switch to next
-            slideshowImage.addEventListener('click', updateImage);
-
-            // Initial star setup
-            updateStars();
+<script>
+    (function () {
+        var root = document.documentElement;
+        if (localStorage.getItem("theme") === "dark") { root.setAttribute("data-theme", "dark"); }
+        document.getElementById("theme").addEventListener("click", function () {
+            var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+            root.setAttribute("data-theme", next);
+            localStorage.setItem("theme", next);
         });
-    </script>
+    })();
+</script>
+<script>
+    (function () {
+        var box = document.getElementById("lightbox");
+        var img = document.getElementById("lb-img");
+        var cap = document.getElementById("lb-cap");
+        var shots = Array.prototype.slice.call(document.querySelectorAll(".shot"));
+        var at = 0;
+
+        function show(i) {
+            at = (i + shots.length) % shots.length;
+            var s = shots[at];
+            img.src = s.getAttribute("data-full");
+            img.alt = s.getAttribute("data-alt") || "";
+            cap.textContent = (at + 1) + " / " + shots.length;
+            box.classList.add("on");
+        }
+        function hide() { box.classList.remove("on"); img.src = ""; }
+
+        shots.forEach(function (s, i) {
+            s.addEventListener("click", function () { show(i); });
+        });
+        box.addEventListener("click", function (e) {
+            if (e.target === box) { hide(); }
+        });
+        box.querySelector(".close").addEventListener("click", hide);
+        box.querySelector(".prev").addEventListener("click", function (e) { e.stopPropagation(); show(at - 1); });
+        box.querySelector(".next").addEventListener("click", function (e) { e.stopPropagation(); show(at + 1); });
+        document.addEventListener("keydown", function (e) {
+            if (!box.classList.contains("on")) { return; }
+            if (e.key === "Escape") { hide(); }
+            if (e.key === "ArrowLeft") { show(at - 1); }
+            if (e.key === "ArrowRight") { show(at + 1); }
+        });
+    })();
+</script>
+
 </body>
 </html>

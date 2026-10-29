@@ -1,114 +1,175 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Classic</title>
-    <style>
-        body {
-            background-color: #DED1B1;
-            background-image: url('https://www.transparenttextures.com/patterns/old-wall.png');
-            background-size: cover;
-            color: #000;
-            font-family: 'Georgia', serif;
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .flower-container {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center;
-        }
-        .flower {
-            font-size: 80px; /* 放大樱花 */
-            display: inline-block;
-            animation: spin 3s linear infinite;
-        }
-        .text {
-            font-size: 20px; /* 调整文字大小 */
-            color: black; /* 设置文字颜色 */
-            text-decoration: none; /* 去掉链接下划线 */
-            display: block;
-        }
-        @keyframes spin {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
-                transform: rotate(360deg);
-            }
-        }
-        .slideshow-container {
-            position: absolute;
-            top: 52%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 70%;
-            max-width: 400px;
-            text-align: center;
-        }
-
-        .slideshow-container img {
-            width: 100%;
-            border: 1px solid white;
-            border-radius: 10px;
-            animation: flow 3s infinite;
-        }
-
-        @keyframes flow {
-            0% {
-                box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-            }
-            50% {
-                box-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
-            }
-            100% {
-                box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Classic — Yukun Wen</title>
+<meta name="description" content="Ornament, drapery and gold leaf. A study in density, where the frame is as busy as the figure and nothing is left unworked.">
+<link rel="stylesheet" href="./folio.css">
+<link rel="stylesheet" href="./folio-detail.css">
 </head>
 <body>
-    <a href="../Index.html" class="flower-container">
-        <div class="flower">🌸</div>
-        <span class="text">Return AIGC</span>
-    </a>
-    <div class="slideshow-container">
-        <img id="slideshow" src="../assets/AIGC/classic/classical_01.png" alt="Slideshow Image">
-    </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const totalImages = 17;
-            const imageFolderPath = "../assets/AIGC/classic";
-            let currentImageIndex = 0;
+<div class="grain" aria-hidden="true"></div>
 
-            const slideshowImage = document.getElementById('slideshow');
+<header class="bar">
+    <a class="brand" href="../index.html">Yukun <span>Wen</span></a>
+    <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="../index.html">Index</a>
+        <a href="./AIGCHome.html">AIGC</a>
+        <span>Classic</span>
+    </nav>
+    <button class="icon-btn" id="theme" type="button" aria-label="Switch theme">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.6" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+    </button>
+</header>
 
-            function updateImage() {
-                const imageNumber = (currentImageIndex + 1).toString().padStart(2, '0');
-                slideshowImage.src = `${imageFolderPath}/classical_${imageNumber}.png`;
-                currentImageIndex = (currentImageIndex + 1) % totalImages;
-            }
+<main class="wrap">
 
-            function startSlideshow() {
-                setTimeout(() => {
-                    updateImage();
-                    setInterval(updateImage, 3000);
-                }, 1000); // 首次显示图片1秒
-            }
+    <section class="masthead">
+        <p class="kicker">Classical</p>
+        <h1>Classic</h1>
+        <p class="lede">Ornament, drapery and gold leaf. A study in density, where the frame is as busy as the figure and nothing is left unworked.</p>
+        <ul class="tally"><li>17 images</li></ul>
+    </section>
 
-            startSlideshow();
+    <section class="gallery" aria-label="Classic">
+        <button class="shot" type="button" data-full="../assets/AIGC/classic/classical_01.png" data-alt="Classic 1">
+            <span class="n">01</span>
+            <img src="../assets/AIGC/classic/classical_01.png" alt="Classic 1" loading="eager" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/classic/classical_02.png" data-alt="Classic 2">
+            <span class="n">02</span>
+            <img src="../assets/AIGC/classic/classical_02.png" alt="Classic 2" loading="eager" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/classic/classical_03.png" data-alt="Classic 3">
+            <span class="n">03</span>
+            <img src="../assets/AIGC/classic/classical_03.png" alt="Classic 3" loading="eager" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/classic/classical_04.png" data-alt="Classic 4">
+            <span class="n">04</span>
+            <img src="../assets/AIGC/classic/classical_04.png" alt="Classic 4" loading="lazy" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/classic/classical_05.png" data-alt="Classic 5">
+            <span class="n">05</span>
+            <img src="../assets/AIGC/classic/classical_05.png" alt="Classic 5" loading="lazy" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/classic/classical_06.png" data-alt="Classic 6">
+            <span class="n">06</span>
+            <img src="../assets/AIGC/classic/classical_06.png" alt="Classic 6" loading="lazy" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/classic/classical_07.png" data-alt="Classic 7">
+            <span class="n">07</span>
+            <img src="../assets/AIGC/classic/classical_07.png" alt="Classic 7" loading="lazy" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/classic/classical_08.png" data-alt="Classic 8">
+            <span class="n">08</span>
+            <img src="../assets/AIGC/classic/classical_08.png" alt="Classic 8" loading="lazy" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/classic/classical_09.png" data-alt="Classic 9">
+            <span class="n">09</span>
+            <img src="../assets/AIGC/classic/classical_09.png" alt="Classic 9" loading="lazy" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/classic/classical_10.png" data-alt="Classic 10">
+            <span class="n">10</span>
+            <img src="../assets/AIGC/classic/classical_10.png" alt="Classic 10" loading="lazy" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/classic/classical_11.png" data-alt="Classic 11">
+            <span class="n">11</span>
+            <img src="../assets/AIGC/classic/classical_11.png" alt="Classic 11" loading="lazy" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/classic/classical_12.png" data-alt="Classic 12">
+            <span class="n">12</span>
+            <img src="../assets/AIGC/classic/classical_12.png" alt="Classic 12" loading="lazy" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/classic/classical_13.png" data-alt="Classic 13">
+            <span class="n">13</span>
+            <img src="../assets/AIGC/classic/classical_13.png" alt="Classic 13" loading="lazy" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/classic/classical_14.png" data-alt="Classic 14">
+            <span class="n">14</span>
+            <img src="../assets/AIGC/classic/classical_14.png" alt="Classic 14" loading="lazy" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/classic/classical_15.png" data-alt="Classic 15">
+            <span class="n">15</span>
+            <img src="../assets/AIGC/classic/classical_15.png" alt="Classic 15" loading="lazy" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/classic/classical_16.png" data-alt="Classic 16">
+            <span class="n">16</span>
+            <img src="../assets/AIGC/classic/classical_16.png" alt="Classic 16" loading="lazy" width="800" height="1067">
+        </button>
+        <button class="shot" type="button" data-full="../assets/AIGC/classic/classical_17.png" data-alt="Classic 17">
+            <span class="n">17</span>
+            <img src="../assets/AIGC/classic/classical_17.png" alt="Classic 17" loading="lazy" width="800" height="1067">
+        </button>
+    </section>
 
-            // 点击图片时切换到下一张
-            slideshowImage.addEventListener('click', updateImage);
+    <nav class="pager" aria-label="Series navigation">
+        <a href="./AIGCHome.html"><span class="lbl">Back</span><span class="t">All AIGC series</span></a>
+        <a class="next" href="../index.html"><span class="lbl">Home</span><span class="t">Yukun Wen</span></a>
+    </nav>
+<div class="lightbox" id="lightbox" role="dialog" aria-label="Image viewer">
+    <img id="lb-img" alt="">
+    <button class="close" type="button" aria-label="Close">✕</button>
+    <button class="nav prev" type="button" aria-label="Previous">‹</button>
+    <button class="nav next" type="button" aria-label="Next">›</button>
+    <span class="cap" id="lb-cap"></span>
+</div>
+</main>
+
+<footer class="foot">
+    <a href="../index.html">← Back to index</a>
+    <a href="./AIGCHome.html">← AIGC</a>
+    <span class="spacer">Yukun Wen — selected work</span>
+</footer>
+
+<script>
+    (function () {
+        var root = document.documentElement;
+        if (localStorage.getItem("theme") === "dark") { root.setAttribute("data-theme", "dark"); }
+        document.getElementById("theme").addEventListener("click", function () {
+            var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+            root.setAttribute("data-theme", next);
+            localStorage.setItem("theme", next);
         });
-    </script>
+    })();
+</script>
+<script>
+    (function () {
+        var box = document.getElementById("lightbox");
+        var img = document.getElementById("lb-img");
+        var cap = document.getElementById("lb-cap");
+        var shots = Array.prototype.slice.call(document.querySelectorAll(".shot"));
+        var at = 0;
+
+        function show(i) {
+            at = (i + shots.length) % shots.length;
+            var s = shots[at];
+            img.src = s.getAttribute("data-full");
+            img.alt = s.getAttribute("data-alt") || "";
+            cap.textContent = (at + 1) + " / " + shots.length;
+            box.classList.add("on");
+        }
+        function hide() { box.classList.remove("on"); img.src = ""; }
+
+        shots.forEach(function (s, i) {
+            s.addEventListener("click", function () { show(i); });
+        });
+        box.addEventListener("click", function (e) {
+            if (e.target === box) { hide(); }
+        });
+        box.querySelector(".close").addEventListener("click", hide);
+        box.querySelector(".prev").addEventListener("click", function (e) { e.stopPropagation(); show(at - 1); });
+        box.querySelector(".next").addEventListener("click", function (e) { e.stopPropagation(); show(at + 1); });
+        document.addEventListener("keydown", function (e) {
+            if (!box.classList.contains("on")) { return; }
+            if (e.key === "Escape") { hide(); }
+            if (e.key === "ArrowLeft") { show(at - 1); }
+            if (e.key === "ArrowRight") { show(at + 1); }
+        });
+    })();
+</script>
+
 </body>
 </html>

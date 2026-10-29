@@ -1,236 +1,72 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SciFI</title>
-    <style>
-        body, html {
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: #000; /* 背景黑色 */
-            overflow: hidden;
-        }
-        canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-        .ring {
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            border-radius: 50%;
-            background: rgba(0, 139, 139, 0.2); /* 深青色 */
-            box-shadow: 0 0 20px rgba(0, 139, 139, 0.5), 0 0 60px rgba(0, 139, 139, 0.3), 0 0 100px rgba(0, 139, 139, 0.1);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            color: white;
-            font-size: 20px;
-            font-family: Arial, sans-serif;
-            cursor: pointer; /* 添加点击效果 */
-            flex-direction: column;
-        }
-
-        .ring::before {
-            content: '';
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            right: -10px;
-            bottom: -10px;
-            border-radius: 50%;
-            border: 5px solid rgba(0, 139, 139, 0.6);
-            animation: glow 1.5s linear infinite;
-        }
-
-        .loading-text {
-            position: absolute;
-            bottom: -30px;
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 16px;
-            text-align: center;
-            width: 100%;
-        }
-
-        .eye {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100px; /* 增加宽度 */
-            height: 50px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .eye div {
-            width: 20px;
-            height: 5vh; /* 增加高度 */
-            background-color: rgba(0, 139, 139, 0.8); /* 青绿色 */
-            animation: blink 2s 3;
-        }
-
-        .eye div:nth-child(1) {
-            animation-delay: 0s;
-        }
-
-        .eye div:nth-child(2) {
-            animation-delay: 0s;
-        }
-
-        @keyframes glow {
-            0%, 100% {
-                box-shadow: 0 0 20px rgba(0, 139, 139, 0.6), 0 0 40px rgba(0, 139, 139, 0.4), 0 0 60px rgba(0, 139, 139, 0.2);
-            }
-            50% {
-                box-shadow: 0 0 40px rgba(0, 139, 139, 0.8), 0 0 80px rgba(0, 139, 139, 0.6), 0 0 120px rgba(0, 139, 139, 0.4);
-            }
-        }
-
-        @keyframes blink {
-            0%, 100% {
-                height: 5vh;
-            }
-            50% {
-                height: 2px;
-            }
-        }
-
-        @keyframes split {
-            0%, 70% {
-                transform: scale(1);
-            }
-            80% {
-                transform: scale(0.5);
-            }
-            90%, 100% {
-                transform: scale(0.5) translateX(-350px); /* 调整位置 */
-            }
-            95%, 100% {
-                transform: scale(0.5) translateX(350px); /* 调整位置 */
-            }
-        }
-
-        @media (max-width: 768px) {
-            .ring.split-left {
-                transform: scale(0.7) translateY(-300px) !important; /* 垂直排列和增加尺寸 */
-            }
-            .ring.split-right {
-                transform: scale(0.7) translateY(300px) !important; /* 垂直排列和增加尺寸 */
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sci-fi Setting — Yukun Wen</title>
+<meta name="description" content="A shared future built twice: the people who live in it, and the places they stand.">
+<link rel="stylesheet" href="./folio.css">
+<link rel="stylesheet" href="./folio-detail.css">
 </head>
 <body>
-    <canvas id="canvas"></canvas>
-    <!-- 初始的大圆圈，包含眼睛动画和提示文字 -->
-    <div class="ring" id="ring1">
-        <div class="eye">
-            <div></div>
-            <div></div>
-        </div>
-        <div class="loading-text">The page assistant is coding 
-             don't rush.</div>
-    </div>
-    <!-- 分裂后的第一个小圆圈，包含“Character Design”文字 -->
-    <div class="ring" id="ring2" style="display: none;" onclick="location.href='./AIGC-SciFi-people.html'">
-        <span style="display: none;">Character Design</span>
-    </div>
-    <!-- 分裂后的第二个小圆圈，包含“Scene Design”文字 -->
-    <div class="ring" id="ring3" style="display: none;" onclick="location.href='./AIGC-SciFi-scene.html'">
-        <span style="display: none;">Scene Design</span>
-    </div>
 
-    <script>
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+<div class="grain" aria-hidden="true"></div>
 
-        const particlesArray = [];
-        const numberOfParticles = 200; // 增加粒子数量
+<header class="bar">
+    <a class="brand" href="../index.html">Yukun <span>Wen</span></a>
+    <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="../index.html">Index</a>
+        <a href="./AIGCHome.html">AIGC</a>
+        <span>Sci-Fi</span>
+    </nav>
+    <button class="icon-btn" id="theme" type="button" aria-label="Switch theme">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.6" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+    </button>
+</header>
 
-        class Particle {
-            constructor() {
-                this.reset();
-            }
-            reset() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 5 + 1;
-                this.speedX = Math.random() * 3 - 1.5;
-                this.speedY = Math.random() * 3 - 1.5;
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                if (this.size > 0.2) this.size -= 0.1;
-                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height || this.size <= 0.2) {
-                    this.reset();
-                }
-            }
-            draw() {
-                ctx.fillStyle = 'rgba(0, 139, 139, 0.8)'; // 深青色
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.closePath();
-                ctx.fill();
-            }
-        }
+<main class="wrap">
 
-        function init() {
-            for (let i = 0; i < numberOfParticles; i++) {
-                particlesArray.push(new Particle());
-            }
-        }
+    <section class="masthead">
+        <p class="kicker">Sci-Fi</p>
+        <h1>Sci-fi Setting</h1>
+        <p class="lede">A shared future built twice: the people who live in it, and the places they stand.</p>
+    </section>
 
-        function animate() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)'; // 半透明背景颜色
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            for (let i = 0; i < particlesArray.length; i++) {
-                particlesArray[i].update();
-                particlesArray[i].draw();
-            }
-            requestAnimationFrame(animate);
-        }
+    <section class="grid two" aria-label="Sci-fi Setting">
+        <a class="card" href="./AIGC-SciFi-people.html">
+            <div class="frame"><span class="idx">01</span><img src="../assets/AIGC/SciFi/people/people_01.png" alt="People" loading="lazy" width="1000" height="1444"></div>
+            <div class="meta"><h2>People</h2><p class="note">Figures, worn and lived in.</p></div>
+        </a>
+        <a class="card" href="./AIGC-SciFi-scene.html">
+            <div class="frame"><span class="idx">02</span><img src="../assets/AIGC/SciFi/scene/scene_01.png" alt="Scenes" loading="lazy" width="1000" height="1444"></div>
+            <div class="meta"><h2>Scenes</h2><p class="note">Environments at a human scale.</p></div>
+        </a>
+    </section>
 
-        init();
-        animate();
+    <nav class="pager" aria-label="Series navigation">
+        <a href="./AIGCHome.html"><span class="lbl">Back</span><span class="t">All AIGC series</span></a>
+        <a class="next" href="../index.html"><span class="lbl">Home</span><span class="t">Yukun Wen</span></a>
+    </nav>
+</main>
 
-        window.addEventListener('resize', function() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+<footer class="foot">
+    <a href="../index.html">← Back to index</a>
+    <a href="./AIGCHome.html">← AIGC</a>
+    <span class="spacer">Yukun Wen — selected work</span>
+</footer>
+
+<script>
+    (function () {
+        var root = document.documentElement;
+        if (localStorage.getItem("theme") === "dark") { root.setAttribute("data-theme", "dark"); }
+        document.getElementById("theme").addEventListener("click", function () {
+            var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+            root.setAttribute("data-theme", next);
+            localStorage.setItem("theme", next);
         });
+    })();
+</script>
 
-        // 动画完成后隐藏初始大圆圈并显示两个小圆圈
-        setTimeout(() => {
-            document.getElementById('ring1').style.display = 'none';
-            const ring2 = document.getElementById('ring2');
-            const ring3 = document.getElementById('ring3');
-            ring2.style.display = 'flex';
-            ring3.style.display = 'flex';
-            // 设置小圆圈的位置
-            if (window.innerWidth <= 768) {
-                ring2.classList.add('split-left');
-                ring3.classList.add('split-right');
-            } else {
-                ring2.style.transform = 'translateX(-200px)';
-                ring3.style.transform = 'translateX(200px)';
-            }
-            // 显示文字
-            document.querySelector('#ring2 span').style.display = 'block';
-            document.querySelector('#ring3 span').style.display = 'block';
-        }, 6000); // 眨眼动画总时长是6秒
-    </script>
 </body>
 </html>

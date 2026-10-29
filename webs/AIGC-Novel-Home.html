@@ -1,125 +1,72 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Novel Home</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
-
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #000;
-            margin: 0;
-        }
-        #image-container {
-            display: flex;
-            justify-content: space-around;
-            width: 80%;
-            max-width: 1200px;
-            height: auto;
-            flex-wrap: wrap;
-        }
-        .image-wrapper {
-            position: relative;
-            width: 45%;
-            height: auto;
-            perspective: 1000px;
-            margin: 10px;
-        }
-        img {
-            width: 100%;
-            height: auto;
-            cursor: pointer;
-            transition: transform 0.6s;
-            backface-visibility: hidden;
-        }
-        .image-wrapper:hover img {
-            transform: rotateY(180deg);
-        }
-        .back {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: rgba(0, 0, 0, 0.6);
-            color: #fff;
-            font-size: 2rem;
-            font-family: 'MedievalSharp', cursive;
-            backface-visibility: hidden;
-            transform: rotateY(180deg);
-            transition: transform 0.6s;
-            border-radius: 50%;
-            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.5);
-            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.7));
-            backdrop-filter: blur(10px); /* 磨砂玻璃效果 */
-        }
-        .image-wrapper:hover .back {
-            transform: rotateY(0);
-        }
-
-        /* Media queries for mobile devices */
-        @media (max-width: 768px) {
-            #image-container {
-                flex-direction: column;
-                align-items: center;
-            }
-            .image-wrapper {
-                width: 80%;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Novel Illustrations — Yukun Wen</title>
+<meta name="description" content="Character and key art for long-form fiction — two bodies of work, one sustained voice.">
+<link rel="stylesheet" href="./folio.css">
+<link rel="stylesheet" href="./folio-detail.css">
 </head>
 <body>
-    
-    <div id="image-container">
-        <div class="image-wrapper">
-            <img src="../assets/AIGC/Novel/She/She_01.png" id="image1" onclick="window.location.href='./AIGC-novel-She.html'">
-            <div class="back" onclick="window.location.href='./AIGC-novel-She.html'">She</div>
-        </div>
-        <div class="image-wrapper">
-            <img src="../assets/AIGC/Novel/TheBest/TheBest_00.png" id="image2" onclick="window.location.href='./AIGC-novel-TheBest.html'">
-            <div class="back" onclick="window.location.href='./AIGC-novel-TheBest.html'">TheBest</div>
-        </div>
-    </div>
 
-    <script>
-        function rotateImages() {
-            document.querySelectorAll('.image-wrapper').forEach(wrapper => {
-                const img = wrapper.querySelector('img');
-                const back = wrapper.querySelector('.back');
+<div class="grain" aria-hidden="true"></div>
 
-                if (img.style.transform === 'rotateY(180deg)') {
-                    img.style.transform = 'rotateY(0)';
-                    back.style.transform = 'rotateY(180deg)';
-                } else {
-                    img.style.transform = 'rotateY(180deg)';
-                    back.style.transform = 'rotateY(0)';
-                }
-            });
-        }
+<header class="bar">
+    <a class="brand" href="../index.html">Yukun <span>Wen</span></a>
+    <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="../index.html">Index</a>
+        <a href="./AIGCHome.html">AIGC</a>
+        <span>Novel</span>
+    </nav>
+    <button class="icon-btn" id="theme" type="button" aria-label="Switch theme">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.6" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+    </button>
+</header>
 
-        window.addEventListener('load', () => {
-            setInterval(rotateImages, 5000); // 每5秒自动旋转
+<main class="wrap">
+
+    <section class="masthead">
+        <p class="kicker">Novel</p>
+        <h1>Novel Illustrations</h1>
+        <p class="lede">Character and key art for long-form fiction — two bodies of work, one sustained voice.</p>
+    </section>
+
+    <section class="grid two" aria-label="Novel Illustrations">
+        <a class="card" href="./AIGC-novel-She.html">
+            <div class="frame"><span class="idx">01</span><img src="../assets/AIGC/Novel/She/She_01.png" alt="She" loading="lazy" width="1000" height="1444"></div>
+            <div class="meta"><h2>She</h2><p class="note">A character across seven drafts.</p></div>
+        </a>
+        <a class="card" href="./AIGC-novel-TheBest.html">
+            <div class="frame"><span class="idx">02</span><img src="../assets/AIGC/Novel/TheBest/TheBest_00.png" alt="The Best" loading="lazy" width="1000" height="1444"></div>
+            <div class="meta"><h2>The Best</h2><p class="note">Thirty-six plates for one story.</p></div>
+        </a>
+    </section>
+
+    <nav class="pager" aria-label="Series navigation">
+        <a href="./AIGCHome.html"><span class="lbl">Back</span><span class="t">All AIGC series</span></a>
+        <a class="next" href="../index.html"><span class="lbl">Home</span><span class="t">Yukun Wen</span></a>
+    </nav>
+</main>
+
+<footer class="foot">
+    <a href="../index.html">← Back to index</a>
+    <a href="./AIGCHome.html">← AIGC</a>
+    <span class="spacer">Yukun Wen — selected work</span>
+</footer>
+
+<script>
+    (function () {
+        var root = document.documentElement;
+        if (localStorage.getItem("theme") === "dark") { root.setAttribute("data-theme", "dark"); }
+        document.getElementById("theme").addEventListener("click", function () {
+            var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+            root.setAttribute("data-theme", next);
+            localStorage.setItem("theme", next);
         });
+    })();
+</script>
 
-        document.querySelectorAll('.image-wrapper').forEach(wrapper => {
-            wrapper.addEventListener('mouseover', () => {
-                wrapper.querySelector('img').style.transform = 'rotateY(180deg)';
-                wrapper.querySelector('.back').style.transform = 'rotateY(0)';
-            });
-            wrapper.addEventListener('mouseout', () => {
-                wrapper.querySelector('img').style.transform = 'rotateY(0)';
-                wrapper.querySelector('.back').style.transform = 'rotateY(180deg)';
-            });
-        });
-    </script>
 </body>
 </html>
