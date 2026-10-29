@@ -1375,6 +1375,30 @@ html[data-theme="dark"] .ripple{
     box-shadow:var(--bar-glow);
 }
 
+
+/* award line under the Architecture heading */
+.sec-award {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    margin-top: 16px;
+    padding: 7px 14px;
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
+    font-size: .74rem;
+    letter-spacing: .06em;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color .25s var(--ease), border-color .25s var(--ease), transform .25s var(--ease);
+}
+.sec-award span { color: var(--accent); }
+.sec-award:hover {
+    color: var(--ink);
+    border-color: var(--accent);
+    transform: translateY(-1px);
+}
+.sec-award:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
 /* =================================================================
    PERCHED BIRDS
    A gull (day) or crow (night) painted on the top edge of every panel.
@@ -2477,6 +2501,10 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
             Concept design and delivery across transport, healthcare, education and
             residential work, with a focus on BIM and parametric form.
         </p>
+        <a class="sec-award" href="https://www.gxhl.com/news/jituanyaowen/866.html" target="_blank" rel="noopener">
+            <span aria-hidden="true">★</span>
+            First Prize, 5th “Bagui Cup” BIM Competition — Jinxiu International Yao Medicine Hospital
+        </a>
     </div>
 
     <div class="grid grid-arch">
