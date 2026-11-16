@@ -69,7 +69,7 @@ html[data-theme="dark"] body[data-series="arch-home"] {
     --accent: #d9b45e;
     --hairline: rgba(201, 163, 74, .26);
     --panel: rgba(255, 240, 205, .035);
-    --bar: rgba(6, 5, 4, .9);
+    --bar: rgba(6, 5, 4, .96);
     --ring: rgba(226, 190, 110, .55);
 
     --gold-line-2: rgba(201, 163, 74, .46);
@@ -707,13 +707,23 @@ body[data-series="arch-home"] .klimt {
     overflow: hidden;
 }
 
-body[data-series="arch-home"] .klimt-leaf {
+body[data-series="arch-home"] .klimt-mosaic {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
-    opacity: .46;
+    opacity: .9;
     mix-blend-mode: screen;
+    filter: blur(.7px) saturate(1.06);
+}
+
+/* a varnish over the leaf: dims the field under the text without greying it */
+body[data-series="arch-home"] .klimt::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(120% 90% at 50% 30%, rgba(4, 3, 2, .18) 0%, rgba(4, 3, 2, .34) 60%, rgba(4, 3, 2, .5) 100%);
+    pointer-events: none;
 }
 
 /* one slow band of light crossing the leaf */
@@ -1078,3 +1088,23 @@ html[lang="en"] body[data-series="arch-home"] .sheet-sec h2::after {
     margin-top: 16px;
     background: linear-gradient(90deg, rgba(226, 190, 110, .85), rgba(201, 163, 74, 0));
 }
+
+/* the vellum: the gold ground runs edge to edge, but the column the reader
+   is actually reading sits on a soft dark panel, the way a painting hangs
+   on a wall rather than behind the label */
+body[data-series="arch-home"] .wrap {
+    background: linear-gradient(180deg,
+        rgba(6, 5, 4, .74) 0%,
+        rgba(6, 5, 4, .8) 34%,
+        rgba(6, 5, 4, .84) 100%);
+    padding-inline: clamp(10px, 1.6vw, 24px);
+    -webkit-mask-image: linear-gradient(90deg,
+        rgba(0, 0, 0, 0) 0%, #000 2.5%, #000 97.5%, rgba(0, 0, 0, 0) 100%);
+    mask-image: linear-gradient(90deg,
+        rgba(0, 0, 0, 0) 0%, #000 2.5%, #000 97.5%, rgba(0, 0, 0, 0) 100%);
+}
+
+/* the vellum frames the column by itself; the old margin hairlines would be
+   cut in half by its feathered edge */
+body[data-series="arch-home"] .wrap::before,
+body[data-series="arch-home"] .wrap::after { display: none; }
