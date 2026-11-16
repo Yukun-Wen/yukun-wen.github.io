@@ -1,0 +1,440 @@
+﻿/* =================================================================
+   arch-gold.css — gold leaf for the Architecture pages.
+
+   Two jobs:
+   1. every plate and card in the Architecture series gets a fine
+      gilt rule (a hairline of gold, a gap, then a second hairline);
+   2. the Architecture home page gets a foil ground instead of the
+      blueprint: laid gold leaf, wide patches where it catches the
+      light, a raking sheen, gilded section rules with a diamond,
+      and gold type accents.
+
+   Load last, after arch-sheet.css.
+   ================================================================= */
+
+:root {
+    --gold-1: #b8862f;
+    --gold-2: #e7cc86;
+    --gold-3: #8a6320;
+    --gold-soft: rgba(184, 134, 47, .34);
+    --gold-line: rgba(184, 134, 47, .58);
+}
+
+html[data-theme="dark"] {
+    --gold-1: #d8b25c;
+    --gold-2: #f6e3ab;
+    --gold-3: #a8812f;
+    --gold-soft: rgba(216, 178, 92, .3);
+    --gold-line: rgba(216, 178, 92, .5);
+}
+
+/* =================================================================
+   1. the gilt rule on plates and cards
+   ================================================================= */
+
+body[data-series^="arch"] .art img {
+    border-color: var(--gold-line);
+    box-shadow:
+        0 0 0 3px transparent,
+        0 0 0 4px var(--gold-soft),
+        0 14px 30px rgba(60, 42, 12, .16);
+}
+
+body[data-series^="arch"] .art.c1 img {
+    box-shadow:
+        0 0 0 4px transparent,
+        0 0 0 5px var(--gold-soft),
+        0 16px 34px rgba(60, 42, 12, .16);
+}
+
+body[data-series^="arch"] .hero-plates img {
+    border-color: var(--gold-line);
+    box-shadow: 0 0 0 3px transparent, 0 0 0 4px var(--gold-soft);
+}
+
+body[data-series^="arch"] .card {
+    border-color: var(--gold-line);
+    box-shadow:
+        0 0 0 3px transparent,
+        0 0 0 4px var(--gold-soft),
+        0 20px 44px rgba(60, 42, 12, .16);
+}
+
+body[data-series^="arch"] .card .frame {
+    box-shadow: inset 0 0 0 1px rgba(255, 246, 220, .38);
+}
+
+body[data-series^="arch"] .award { border-left-color: var(--gold-1); }
+
+body[data-series^="arch"] .award .medal {
+    color: var(--gold-1);
+    border-color: var(--gold-line);
+}
+
+/* =================================================================
+   2. the gilded Architecture home page
+   ================================================================= */
+
+body[data-series="arch-home"] {
+    --ink: #33260e;
+    --muted: rgba(51, 38, 14, .78);
+    --faint: rgba(51, 38, 14, .52);
+    --accent: #96661a;
+    --hairline: rgba(150, 106, 38, .3);
+    --panel: rgba(255, 250, 234, .42);
+    --bar: rgba(244, 228, 194, .84);
+    --ring: rgba(184, 134, 47, .55);
+
+    --s-bg:
+        radial-gradient(64% 24% at 50% -8%, rgba(255, 240, 198, .4) 0%, rgba(255, 240, 198, 0) 64%),
+        radial-gradient(38% 28% at 6% 12%, rgba(255, 216, 124, .38) 0%, rgba(255, 216, 124, 0) 72%),
+        radial-gradient(36% 26% at 94% 6%, rgba(238, 194, 100, .34) 0%, rgba(238, 194, 100, 0) 74%),
+        radial-gradient(76% 44% at 50% 106%, rgba(72, 44, 6, .38) 0%, rgba(72, 44, 6, 0) 64%),
+        linear-gradient(178deg, #ecd8a6 0%, #e3c684 16%, #d8b76c 34%, #cca659 54%, #bd9448 74%, #ad853c 100%);
+}
+
+html[data-theme="dark"] body[data-series="arch-home"] {
+    --ink: #f6ecd5;
+    --muted: rgba(246, 236, 213, .78);
+    --faint: rgba(246, 236, 213, .48);
+    --accent: #e0bb68;
+    --hairline: rgba(216, 178, 92, .24);
+    --panel: rgba(255, 244, 214, .06);
+    --bar: rgba(16, 12, 5, .82);
+    --ring: rgba(226, 190, 110, .5);
+
+    --s-bg:
+        radial-gradient(66% 28% at 50% -6%, rgba(198, 148, 46, .55) 0%, rgba(198, 148, 46, 0) 64%),
+        radial-gradient(40% 26% at 12% 10%, rgba(170, 120, 34, .3) 0%, rgba(170, 120, 34, 0) 72%),
+        radial-gradient(38% 24% at 90% 6%, rgba(140, 96, 26, .26) 0%, rgba(140, 96, 26, 0) 74%),
+        linear-gradient(180deg, #0a0805 0%, #100c07 30%, #16100a 58%, #1b130a 82%, #20160b 100%);
+
+    /* folio.css paints its own night sky on every dark body, and that rule
+       outranks body[data-series] - so the bronze ground is declared here */
+    background-color: #100d07;
+    background-image: var(--s-bg);
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+html[data-theme="light"] body[data-series="arch-home"],
+body[data-series="arch-home"] {
+    background-color: #e3c583;
+    background-image: var(--s-bg);
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+/* ---------- the foil ---------- */
+
+/* the raking light: one wide band of highlight sliding across the leaf,
+   plus a soft vignette at the foot of the page */
+body[data-series="arch-home"] .series-fx {
+    background-image:
+        radial-gradient(58% 38% at 50% 4%, rgba(255, 251, 232, .38) 0%, rgba(255, 251, 232, 0) 70%),
+        linear-gradient(103deg,
+            rgba(255, 248, 222, 0) 14%,
+            rgba(255, 250, 232, .26) 34%,
+            rgba(255, 253, 246, .46) 46%,
+            rgba(255, 248, 220, .24) 56%,
+            rgba(255, 248, 222, 0) 74%),
+        linear-gradient(103deg,
+            rgba(104, 66, 10, 0) 50%,
+            rgba(90, 58, 10, .18) 62%,
+            rgba(104, 66, 10, 0) 74%),
+        radial-gradient(120% 40% at 50% 108%, rgba(70, 44, 6, .3) 0%, rgba(70, 44, 6, 0) 66%);
+    background-size: cover, cover, cover, cover;
+    background-repeat: no-repeat;
+    mix-blend-mode: overlay;
+    opacity: .46;
+}
+
+html[data-theme="dark"] body[data-series="arch-home"] .series-fx {
+    mix-blend-mode: soft-light;
+    opacity: .8;
+}
+
+/* the leaf itself: fine facets catching the light (specular), then the
+   laid crinkles and the wide patches where each sheet reflects differently */
+body[data-series="arch-home"] .series-fx::before {
+    background-image:
+        url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='a' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.03 0.042' numOctaves='4' seed='5' stitchTiles='stitch' result='t'/%3E%3CfeSpecularLighting in='t' surfaceScale='1.7' specularConstant='1.05' specularExponent='15' lighting-color='%23fffdf1' result='s'%3E%3CfeDistantLight azimuth='232' elevation='58'/%3E%3C/feSpecularLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23a)'/%3E%3C/svg%3E"),
+        url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='700'%3E%3Cfilter id='b' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.008 0.012' numOctaves='4' seed='19' stitchTiles='stitch'/%3E%3CfeDiffuseLighting lighting-color='%23fff0c8' surfaceScale='3.4' diffuseConstant='1.05'%3E%3CfeDistantLight azimuth='212' elevation='46'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23b)'/%3E%3C/svg%3E");
+    background-size: 320px 320px, 700px 700px;
+    background-repeat: repeat, repeat;
+    -webkit-mask-image: none;
+    mask-image: none;
+    mix-blend-mode: soft-light;
+    opacity: .95;
+    filter: contrast(1.45) brightness(.8);
+    animation: none;
+}
+
+body[data-series="arch-home"] .series-fx::after {
+    background-image:
+        url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='1200'%3E%3Cfilter id='c' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.0021 0.0032' numOctaves='3' seed='31' stitchTiles='stitch'/%3E%3CfeDiffuseLighting lighting-color='%23ffe6ae' surfaceScale='5' diffuseConstant='1.18'%3E%3CfeDistantLight azimuth='198' elevation='38'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23c)'/%3E%3C/svg%3E");
+    background-size: 1200px 1200px;
+    background-repeat: repeat;
+    mix-blend-mode: soft-light;
+    opacity: .85;
+}
+
+html[data-theme="dark"] body[data-series="arch-home"] .series-fx::before { mix-blend-mode: soft-light; opacity: .5; }
+html[data-theme="dark"] body[data-series="arch-home"] .series-fx::after { mix-blend-mode: soft-light; opacity: .52; }
+
+/* ---------- gilded section rules with a diamond ---------- */
+
+body[data-series="arch-home"] .sheet-sec {
+    position: relative;
+    border-top: 0;
+}
+
+body[data-series="arch-home"] .sheet-sec::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg,
+        rgba(150, 106, 38, 0) 0%,
+        rgba(150, 106, 38, .45) 16%,
+        rgba(150, 106, 38, .85) 50%,
+        rgba(150, 106, 38, .45) 84%,
+        rgba(150, 106, 38, 0) 100%);
+}
+
+body[data-series="arch-home"] .sheet-sec::after {
+    content: "";
+    position: absolute;
+    top: -3.5px;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    transform: translateX(-50%) rotate(45deg);
+    background: linear-gradient(135deg, #fdf4d6 0%, var(--gold-1) 48%, #6f4d10 100%);
+    box-shadow: 0 0 9px rgba(150, 106, 38, .55);
+}
+
+body[data-series="arch-home"] .sheet-sec > .lab,
+body[data-series="arch-home"] .cta .k {
+    color: #7d5512;
+    text-shadow: 0 1px 0 rgba(255, 250, 236, .5);
+}
+
+html[data-theme="dark"] body[data-series="arch-home"] .sheet-sec > .lab,
+html[data-theme="dark"] body[data-series="arch-home"] .cta .k {
+    color: var(--gold-2);
+    text-shadow: none;
+}
+
+/* ---------- masthead ---------- */
+
+body[data-series="arch-home"] .masthead h1 em {
+    background: linear-gradient(98deg, #9a6a18 0%, #d3a233 14%, #fff8e0 36%, #f3dc9c 46%, #c08f2c 66%, #8a5f12 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    font-style: italic;
+    filter: drop-shadow(0 1px 1.5px rgba(58, 38, 6, .3));
+}
+
+html[data-theme="dark"] body[data-series="arch-home"] .masthead h1 em {
+    background: linear-gradient(98deg, #a8812f 0%, #dfbc6c 20%, #fdf4d4 44%, #e2c176 66%, #a8812f 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+}
+
+body[data-series="arch-home"] .kicker {
+    color: #7d5512;
+    letter-spacing: .34em;
+}
+
+html[data-theme="dark"] body[data-series="arch-home"] .kicker { color: var(--gold-2); }
+
+/* the fact strip reads as a gilded title block */
+body[data-series="arch-home"] .facts {
+    border-top-color: var(--gold-line);
+    border-bottom-color: var(--gold-line);
+}
+
+body[data-series="arch-home"] .facts dt { color: rgba(112, 78, 20, .78); }
+html[data-theme="dark"] body[data-series="arch-home"] .facts dt { color: var(--gold-2); opacity: .8; }
+body[data-series="arch-home"] .facts > div { border-right-color: rgba(150, 106, 38, .26); }
+
+/* ---------- panels and tables pick up the foil ---------- */
+
+body[data-series="arch-home"] .cv-panel {
+    border-color: var(--gold-line);
+    background:
+        linear-gradient(160deg, rgba(255, 253, 244, .72) 0%, rgba(252, 240, 214, .46) 52%, rgba(246, 228, 190, .42) 100%);
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 250, 232, .5),
+        0 16px 36px rgba(90, 66, 20, .12);
+}
+
+html[data-theme="dark"] body[data-series="arch-home"] .cv-panel {
+    background: linear-gradient(160deg, rgba(255, 240, 205, .07) 0%, rgba(255, 232, 180, .03) 100%);
+    box-shadow: inset 0 0 0 1px rgba(216, 178, 92, .12);
+}
+
+body[data-series="arch-home"] .cv-table th {
+    border-bottom-color: var(--gold-line);
+    color: rgba(112, 78, 20, .82);
+}
+
+html[data-theme="dark"] body[data-series="arch-home"] .cv-table th { color: var(--gold-2); opacity: .85; }
+
+body[data-series="arch-home"] .cv-table td { border-bottom-color: rgba(150, 106, 38, .2); }
+body[data-series="arch-home"] .cv-table tr:hover td { background: rgba(255, 236, 190, .4); }
+html[data-theme="dark"] body[data-series="arch-home"] .cv-table tr:hover td { background: rgba(226, 190, 110, .1); }
+
+body[data-series="arch-home"] .cv-table .pill {
+    border-color: var(--gold-line);
+    color: #7d5512;
+}
+
+html[data-theme="dark"] body[data-series="arch-home"] .cv-table .pill { color: var(--gold-2); }
+
+body[data-series="arch-home"] .cv-awards li { border-top-color: rgba(150, 106, 38, .24); }
+body[data-series="arch-home"] .cv-awards .tier { color: #7d5512; }
+html[data-theme="dark"] body[data-series="arch-home"] .cv-awards .tier { color: var(--gold-2); }
+body[data-series="arch-home"] .cv-awards b { color: #4a3712; }
+html[data-theme="dark"] body[data-series="arch-home"] .cv-awards b { color: var(--gold-2); }
+
+body[data-series="arch-home"] .cv-time > li { border-top-color: rgba(150, 106, 38, .24); }
+body[data-series="arch-home"] .cv-time .when { color: #7d5512; }
+html[data-theme="dark"] body[data-series="arch-home"] .cv-time .when { color: var(--gold-2); }
+
+body[data-series="arch-home"] .cv-panel .tags li {
+    border-color: var(--gold-line);
+    color: var(--muted);
+}
+
+body[data-series="arch-home"] .cv-panel ul.plain > li { border-bottom-color: rgba(150, 106, 38, .22); }
+
+/* ---------- the card grid ---------- */
+
+body[data-series="arch-home"] .card {
+    background: linear-gradient(168deg, rgba(255, 252, 242, .82) 0%, rgba(252, 238, 208, .56) 100%);
+}
+
+html[data-theme="dark"] body[data-series="arch-home"] .card {
+    background: linear-gradient(168deg, rgba(255, 240, 205, .09) 0%, rgba(255, 232, 180, .03) 100%);
+}
+
+body[data-series="arch-home"] .card .idx { color: #fdf3d9; text-shadow: 0 1px 8px rgba(60, 40, 8, .7); }
+
+/* ---------- buttons ---------- */
+
+body[data-series="arch-home"] .btn.primary {
+    background: linear-gradient(135deg, #f6dfa8 0%, #c9963a 44%, #8f6719 100%);
+    border-color: rgba(112, 78, 20, .55);
+    color: #2b1e05;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 252, 236, .75),
+        0 10px 24px rgba(112, 78, 20, .26);
+}
+
+body[data-series="arch-home"] .btn.primary:hover {
+    background: transparent;
+    color: #7d5512;
+    box-shadow: none;
+}
+
+html[data-theme="dark"] body[data-series="arch-home"] .btn.primary { color: #2b1e05; }
+html[data-theme="dark"] body[data-series="arch-home"] .btn.primary:hover { color: var(--gold-2); }
+
+body[data-series="arch-home"] .btn:hover { border-color: var(--gold-line); color: #7d5512; }
+html[data-theme="dark"] body[data-series="arch-home"] .btn:hover { color: var(--gold-2); }
+
+/* ---------- the closing call to action ---------- */
+
+body[data-series="arch-home"] .cta {
+    border-color: var(--gold-line);
+    background:
+        radial-gradient(120% 140% at 0% 0%, rgba(255, 246, 214, .82) 0%, rgba(255, 246, 214, 0) 58%),
+        linear-gradient(150deg, rgba(255, 250, 236, .7) 0%, rgba(247, 227, 187, .48) 100%);
+    box-shadow: inset 0 0 0 1px rgba(255, 250, 232, .55);
+}
+
+html[data-theme="dark"] body[data-series="arch-home"] .cta {
+    background:
+        radial-gradient(120% 140% at 0% 0%, rgba(226, 190, 110, .12) 0%, rgba(226, 190, 110, 0) 58%),
+        linear-gradient(150deg, rgba(255, 240, 205, .06) 0%, rgba(255, 228, 170, .02) 100%);
+    box-shadow: inset 0 0 0 1px rgba(216, 178, 92, .14);
+}
+
+/* ---------- the top bar ---------- */
+
+body[data-series="arch-home"] .bar {
+    border-bottom-color: var(--gold-line);
+    box-shadow: 0 1px 0 rgba(255, 250, 236, .45), 0 12px 30px rgba(90, 66, 20, .1);
+}
+
+html[data-theme="dark"] body[data-series="arch-home"] .bar {
+    box-shadow: 0 1px 0 rgba(216, 178, 92, .16);
+}
+
+body[data-series="arch-home"] .brand span { color: var(--gold-1); }
+
+body[data-series="arch-home"] .switcher a[aria-current="page"] {
+    color: #7d5512;
+    border-color: var(--gold-line);
+    background: rgba(255, 246, 214, .62);
+}
+
+html[data-theme="dark"] body[data-series="arch-home"] .switcher a[aria-current="page"] {
+    color: var(--gold-2);
+    background: rgba(226, 190, 110, .1);
+}
+
+body[data-series="arch-home"] .icon-btn:hover { border-color: var(--gold-line); }
+
+/* stray links (the award source, panel footnotes) keep the browser's blue
+   otherwise, which is the one colour that ruins a gold ground */
+body[data-series="arch-home"] .cv-awards a,
+body[data-series="arch-home"] .cv-panel a,
+body[data-series="arch-home"] .closing a {
+    color: #8a5f12;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(138, 95, 18, .45);
+    transition: border-color .2s var(--ease), color .2s var(--ease);
+}
+
+body[data-series="arch-home"] .cv-awards a:hover,
+body[data-series="arch-home"] .cv-panel a:hover,
+body[data-series="arch-home"] .closing a:hover {
+    color: #4a3310;
+    border-bottom-color: #4a3310;
+}
+
+html[data-theme="dark"] body[data-series="arch-home"] .cv-awards a,
+html[data-theme="dark"] body[data-series="arch-home"] .cv-panel a,
+html[data-theme="dark"] body[data-series="arch-home"] .closing a {
+    color: var(--gold-2);
+    border-bottom-color: rgba(246, 227, 171, .4);
+}
+
+html[data-theme="dark"] body[data-series="arch-home"] .cv-awards a:hover,
+html[data-theme="dark"] body[data-series="arch-home"] .cv-panel a:hover {
+    color: #fdf4d4;
+    border-bottom-color: #fdf4d4;
+}
+
+/* ---------- the foot ---------- */
+
+body[data-series="arch-home"] .foot { border-top-color: var(--gold-line); }
+
+/* the small screens keep the type but drop the costliest blend */
+@media (max-width: 620px) {
+    body[data-series="arch-home"] .series-fx::after { opacity: .55; }
+    body[data-series="arch-home"] .series-fx { opacity: .8; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body[data-series="arch-home"] .arch-profile:hover .ap-right svg { transform: none; }
+}
