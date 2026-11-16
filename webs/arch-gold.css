@@ -646,12 +646,32 @@ body[data-series="arch-home"] a:focus-visible {
 /* the profile paragraph is a single column, in the page's own language */
 body[data-series="arch-home"] .cv-profile.one { grid-template-columns: 1fr; }
 
+/* the profile runs the full width in two columns - a single half-wide column
+   left the section looking like a paragraph that had lost its way */
 body[data-series="arch-home"] .cv-profile.one .en,
 body[data-series="arch-home"] .cv-profile.one .cn {
-    max-width: 76ch;
-    font-size: 1rem;
-    line-height: 1.78;
+    max-width: none;
+    columns: 2;
+    column-fill: balance;
+    column-gap: clamp(30px, 4.2vw, 66px);
+    column-rule: 1px solid rgba(201, 163, 74, .2);
+    font-size: clamp(1rem, 1.32vw, 1.12rem);
+    line-height: 1.85;
     color: var(--muted);
+}
+
+html[lang="zh-Hans"] body[data-series="arch-home"] .cv-profile.one .cn {
+    max-width: none;
+    column-rule-color: rgba(201, 163, 74, .18);
+    line-height: 2;
+}
+
+@media (max-width: 760px) {
+    body[data-series="arch-home"] .cv-profile.one .en,
+    body[data-series="arch-home"] .cv-profile.one .cn {
+        columns: 1;
+        column-rule: 0;
+    }
 }
 
 /* ---------- Chinese typesetting ---------- */
@@ -708,29 +728,47 @@ body[data-series="arch-home"] .klimt {
 }
 
 /* one slow band of light crossing the leaf */
-body[data-series="arch-home"] .klimt-sweep {
+/* ---------- gold dust, always catching something ---------- */
+
+body[data-series="arch-home"] .klimt-sparkle {
     position: absolute;
-    top: -20%;
-    left: -30%;
-    width: 42%;
-    height: 140%;
-    background: linear-gradient(90deg,
-        rgba(255, 246, 214, 0) 0%,
-        rgba(255, 248, 224, .05) 34%,
-        rgba(255, 252, 238, .13) 50%,
-        rgba(255, 248, 224, .05) 66%,
-        rgba(255, 246, 214, 0) 100%);
-    transform: rotate(9deg);
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: .9;
     mix-blend-mode: screen;
-    animation: klimt-sweep 26s ease-in-out infinite;
 }
 
-@keyframes klimt-sweep {
-    0%   { transform: translateX(-40%) rotate(9deg); opacity: 0; }
-    18%  { opacity: .9; }
-    50%  { transform: translateX(180%) rotate(9deg); opacity: .55; }
-    82%  { opacity: .0; }
-    100% { transform: translateX(180%) rotate(9deg); opacity: 0; }
+body[data-series="arch-home"] .klimt-sparkle circle {
+    fill: #ffeec4;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation-name: sparkle;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+}
+
+@keyframes sparkle {
+    0%, 100% { opacity: 0; transform: scale(.5); }
+    42%      { opacity: 1; transform: scale(1.3); }
+    62%      { opacity: .45; transform: scale(.95); }
+}
+
+/* ---------- the follow spot ---------- */
+
+body[data-series="arch-home"] .klimt-spot {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle 420px at var(--mx, 50vw) var(--my, 40vh),
+            rgba(255, 250, 234, .11) 0%,
+            rgba(255, 244, 214, .05) 38%,
+            rgba(255, 240, 200, 0) 68%),
+        radial-gradient(circle 900px at var(--mx, 50vw) var(--my, 40vh),
+            rgba(201, 163, 74, .09) 0%,
+            rgba(201, 163, 74, 0) 72%);
+    mix-blend-mode: screen;
+    pointer-events: none;
 }
 
 /* spirals and the eye sit in the margins, behind the text */
@@ -915,8 +953,8 @@ body[data-series="arch-home"] .btn.primary:hover { animation: none; }
 /* ---------- still, when asked ---------- */
 
 @media (prefers-reduced-motion: reduce) {
-    body[data-series="arch-home"] .klimt-sweep,
     body[data-series="arch-home"] .klimt-spiral,
+    body[data-series="arch-home"] .klimt-sparkle circle,
     body[data-series="arch-home"] .series-fx::before,
     body[data-series="arch-home"] .sheet-sec::after,
     body[data-series="arch-home"] .masthead h1 em,
@@ -1041,7 +1079,7 @@ body[data-series="arch-home"] .card::after {
         rgba(255, 236, 190, .26) .60turn,
         rgba(201, 163, 74, .09) .66turn,
         rgba(201, 163, 74, .04) 1turn);
-    animation: gilt-run 5.6s linear infinite;
+    animation: gilt-run 9.5s linear infinite;
     pointer-events: none;
     z-index: 3;
 }
