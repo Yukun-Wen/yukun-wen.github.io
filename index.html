@@ -348,6 +348,39 @@ html[data-theme="dark"] .pillar:hover{background:rgba(124,187,192,.07)}
 .grid-aigc{grid-template-columns:repeat(3,1fr)}
 .grid-arch{grid-template-columns:repeat(2,1fr)}
 
+/* the practice record, one line above the four portfolios: evidence
+   first, then a single link to the page that holds all of it */
+.arch-profile{
+    display:grid;grid-template-columns:minmax(0,1fr) auto;
+    align-items:center;gap:6px 24px;
+    margin:0 0 clamp(18px,2.4vw,28px);
+    padding:15px 20px;
+    border:1px solid var(--line);
+    border-left:3px solid var(--accent);
+    color:inherit;text-decoration:none;
+    transition:background .3s var(--ease),border-color .3s var(--ease);
+}
+.arch-profile:hover{background:var(--paper-2);border-color:var(--line-strong)}
+.arch-profile .ap-k{
+    display:block;
+    font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--muted);margin-bottom:5px;
+}
+.arch-profile .ap-t{display:block;font-size:.94rem;line-height:1.45}
+.arch-profile .ap-right{
+    display:inline-flex;align-items:center;gap:8px;white-space:nowrap;
+    font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--accent);
+}
+.arch-profile .ap-right svg{transition:transform .35s var(--ease)}
+.arch-profile:hover .ap-right svg{transform:translate(3px,-3px)}
+
+@media (max-width:700px){
+    .arch-profile{grid-template-columns:1fr;gap:10px}
+    .arch-profile .ap-right{justify-self:start}
+}
+
+
 .card{display:block;position:relative}
 .card .frame{overflow:hidden;background:var(--paper-2);position:relative}
 .grid-aigc .card .frame{aspect-ratio:3/4}
@@ -2494,7 +2527,7 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
             <h2>Architecture</h2>
         </div>
         <a class="sec-more" href="./webs/ArchitectureHomePage.html">
-            Full archive
+            Architecture profile
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
         </a>
         <p class="sec-desc">
@@ -2506,6 +2539,17 @@ html[data-theme="dark"] .perch-say::after{border-top-color:rgba(17,19,27,.96)}
             First Prize, 5th “Bagui Cup” BIM Competition — Jinxiu International Yao Medicine Hospital
         </a>
     </div>
+
+    <a class="arch-profile reveal" href="./webs/ArchitectureHomePage.html">
+        <span>
+            <span class="ap-k">Architect&rsquo;s profile &middot; 建筑履历</span>
+            <span class="ap-t">B.Arch, East China Jiaotong University &middot; Hualan Group and BCCI &middot; 22 named projects &middot; BIM team and 5 awards</span>
+        </span>
+        <span class="ap-right">
+            Practice record &amp; CV
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
+        </span>
+    </a>
 
     <div class="grid grid-arch">
         <a class="card reveal" href="./webs/Architecture-Airport.html">
