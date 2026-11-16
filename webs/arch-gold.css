@@ -90,7 +90,7 @@ body[data-series="arch-home"] {
         radial-gradient(38% 28% at 6% 12%, rgba(255, 216, 124, .38) 0%, rgba(255, 216, 124, 0) 72%),
         radial-gradient(36% 26% at 94% 6%, rgba(238, 194, 100, .34) 0%, rgba(238, 194, 100, 0) 74%),
         radial-gradient(76% 44% at 50% 106%, rgba(72, 44, 6, .38) 0%, rgba(72, 44, 6, 0) 64%),
-        linear-gradient(178deg, #ecd8a6 0%, #e3c684 16%, #d8b76c 34%, #cca659 54%, #bd9448 74%, #ad853c 100%);
+        linear-gradient(180deg, #eedaa9 0%, #e7ce94 8%, #ddc07e 18%, #d3b26a 30%, #c9a55b 44%, #be984d 58%, #b28a43 100%);
 }
 
 html[data-theme="dark"] body[data-series="arch-home"] {
@@ -119,7 +119,7 @@ html[data-theme="dark"] body[data-series="arch-home"] {
 
 html[data-theme="light"] body[data-series="arch-home"],
 body[data-series="arch-home"] {
-    background-color: #e3c583;
+    background-color: #d8b76c;
     background-image: var(--s-bg);
     background-attachment: fixed;
     background-size: cover;
