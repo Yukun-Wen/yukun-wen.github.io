@@ -283,6 +283,24 @@ html[data-theme="dark"] .art img { background: rgba(255, 255, 255, .05); }
     object-fit: cover;
 }
 
+/* ---------------------------------------------------------------- CAD sheets */
+/* A scanned drawing sheet arrives with a paper margin, the drawn border, a
+   signature strip and a title block (图签). All four are cropped out of the
+   file itself: a title block names the issuing institute, the drawing number
+   and the people who signed the sheet, and none of that belongs on a
+   portfolio page. What is left is the drawing only, and the plate's own
+   hairline becomes the frame.
+   The crops land near 4:3. Pinning that here matters: in the default 16:10
+   box the white sheet would be letterboxed, which on the dark theme reads as
+   a clipped drawing rather than an unmatted one. The plate stays paper-white
+   in both themes for the same reason - the sheet itself is white. */
+.art.sheets img {
+    aspect-ratio: 4 / 3;
+    background: #fff;
+}
+
+html[data-theme="dark"] .art.sheets img { background: #fff; }
+
 /* a plate that closes an odd row and takes the rest of it */
 .art img.w2 { grid-column: span 2; }
 .art img.w3 { grid-column: span 3; }
