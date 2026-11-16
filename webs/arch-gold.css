@@ -609,3 +609,86 @@ body[data-series="arch-home"] a:focus-visible {
     body[data-series="arch-home"] .cv-panel::before,
     body[data-series="arch-home"] .cta::before { inset: 5px; }
 }
+
+/* =================================================================
+   3. the language switch, and Chinese typography
+   ================================================================= */
+
+.lang-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    margin-left: clamp(10px, 1.6vw, 20px);
+    padding: 3px;
+    border: 1px solid rgba(201, 163, 74, .2);
+    border-radius: 2px;
+    flex: none;
+}
+
+.lang-switch a {
+    padding: 4px 9px;
+    border-radius: 1px;
+    font-size: .66rem;
+    letter-spacing: .12em;
+    color: rgba(241, 231, 209, .58);
+    text-decoration: none;
+    transition: color .2s var(--ease), background .2s var(--ease);
+}
+
+.lang-switch a:hover { color: var(--gold-2); background: rgba(201, 163, 74, .1); }
+
+.lang-switch a[aria-current="page"] {
+    color: #1b1307;
+    background: linear-gradient(150deg, #f2dc9f 0%, #cfa94f 60%, #a67c2c 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 250, 232, .6);
+}
+
+/* the profile paragraph is a single column, in the page's own language */
+body[data-series="arch-home"] .cv-profile.one { grid-template-columns: 1fr; }
+
+body[data-series="arch-home"] .cv-profile.one .en,
+body[data-series="arch-home"] .cv-profile.one .cn {
+    max-width: 76ch;
+    font-size: 1rem;
+    line-height: 1.78;
+    color: var(--muted);
+}
+
+/* ---------- Chinese typesetting ---------- */
+
+/* Latin first, CJK after: Times has no Chinese glyphs, so the Chinese
+   falls through to the Song face while the English keeps its serif */
+html[lang="zh-Hans"] body,
+html[lang="zh-Hans"] .masthead h1 {
+    font-family: "Times New Roman", Times, "Songti SC", "Source Han Serif SC",
+                 "Noto Serif SC", "SimSun", "Liberation Serif", serif;
+}
+
+html[lang="zh-Hans"] .masthead h1 em { font-style: normal; }
+
+html[lang="zh-Hans"] .kicker { letter-spacing: .22em; }
+html[lang="zh-Hans"] .sheet-sec > .lab { letter-spacing: .14em; }
+html[lang="zh-Hans"] .facts dt { letter-spacing: .16em; }
+html[lang="zh-Hans"] .cv-table th { letter-spacing: .14em; }
+html[lang="zh-Hans"] .cv-table .pill { letter-spacing: .04em; }
+
+html[lang="zh-Hans"] .cv-profile.one .cn {
+    line-height: 1.95;
+    font-size: 1.02rem;
+}
+
+html[lang="zh-Hans"] .cv-table td { line-height: 1.65; }
+html[lang="zh-Hans"] .cv-time ul,
+html[lang="zh-Hans"] .cv-panel ul,
+html[lang="zh-Hans"] .cv-awards li { line-height: 1.78; }
+
+html[lang="zh-Hans"] .sheet-head .zh-line {
+    max-width: 60ch;
+    font-size: .9rem;
+    letter-spacing: .02em;
+}
+
+@media (max-width: 760px) {
+    .lang-switch { margin-left: 8px; }
+    .lang-switch a { padding: 3px 7px; font-size: .62rem; }
+}
