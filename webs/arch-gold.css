@@ -931,3 +931,136 @@ body[data-series="arch-home"] .btn.primary:hover { animation: none; }
     body[data-series="arch-home"] .masthead h1 em,
     body[data-series="arch-home"] .btn.primary { animation: none; }
 }
+
+/* =================================================================
+   5. the art-nouveau stars
+   ================================================================= */
+
+/* --- the pair flanking the monogram, joined to it by a hairline --- */
+
+body[data-series="arch-home"] .crest-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(12px, 2.2vw, 26px);
+    margin: 0 auto clamp(14px, 2.4vh, 22px);
+}
+
+/* the crest carries `margin: 0 auto` for its old standalone life; inside a
+   flex row those auto margins eat the free space and shove the stars to the
+   page edges, so they are cancelled here */
+body[data-series="arch-home"] .crest-row .crest { margin: 0; }
+
+body[data-series="arch-home"] .crest-row .star {
+    width: clamp(40px, 5vw, 64px);
+    height: auto;
+    flex: none;
+    opacity: .88;
+    animation: star-turn 140s linear infinite, star-glow 4.6s ease-in-out infinite;
+}
+
+body[data-series="arch-home"] .crest-row .star:last-child {
+    animation-direction: reverse;
+}
+
+body[data-series="arch-home"] .crest-row::before,
+body[data-series="arch-home"] .crest-row::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: clamp(50px, 13vw, 210px);
+    height: 1px;
+    pointer-events: none;
+}
+
+body[data-series="arch-home"] .crest-row::before {
+    right: 100%;
+    margin-right: 8px;
+    background: linear-gradient(90deg, rgba(201, 163, 74, 0), rgba(201, 163, 74, .55));
+}
+
+body[data-series="arch-home"] .crest-row::after {
+    left: 100%;
+    margin-left: 8px;
+    background: linear-gradient(90deg, rgba(201, 163, 74, .55), rgba(201, 163, 74, 0));
+}
+
+/* --- the two large stars in the field --- */
+
+body[data-series="arch-home"] .klimt-star {
+    position: absolute;
+    display: block;
+    opacity: .46;
+    mix-blend-mode: screen;
+}
+
+body[data-series="arch-home"] .klimt-star svg { display: block; width: 100%; height: auto; }
+
+body[data-series="arch-home"] .klimt-star.k1 {
+    width: 300px;
+    left: -104px;
+    top: 24vh;
+    animation: star-turn 180s linear infinite;
+}
+
+body[data-series="arch-home"] .klimt-star.k2 {
+    width: 200px;
+    right: -92px;
+    bottom: 20vh;
+    opacity: .3;
+    animation: star-turn 130s linear infinite reverse;
+}
+
+/* --- sparkle --- */
+
+body[data-series="arch-home"] .star .sb {
+    animation: star-twinkle 3.4s ease-in-out infinite;
+}
+
+body[data-series="arch-home"] .star:hover .sb { animation-duration: 1.4s; }
+
+body[data-series="arch-home"] .crest {
+    animation: crest-glow 6.5s ease-in-out infinite;
+}
+
+@keyframes star-turn {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+@keyframes star-twinkle {
+    0%, 100% { opacity: .2; }
+    45%      { opacity: 1; }
+}
+
+@keyframes star-glow {
+    0%, 100% { filter: drop-shadow(0 0 3px rgba(201, 163, 74, .3)); }
+    50%      { filter: drop-shadow(0 0 10px rgba(240, 212, 146, .75)); }
+}
+
+@keyframes crest-glow {
+    0%, 100% { filter: drop-shadow(0 2px 10px rgba(201, 163, 74, .22)); }
+    50%      { filter: drop-shadow(0 2px 22px rgba(232, 200, 128, .55)); }
+}
+
+@media (max-width: 1399px) {
+    body[data-series="arch-home"] .klimt-star { display: none; }
+}
+
+@media (max-width: 760px) {
+    body[data-series="arch-home"] .crest-row::before,
+    body[data-series="arch-home"] .crest-row::after { width: 34px; }
+    /* the crest carries `margin: 0 auto` for its old standalone life; inside a
+   flex row those auto margins eat the free space and shove the stars to the
+   page edges, so they are cancelled here */
+body[data-series="arch-home"] .crest-row .crest { margin: 0; }
+
+body[data-series="arch-home"] .crest-row .star { width: 34px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body[data-series="arch-home"] .star,
+    body[data-series="arch-home"] .star .sb,
+    body[data-series="arch-home"] .crest { animation: none; }
+}
