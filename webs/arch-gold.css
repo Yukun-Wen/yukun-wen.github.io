@@ -1064,3 +1064,17 @@ body[data-series="arch-home"] .crest-row .star { width: 34px; }
     body[data-series="arch-home"] .star .sb,
     body[data-series="arch-home"] .crest { animation: none; }
 }
+
+/* =================================================================
+   6. the English page: one language only
+   ================================================================= */
+
+/* nothing else to read under a title, so the accent becomes a rule */
+html[lang="en"] body[data-series="arch-home"] .sheet-sec h2::after {
+    content: "";
+    display: block;
+    width: 46px;
+    height: 1px;
+    margin-top: 16px;
+    background: linear-gradient(90deg, rgba(226, 190, 110, .85), rgba(201, 163, 74, 0));
+}
