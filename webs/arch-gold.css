@@ -1,4 +1,4 @@
-﻿/* =================================================================
+/* =================================================================
    arch-gold.css — gilding for the Architecture pages.
 
    1. every plate and card in the Architecture series carries a fine
@@ -174,12 +174,12 @@ body[data-series="arch-home"] .series-fx::after {
 
 body[data-series="arch-home"] .garland {
     position: absolute;
-    top: 46px;
+    top: 4px;
     left: 50%;
-    width: min(860px, 98%);
+    width: min(1180px, 100%);
     height: auto;
     transform: translateX(-50%);
-    opacity: .55;
+    opacity: .52;
     pointer-events: none;
     z-index: 0;
 }
@@ -200,7 +200,7 @@ body[data-series="arch-home"] .sheet-head > .garland { position: absolute; z-ind
 body[data-series="arch-home"] .sheet-head {
     position: relative;
     text-align: center;
-    padding-top: clamp(34px, 6vh, 62px);
+    padding-top: clamp(84px, 10vh, 132px);
     margin-bottom: clamp(18px, 3vh, 30px);
 }
 
@@ -946,56 +946,6 @@ body[data-series="arch-home"] .btn.primary:hover { animation: none; }
    5. the art-nouveau stars
    ================================================================= */
 
-/* --- the pair flanking the monogram, joined to it by a hairline --- */
-
-body[data-series="arch-home"] .crest-row {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: clamp(12px, 2.2vw, 26px);
-    margin: 0 auto clamp(14px, 2.4vh, 22px);
-}
-
-/* the crest carries `margin: 0 auto` for its old standalone life; inside a
-   flex row those auto margins eat the free space and shove the stars to the
-   page edges, so they are cancelled here */
-body[data-series="arch-home"] .crest-row .crest { margin: 0; }
-
-body[data-series="arch-home"] .crest-row .star {
-    width: clamp(40px, 5vw, 64px);
-    height: auto;
-    flex: none;
-    opacity: .88;
-    animation: star-turn 140s linear infinite, star-glow 4.6s ease-in-out infinite;
-}
-
-body[data-series="arch-home"] .crest-row .star:last-child {
-    animation-direction: reverse;
-}
-
-body[data-series="arch-home"] .crest-row::before,
-body[data-series="arch-home"] .crest-row::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    width: clamp(50px, 13vw, 210px);
-    height: 1px;
-    pointer-events: none;
-}
-
-body[data-series="arch-home"] .crest-row::before {
-    right: 100%;
-    margin-right: 8px;
-    background: linear-gradient(90deg, rgba(201, 163, 74, 0), rgba(201, 163, 74, .55));
-}
-
-body[data-series="arch-home"] .crest-row::after {
-    left: 100%;
-    margin-left: 8px;
-    background: linear-gradient(90deg, rgba(201, 163, 74, .55), rgba(201, 163, 74, 0));
-}
-
 /* --- the two large stars in the field --- */
 
 body[data-series="arch-home"] .klimt-star {
@@ -1059,14 +1009,7 @@ body[data-series="arch-home"] .crest {
 }
 
 @media (max-width: 760px) {
-    body[data-series="arch-home"] .crest-row::before,
-    body[data-series="arch-home"] .crest-row::after { width: 34px; }
-    /* the crest carries `margin: 0 auto` for its old standalone life; inside a
-   flex row those auto margins eat the free space and shove the stars to the
-   page edges, so they are cancelled here */
-body[data-series="arch-home"] .crest-row .crest { margin: 0; }
-
-body[data-series="arch-home"] .crest-row .star { width: 34px; }
+    body[data-series="arch-home"] .star { width: 34px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
