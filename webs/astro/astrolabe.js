@@ -57,8 +57,8 @@ const DEFAULTS = {
   /** 长按蓄能多久充满（秒） */
   chargeTime: 10,
   /** 翻面：总圈数 / 时长（毫秒） */
-  flipTurns: 8,
-  flipDur: 1800,
+  flipTurns: 14,
+  flipDur: 2800,
   /** 这些元素上的指针事件不归组件管 */
   ignore: '[data-dial-ignore]',
   palette: null,
@@ -803,11 +803,22 @@ export class Astrolabe extends EventTarget {
     }
 
     if (this.flip) {
-      const u = clamp((performance.now() - this.flip.t0) / this.flip.dur, 0, 1);
+      const t2 = performance.now();
+      const u = clamp((t2 - this.flip.t0) / this.flip.dur, 0, 1);
       const deg = this._flipDeg(u);
       this.canvas.style.transform = 'perspective(1400px) rotateY(' + deg.toFixed(1) + 'deg)';
+
+      // 角速度越大，加一点运动模糊，快转才"看起来在转"
+      const dT = Math.max(4, t2 - (this._flipT || t2 - 16));
+      const dDeg = Math.abs(deg - (this._flipPrev === undefined ? deg : this._flipPrev));
+      const vel = dDeg / dT; // 度/毫秒
+      const blur = Math.min(7, Math.max(0, (vel - 0.25) * 2.4));
+      this.canvas.style.filter = blur > 0.15 ? 'blur(' + blur.toFixed(1) + 'px)' : '';
+      this._flipT = t2;
+      this._flipPrev = deg;
     } else if (this.canvas.style.transform) {
       this.canvas.style.transform = '';
+      this.canvas.style.filter = '';
     }
     this._cssScale = s;
 
@@ -870,10 +881,10 @@ export class Astrolabe extends EventTarget {
 
   /** 0..1 的进度 → 已经转过的角度（度） */
   _flipDeg(u) {
-    const A = 0.55;
+    const A = 0.45;
     const total = this.o.flipTurns;
-    const fast = Math.max(1, total - 2);
-    const slow = total - fast;
+    const fast = Math.max(1, Math.round(total * 0.57)); // 前段：快
+    const slow = total - fast;                          // 后段：长尾减速
     if (u <= A) return fast * (u / A) * 360;
     const v = (u - A) / (1 - A);
     return (fast + slow * (1 - Math.pow(1 - v, 3))) * 360;
