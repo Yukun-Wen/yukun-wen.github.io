@@ -83,6 +83,40 @@
 
 .astro.cam .astro-note { display: block; }
 
+/* 手势模式：页面退到后面去，只留下手和罗盘 */
+html.astro-focus .wrap,
+html.astro-focus .bar,
+html.astro-focus .foot {
+    filter: blur(8px) saturate(.6);
+    opacity: .34;
+    pointer-events: none;
+    transition: filter .45s var(--ease), opacity .45s var(--ease);
+}
+
+/* 压暗远离罗盘的那一片，等于给左下角打了盏聚光灯 */
+.astro-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 5;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .45s var(--ease);
+    background: radial-gradient(
+        circle at 9% 90%,
+        rgba(0, 0, 0, 0) 0 130px,
+        rgba(0, 0, 0, .42) 42%,
+        rgba(0, 0, 0, .74) 100%
+    );
+}
+
+html.astro-focus .astro-scrim { opacity: 1; }
+
+html:not(.astro-focus) .wrap,
+html:not(.astro-focus) .bar,
+html:not(.astro-focus) .foot {
+    transition: filter .45s var(--ease), opacity .45s var(--ease);
+}
+
 /* 手势光标层 */
 .astro-cursor {
     position: fixed;

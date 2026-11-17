@@ -392,8 +392,9 @@ export class Astrolabe extends EventTarget {
 
     const p = entries[0][1];
     const zone = this._zone(p.x, p.y);
+    const scrub = zone === 'ring' || zone === 'needle';
     this.gesture = {
-      mode: zone === 'ring' ? 'scrub' : 'rotate',
+      mode: scrub ? 'scrub' : 'rotate',
       zone,
       lastAngle: Math.atan2(p.y, p.x),
       t0: performance.now(),
@@ -402,7 +403,7 @@ export class Astrolabe extends EventTarget {
       moved: 0,
       src: p.src,
     };
-    if (zone === 'ring') this._applyPercent(this._pctAt(p.x, p.y));
+    if (scrub) this._applyPercent(this._pctAt(p.x, p.y));
   }
 
   _update(p, prev) {
@@ -490,14 +491,29 @@ export class Astrolabe extends EventTarget {
 
   _zone(x, y) {
     const r = Math.hypot(x, y);
-    if (r <= this.geo.rIn) return 'art';
-    if (r <= this.geo.rOut * 1.10) return 'ring';
-    return 'out';
+    if (r > this.geo.rOut * 1.10) return 'out';
+    if (r >= this.geo.rIn) return 'ring';
+    // 指针本身就是个把手：抓住它也能读百分比
+    if (this._nearNeedle(x, y)) return 'needle';
+    return 'art';
+  }
+
+  /** 点到指针这根线的垂距（只在针尖那一侧、读数盘之外算） */
+  _nearNeedle(x, y) {
+    const S = this.size;
+    const a = -Math.PI / 2 + (this.pct / 100) * TAU;
+    const cx = Math.cos(a);
+    const cy = Math.sin(a);
+    const proj = x * cx + y * cy;      // 沿针方向
+    if (proj < S * GEO.badgeR * 0.95) return false;
+    const perp = Math.abs(-x * cy + y * cx);
+    // 手指/手都不精细，给得比鼠标宽一点
+    return perp <= Math.max(14, S * 0.065);
   }
 
   _hover(p) {
     const zone = this._zone(p.x, p.y);
-    const want = zone === 'ring' ? 'grab' : zone === 'art' ? 'pointer' : '';
+    const want = zone === 'ring' || zone === 'needle' ? 'grab' : zone === 'art' ? 'pointer' : '';
     if (want !== this._cursor) {
       this._cursor = want;
       document.documentElement.style.cursor = want;

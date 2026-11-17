@@ -58,12 +58,20 @@ function boot(root) {
 
   /* ---------- 首屏先藏着（原来的脾气） ---------- */
   const masthead = document.querySelector('.masthead');
+  let focused = false;
   const updateVisible = () => {
     const show = !masthead || masthead.getBoundingClientRect().bottom < 60;
-    root.classList.toggle('on', show);
+    root.classList.toggle('on', show || focused);
   };
   window.addEventListener('scroll', updateVisible, { passive: true });
   updateVisible();
+
+  /* 手势模式：页面虚掉，只留手和罗盘 */
+  const setFocus = (on) => {
+    focused = on;
+    document.documentElement.classList.toggle('astro-focus', on);
+    updateVisible();
+  };
 
   /* ---------- 手势（按需加载，不拖累首屏） ---------- */
   const btn = root.querySelector('.astro-btn');
@@ -74,13 +82,19 @@ function boot(root) {
   overlay.className = 'astro-cursor';
   document.body.appendChild(overlay);
 
+  const scrim = document.createElement('div');
+  scrim.className = 'astro-scrim';
+  document.body.appendChild(scrim);
+
   let hand = null;
   let starting = false;
 
   const setNote = (state, text) => {
+    const live = state === 'loading' || state === 'ready';
     if (note) note.textContent = text || '';
-    root.classList.toggle('cam', state === 'loading' || state === 'ready');
-    if (btn) btn.setAttribute('aria-pressed', state === 'loading' || state === 'ready' ? 'true' : 'false');
+    root.classList.toggle('cam', live);
+    setFocus(live);
+    if (btn) btn.setAttribute('aria-pressed', live ? 'true' : 'false');
   };
 
   if (btn) {
