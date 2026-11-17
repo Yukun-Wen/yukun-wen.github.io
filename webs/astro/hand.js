@@ -128,7 +128,7 @@ export class HandController {
       await this.video.play();
 
       this.running = true;
-      this.onStatus('ready', '把手放进画面');
+      this.onStatus('ready', '捏住不动 → 蓄能');
       this._loop();
     } catch (err) {
       this.onStatus('error', this._explain(err));
@@ -225,7 +225,7 @@ export class HandController {
       }
       if (slot.miss > 12) {
         this.slots.delete(key);
-        if (this.slots.size === 0) this.onStatus('ready', '把手放进画面');
+        if (this.slots.size === 0) this.onStatus('ready', '捏住不动 → 蓄能');
       }
     }
 

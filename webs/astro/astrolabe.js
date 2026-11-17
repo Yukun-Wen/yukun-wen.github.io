@@ -310,7 +310,7 @@ export class Astrolabe extends EventTarget {
     this.anim = null;
     this.setManual(true);
     this._suppressClickUntil = performance.now() + 400;
-    this.pointers.set(id, { x: p.x, y: p.y, src });
+    this.pointers.set(id, { x: p.x, y: p.y, src, cx: clientX, cy: clientY });
     this._begin();
     return true;
   }
@@ -319,7 +319,7 @@ export class Astrolabe extends EventTarget {
     const prev = this.pointers.get(id);
     if (!prev) return false;
     const p = this._local(clientX, clientY);
-    this.pointers.set(id, { x: p.x, y: p.y, src: prev.src });
+    this.pointers.set(id, { x: p.x, y: p.y, src: prev.src, cx: clientX, cy: clientY });
     this._update(p, prev);
     return true;
   }
@@ -395,7 +395,7 @@ export class Astrolabe extends EventTarget {
     this.setManual(true);
     this._suppressClickUntil = performance.now() + 400;
     if (this.pointers.size >= 3) return;
-    this.pointers.set(e.pointerId, { x: p.x, y: p.y, src: 'pointer' });
+    this.pointers.set(e.pointerId, { x: p.x, y: p.y, src: 'pointer', cx: e.clientX, cy: e.clientY });
     this._begin();
   }
 
@@ -408,7 +408,7 @@ export class Astrolabe extends EventTarget {
       return;
     }
     e.preventDefault();
-    this.pointers.set(e.pointerId, { x: p.x, y: p.y, src: prev.src });
+    this.pointers.set(e.pointerId, { x: p.x, y: p.y, src: prev.src, cx: e.clientX, cy: e.clientY });
     this._update(p, prev);
   }
 
@@ -492,9 +492,14 @@ export class Astrolabe extends EventTarget {
       t0: performance.now(),
       sx: p.x,
       sy: p.y,
+      cx0: p.cx,
+      cy0: p.cy,
       moved: 0,
       src: p.src,
+      p0: this.pct,
     };
+    clearTimeout(this._fireT);
+    this._pendingFire = false;
     if (scrub) this._applyPercent(this._pctAt(p.x, p.y));
   }
 
@@ -532,8 +537,19 @@ export class Astrolabe extends EventTarget {
       if (g && g.mode !== 'scrub' && !this.hadPinch && g.moved < limit && dt < 700) {
         this._click(g.sx, g.sy);
       }
-      if (this.charge > 0.15) this._fire(this.charge);
-      this.charge = 0;
+      if (this.charge > 0.15) {
+        // 捏合偶尔会松一帧，给个宽限再放
+        this._pendingFire = true;
+        clearTimeout(this._fireT);
+        this._fireT = setTimeout(() => {
+          this._pendingFire = false;
+          if (this.charge > 0.15) this._fire(this.charge);
+          this.charge = 0;
+          this._mark();
+        }, 240);
+      } else {
+        this.charge = 0;
+      }
       if (g && g.mode === 'scrub') {
         this.root.dispatchEvent(new CustomEvent('dial:scrubend'));
       }
@@ -675,14 +691,25 @@ export class Astrolabe extends EventTarget {
     // 长按蓄能：按住不动才充，一拖动就放电
     const dt = this._prevNow ? Math.min(0.12, (now - this._prevNow) / 1000) : 0;
     this._prevNow = now;
-    if (this.pointers.size > 0 && this.gesture && this.gesture.moved < 12) {
+    let still = false;
+    if (this.pointers.size > 0 && this.gesture) {
+      const g = this.gesture;
+      const p = this.pointers.values().next().value;
+      // 用"离起点的距离"而不是累计路程：手再稳也会抖，累计路程一秒就超标
+      // 必须用屏幕坐标：星盘在放大过程中自己会移动、变大，
+      // 用布局坐标量"手有没有动"会把缩放误判成移动
+      const drift = Math.hypot((p.cx ?? g.cx0) - g.cx0, (p.cy ?? g.cy0) - g.cy0);
+      const turned = Math.abs(this.pct - (g.p0 === undefined ? this.pct : g.p0));
+      still = drift < 38 && turned < 1.5;
+    }
+    if (still) {
       const before = this.charge;
       this.charge = Math.min(1, this.charge + dt / this.o.chargeTime);
       this.spinBoost = Math.max(this.spinBoost, 0.12 + this.charge * 1.1);
       if (Math.abs(this.charge - before) > 0.02) {
         this.root.dispatchEvent(new CustomEvent('dial:charge', { detail: { charge: this.charge } }));
       }
-    } else if (this.charge > 0) {
+    } else if (this.charge > 0 && !this._pendingFire) {
       this.charge = Math.max(0, this.charge - dt * 3);
     }
 
