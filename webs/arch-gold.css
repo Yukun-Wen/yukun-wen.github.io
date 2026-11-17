@@ -756,17 +756,24 @@ body[data-series="arch-home"] .klimt-sparkle circle {
 
 /* ---------- the follow spot ---------- */
 
+/* a stage spot rather than a wash: a hot core, a tight pool with a defined
+   edge, and only a whisper of spill so the rest of the page stays black */
 body[data-series="arch-home"] .klimt-spot {
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(circle 420px at var(--mx, 50vw) var(--my, 40vh),
-            rgba(255, 250, 234, .11) 0%,
-            rgba(255, 244, 214, .05) 38%,
-            rgba(255, 240, 200, 0) 68%),
-        radial-gradient(circle 900px at var(--mx, 50vw) var(--my, 40vh),
-            rgba(201, 163, 74, .09) 0%,
-            rgba(201, 163, 74, 0) 72%);
+        radial-gradient(circle 52px at var(--mx, 50vw) var(--my, 40vh),
+            rgba(255, 255, 253, .62) 0%,
+            rgba(255, 252, 238, .34) 42%,
+            rgba(255, 246, 218, 0) 100%),
+        radial-gradient(circle 165px at var(--mx, 50vw) var(--my, 40vh),
+            rgba(255, 250, 232, .42) 0%,
+            rgba(255, 244, 210, .40) 30%,
+            rgba(255, 236, 186, .16) 62%,
+            rgba(255, 230, 170, 0) 80%),
+        radial-gradient(circle 340px at var(--mx, 50vw) var(--my, 40vh),
+            rgba(214, 172, 92, .05) 0%,
+            rgba(201, 163, 74, 0) 78%);
     mix-blend-mode: screen;
     pointer-events: none;
 }
