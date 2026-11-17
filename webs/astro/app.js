@@ -1,4 +1,4 @@
-﻿/**
+/**
  * 左下角星盘（本站接入层）
  *
  * 接替原来的 .dial 阅读进度盘：
@@ -74,23 +74,18 @@ function boot(root) {
 
   syncProgress();
 
-  /* ---------- 首屏先藏着（原来的脾气） ---------- */
-  const masthead = document.querySelector('.masthead');
-  let focused = false;
-  const updateVisible = () => {
-    const show = !masthead || masthead.getBoundingClientRect().bottom < 60;
-    root.classList.toggle('on', show || focused);
-    // 从隐藏切成可见的那一刻要踢一下，自转循环才会重新跑起来
-    if (show || focused) dial.kick();
+  /* ---------- 罗盘一直在，不再等滚过首屏 ---------- */
+  const showDial = () => {
+    root.classList.add('on');
+    dial.kick(); // 自转循环靠这一下接上
   };
-  window.addEventListener('scroll', updateVisible, { passive: true });
-  updateVisible();
+  showDial();
+  window.addEventListener('scroll', showDial, { passive: true });
 
   /* 手势模式：页面虚掉，只留手和罗盘 */
   const setFocus = (on) => {
-    focused = on;
     document.documentElement.classList.toggle('astro-focus', on);
-    updateVisible();
+    showDial();
   };
 
   /* ---------- 手势（按需加载，不拖累首屏） ---------- */

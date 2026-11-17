@@ -1,4 +1,4 @@
-/* =================================================================
+﻿/* =================================================================
    左下角星盘：接替原来的 .dial（阅读进度盘）
    ================================================================= */
 
@@ -7,8 +7,8 @@
     left: 24px;
     bottom: 22px;
     /* 永远只占页面两侧的空白：1180 是 .wrap 的宽度，24 给左边让出画框线 */
-    width: min(200px, max(0px, calc((100vw - 1180px) / 2 - 26px)));
-    height: min(200px, max(0px, calc((100vw - 1180px) / 2 - 26px)));
+    width: min(200px, max(104px, calc((100vw - 1180px) / 2 - 26px)));
+    height: min(200px, max(104px, calc((100vw - 1180px) / 2 - 26px)));
     z-index: 6;
     pointer-events: none;
     opacity: 0;
@@ -129,7 +129,7 @@ html:not(.astro-focus) .foot {
 
 /* 两侧没有余量就不放（和原来的 .dial 同一个脾气）；
    这时候把让位给它的左下角花饰还回去 */
-@media (max-width: 1403px) {
+@media (max-width: 1199px) {
     .astro { display: none; }
     body[data-series="arch-home"] .corner.c4 { display: block; }
 }
