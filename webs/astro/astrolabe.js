@@ -57,6 +57,19 @@ const DEFAULTS = {
   /** 这些元素上的指针事件不归组件管 */
   ignore: '[data-dial-ignore]',
   palette: null,
+
+  /* ---- 呈现（present）：0 = 缩在角落，1 = 铺到屏幕正中 ---- */
+  /** 画布固定边长；放大靠 CSS 变换，连续缩放不会每帧重开画布 */
+  layout: 520,
+  /** 角落里的静止尺寸范围 */
+  restMin: 104,
+  restMax: 200,
+  /** 页面版心宽度，用来算两侧余量 */
+  contentWidth: 1180,
+  /** 铺满时占屏幕短边的比例 */
+  presentMax: 0.68,
+  /** present 跟随手势的速度（每帧逼近系数） */
+  presentEase: 0.16,
 };
 
 export const THEMES = {
@@ -102,6 +115,7 @@ export class Astrolabe extends EventTarget {
     this.root = root;
     this.canvas = root.querySelector('canvas') || root.appendChild(document.createElement('canvas'));
     this.ctx = this.canvas.getContext('2d');
+    this.btn = root.querySelector('.astro-btn');
     this.o = { ...DEFAULTS, ...options };
     this.pal = { ...(THEMES[this.o.theme] || THEMES.light), ...(this.o.palette || {}) };
 
@@ -128,11 +142,24 @@ export class Astrolabe extends EventTarget {
     this._suppressClickUntil = 0;
     this._cursor = '';
 
+    /** 0 = 角落，1 = 屏幕正中放大；present 是缓动后的实际值 */
+    this.present = 0;
+    this.presentTarget = 0;
+    this._lastDrawAt = 0;
+
     this._bind();
     this._resize();
 
     this._ro = new ResizeObserver(() => this._resize());
     this._ro.observe(root);
+
+    // 布局尺寸不变，但窗口变了 restSize 会变，角落那份线稿得跟着重建
+    this._onWinResize = () => {
+      this._applyPresentation();
+      this._rebuildInkRest();
+      this._mark();
+    };
+    window.addEventListener('resize', this._onWinResize);
 
     // 从别的标签页回来时，自转循环得重新接上
     this._onVis = () => {
@@ -156,14 +183,36 @@ export class Astrolabe extends EventTarget {
   }
 
   /**
-   * 线稿必须按「显示尺寸」重建：先在目标分辨率下缩小，再抠彩度。
+   * 线稿要按「显示尺寸」重建：先在目标分辨率下缩小，再抠彩度。
    * 反过来（先抠再缩小）会把只有一像素宽的金线平均成一片灰。
+   *
+   * 于是存两份：角落里那份按 176 左右建（清晰），放大那份按 520 建。
+   * 中间状态按 present 交叉淡化。
    */
   _rebuildInk() {
     if (!this.o.ink || !this.img) return;
     const N = Math.min(1024, Math.max(160, Math.round(this.size * this.dpr)));
     this.inkCanvas = buildInk(this.img, this.o.crop, N);
     this._inkN = N;
+    this._rebuildInkRest();
+  }
+
+  _rebuildInkRest() {
+    if (!this.o.ink || !this.img) return;
+    const rest = Math.round(this._restSize || 176);
+    const R = Math.max(96, Math.min(1024, Math.round(rest * this.dpr)));
+    if (R === this._inkR) return;
+    this.inkRest = buildInk(this.img, this.o.crop, R);
+    this._inkR = R;
+  }
+
+  /** 按 present 挑要画的线稿（可同时两层） */
+  _inkLayers() {
+    const a = clamp(this.present, 0, 1);
+    const out = [];
+    if (this.inkRest && a < 0.995) out.push({ img: this.inkRest, alpha: 1 - a });
+    if (this.inkCanvas && a > 0.005) out.push({ img: this.inkCanvas, alpha: a });
+    return out;
   }
 
   get value() {
@@ -263,6 +312,7 @@ export class Astrolabe extends EventTarget {
     window.removeEventListener('click', this._h.click, true);
     this.root.removeEventListener('keydown', this._h.key);
     document.removeEventListener('visibilitychange', this._onVis);
+    window.removeEventListener('resize', this._onWinResize);
     this._ro.disconnect();
     if (this._raf) cancelAnimationFrame(this._raf);
   }
@@ -501,9 +551,11 @@ export class Astrolabe extends EventTarget {
 
   _local(clientX, clientY) {
     const r = this.root.getBoundingClientRect();
+    // 元素被 CSS 缩放过了，这里换算回"布局像素"，内部几何才不用跟着动
+    const k = r.width > 0 ? r.width / this.size : 1;
     return {
-      x: clientX - (r.left + r.width / 2),
-      y: clientY - (r.top + r.height / 2),
+      x: (clientX - (r.left + r.width / 2)) / k,
+      y: (clientY - (r.top + r.height / 2)) / k,
     };
   }
 
@@ -552,6 +604,7 @@ export class Astrolabe extends EventTarget {
 
     const S = w;
     this.geo = { rArt: S * GEO.art, rIn: S * GEO.ringIn, rOut: S * GEO.ringOut };
+    this._applyPresentation();
 
     if (this.o.ink && this.img) {
       const N = Math.min(1024, Math.max(160, Math.round(S * this.dpr)));
@@ -587,15 +640,73 @@ export class Astrolabe extends EventTarget {
         this.pct = a.to.pct;
       }
     }
+
+    // 放大/回到角落：每帧朝目标逼近一点
+    const d = this.presentTarget - this.present;
+    if (Math.abs(d) > 0.0015) this.present += d * this.o.presentEase;
+    else this.present = this.presentTarget;
+    this._applyPresentation();
+
+    // 静止自转没必要跑 60fps；有手势/动画时全速
+    const idle = !this.gesture && !this.anim && Math.abs(this.presentTarget - this.present) < 0.002;
+    if (idle && now - this._lastDrawAt < 30) {
+      this._schedule();
+      return;
+    }
+    this._lastDrawAt = now;
+
     this._draw();
     this._emit();
-    if (this.anim || this._spinning()) this._schedule();
+    if (this.anim || this._spinning() || Math.abs(this.presentTarget - this.present) > 0.002) {
+      this._schedule();
+    }
   }
 
   /** 只有真正看得见、且用户没要求减少动效时才转 */
   /** 外部把组件从隐藏切成可见时叫一声，自转循环才会接上 */
   kick() {
     this._mark();
+  }
+
+  /** 0..1：手张开多少，星盘就放大到屏幕正中的程度 */
+  setPresent(v) {
+    const t = clamp(v, 0, 1);
+    if (Math.abs(t - this.presentTarget) < 1e-4) return;
+    this.presentTarget = t;
+    this._mark();
+  }
+
+  /** 把 present 换算成 CSS 变换：左下角固定，缩放在这里做 */
+  _applyPresentation() {
+    const el = this.root;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const L = this.o.layout;
+    const half = L / 2;
+
+    const restSize = clamp((vw - this.o.contentWidth) / 2 - 26, this.o.restMin, this.o.restMax);
+    this._restSize = restSize;
+    const sRest = restSize / L;
+    const sMax = Math.min(L, Math.min(vw, vh) * this.o.presentMax) / L;
+    const s = sRest + (sMax - sRest) * this.present;
+
+    // 元素盒子左下角固定在 (left, vh - bottom)，transform-origin 也在这儿
+    const ox = 24;
+    const oy = vh - 22;
+    const tx = this.present * (vw / 2 - ox - half * s);
+    const ty = this.present * (vh / 2 - oy + half * s);
+
+    const tf = 'translate(' + tx.toFixed(2) + 'px,' + ty.toFixed(2) + 'px) scale(' + s.toFixed(4) + ')';
+    if (tf !== this._lastTf) {
+      this._lastTf = tf;
+      el.style.transform = tf;
+    }
+    this._cssScale = s;
+
+    // 开关按钮反向缩放，屏幕上始终是 22px 左右，别跟着盘一起变大
+    if (this.btn) {
+      this.btn.style.transform = 'scale(' + (1 / s).toFixed(3) + ')';
+    }
   }
 
   _spinning() {
@@ -687,16 +798,19 @@ export class Astrolabe extends EventTarget {
         const outer = this.rot - t * this.o.spinOuter;
         const rSplit = rArt * this.o.split;
 
+        const layers = this._inkLayers();
         const paint = (clipPath, angle) => {
-          c.save();
-          clipPath();
-          c.clip();
-          c.rotate(angle);
-          c.scale(this.zoom, this.zoom);
-          c.imageSmoothingQuality = 'high';
-          c.globalAlpha = 0.92;
-          c.drawImage(this.inkCanvas, -rArt, -rArt, rArt * 2, rArt * 2);
-          c.restore();
+          for (const layer of layers) {
+            c.save();
+            clipPath();
+            c.clip();
+            c.rotate(angle);
+            c.scale(this.zoom, this.zoom);
+            c.imageSmoothingQuality = 'high';
+            c.globalAlpha = 0.92 * layer.alpha;
+            c.drawImage(layer.img, -rArt, -rArt, rArt * 2, rArt * 2);
+            c.restore();
+          }
         };
 
         // 内盘：顺时针

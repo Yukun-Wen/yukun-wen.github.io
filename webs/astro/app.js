@@ -1,4 +1,4 @@
-/**
+﻿/**
  * 左下角星盘（本站接入层）
  *
  * 接替原来的 .dial 阅读进度盘：
@@ -82,6 +82,7 @@ function boot(root) {
   showDial();
   window.addEventListener('scroll', showDial, { passive: true });
 
+
   /* 手势模式：页面虚掉，只留手和罗盘 */
   const setFocus = (on) => {
     document.documentElement.classList.toggle('astro-focus', on);
@@ -116,6 +117,7 @@ function boot(root) {
     btn.addEventListener('click', async () => {
       if (hand && hand.running) {
         hand.stop();
+        dial.setPresent(0);
         return;
       }
       if (starting) return;
@@ -129,6 +131,9 @@ function boot(root) {
             dial,
             overlay,
             onStatus: (state, text) => setNote(state, text),
+            // 手张开 → 星盘放大并移到屏幕正中；收拢 → 缩回角落
+            // 正在捏合拖动时不跟着变，否则一捏盘就缩回去了
+            onOpen: (v) => { if (!dial.gesture) dial.setPresent(v); },
           });
         }
         await hand.start();

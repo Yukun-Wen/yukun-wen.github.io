@@ -7,16 +7,18 @@
     left: 24px;
     bottom: 22px;
     /* 永远只占页面两侧的空白：1180 是 .wrap 的宽度，24 给左边让出画框线 */
-    width: min(200px, max(104px, calc((100vw - 1180px) / 2 - 26px)));
-    height: min(200px, max(104px, calc((100vw - 1180px) / 2 - 26px)));
+    /* 固定画布，缩放交给 JS 的 transform —— 连续放大不会每帧重建画布 */
+    width: 520px;
+    height: 520px;
     z-index: 6;
     pointer-events: none;
     opacity: 0;
-    transform: translateY(8px);
-    transition: opacity .6s var(--ease), transform .6s var(--ease);
+    transform-origin: left bottom;
+    will-change: transform;
+    transition: opacity .6s var(--ease);
 }
 
-.astro.on { opacity: 1; transform: none; }
+.astro.on { opacity: 1; }
 
 .astro-canvas {
     display: block;

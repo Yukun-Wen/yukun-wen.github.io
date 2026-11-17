@@ -1,4 +1,4 @@
-/**
+﻿/**
  * 摄像头手势层
  *
  * 它不做任何「交互逻辑」：只负责把手变成一个虚拟指针，
@@ -55,12 +55,16 @@ class OneEuro {
 /* ---------------- 主类 ---------------- */
 
 export class HandController {
-  constructor({ video, dial, overlay, onStatus }) {
+  constructor({ video, dial, overlay, onStatus, onOpen }) {
     this.video = video;
     this.dial = dial;
     this.overlay = overlay;
     this.octx = overlay.getContext('2d');
     this.onStatus = onStatus || (() => {});
+    /** 手张开程度 0..1（0 = 握拳，1 = 五指全开） */
+    this.onOpen = onOpen || (() => {});
+    this._openSmooth = 0;
+    this._openSent = -1;
 
     this.gain = 1.35;
     this.slots = new Map();
@@ -145,6 +149,9 @@ export class HandController {
     }
     this.video.srcObject = null;
     this._clearOverlay();
+    this._openSmooth = 0;
+    this._openSent = -1;
+    this.onOpen(0);
     this.onStatus('idle', '摄像头未开启');
   }
 
@@ -210,6 +217,23 @@ export class HandController {
         if (this.slots.size === 0) this.onStatus('ready', '把手放进画面');
       }
     }
+
+    this._publishOpen();
+  }
+
+  /** 把所有手的最张开值平滑后发出去：0 = 握拳，1 = 全开 */
+  _publishOpen() {
+    let raw = 0;
+    for (const slot of this.slots.values()) {
+      if (slot.pos && typeof slot.open === 'number') raw = Math.max(raw, slot.open);
+    }
+    // 张开时跟得紧一点，收拢时慢一点，避免抖动
+    const k = raw > this._openSmooth ? 0.35 : 0.18;
+    this._openSmooth += (raw - this._openSmooth) * k;
+    if (Math.abs(this._openSmooth - this._openSent) > 0.008) {
+      this._openSent = this._openSmooth;
+      this.onOpen(this._openSmooth);
+    }
   }
 
   _keyFor(handed, i, seen) {
@@ -223,6 +247,13 @@ export class HandController {
     const mcp = lm[9];
     const palm = Math.hypot(mcp.x - wrist.x, mcp.y - wrist.y);
     if (palm < 0.035) return; // 手太小/太远，忽略
+
+    // 张开度：五个指尖到手腕的平均距离 / 掌长（与离镜头远近无关）
+    let reach = 0;
+    for (const i of [4, 8, 12, 16, 20]) {
+      reach += Math.hypot(lm[i].x - wrist.x, lm[i].y - wrist.y);
+    }
+    slot.open = clamp((reach / 5 / palm - 1.12) / 0.62, 0, 1);
 
     const tip = lm[8];
     const thumb = lm[4];
