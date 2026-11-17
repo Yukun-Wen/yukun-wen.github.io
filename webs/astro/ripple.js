@@ -20,6 +20,7 @@ export class Ripple {
     this.stars = [];
     this.waves = [];
     this.parts = [];
+    this.flashes = [];
     this.rainLevel = 0;
     this._rainAcc = 0;
     this._last = 0;
@@ -61,27 +62,60 @@ export class Ripple {
     if (this.rainLevel > 0) this._schedule();
   }
 
-  /** 星盘炸成金色粉末 */
+  /**
+   * 星盘炸成金粉：
+   *   一批炸出去（高速、带重力、横扫屏幕）
+   *   一批在整屏铺开、慢慢往下飘（像金色的雪）
+   *   外加一下闪光
+   */
   shatter(x, y, radius, power = 1, cold = false) {
-    const n = Math.round(120 + 220 * Math.min(1, power));
-    for (let i = 0; i < n; i++) {
+    const p = Math.min(1, Math.max(0, power));
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+
+    // 1) 炸开
+    const nBurst = Math.round(220 + 520 * p);
+    for (let i = 0; i < nBurst; i++) {
       const a = Math.random() * Math.PI * 2;
       const r = radius * Math.sqrt(Math.random());
-      const sp = (0.25 + Math.random() * 1.05) * (0.6 + power * 0.9);
+      const sp = (180 + Math.random() * 520) * (0.55 + p * 0.85);
       this.parts.push({
+        kind: 'burst',
         x: x + Math.cos(a) * r,
         y: y + Math.sin(a) * r,
-        vx: Math.cos(a) * sp * 60 + (Math.random() - 0.5) * 30,
-        vy: Math.sin(a) * sp * 60 - 40 - Math.random() * 70,
-        r: 0.8 + Math.random() * 2.1,
+        vx: Math.cos(a) * sp + (Math.random() - 0.5) * 120,
+        vy: Math.sin(a) * sp * 0.72 - 60 - Math.random() * 160,
+        r: 0.8 + Math.random() * 2.4,
         life: 900 + Math.random() * 1500,
         t: 0,
+        alpha: 0.75 + Math.random() * 0.25,
         cold,
       });
     }
+
+    // 2) 满屏飘落
+    const nDrift = Math.round(260 + 640 * p);
+    for (let i = 0; i < nDrift; i++) {
+      this.parts.push({
+        kind: 'drift',
+        x: Math.random() * w,
+        y: Math.random() * h - h * 0.15,
+        vx: (Math.random() - 0.5) * 40,
+        vy: 28 + Math.random() * 95,
+        ph: Math.random() * 6.28,
+        r: 0.5 + Math.random() * 1.7,
+        life: 2600 + Math.random() * 3000,
+        t: 0,
+        alpha: 0.45 + Math.random() * 0.5,
+        cold,
+      });
+    }
+
+    if (this.parts.length > 1800) this.parts.splice(0, this.parts.length - 1800);
+
+    this.flashes.push({ x, y, t: 0, life: 300, r: radius * 2.4, cold });
     this._schedule();
   }
-
   /** 在某点起一圈波 */
   burst(x, y, opts = {}) {
     this.waves.push({
@@ -100,7 +134,7 @@ export class Ripple {
     this.raf = requestAnimationFrame((now) => {
       this.raf = 0;
       this._draw(now);
-      if (this.waves.length || this.parts.length || this.rainLevel > 0) this._schedule();
+      if (this.waves.length || this.parts.length || this.flashes.length || this.rainLevel > 0) this._schedule();
     });
   }
 
@@ -136,20 +170,31 @@ export class Ripple {
 
     this.waves = this.waves.filter((v) => now - v.t0 < v.dur);
 
-    // 金粉
+    // 金粉：炸出去的一批受重力，飘落的一批左右摆
     if (this.parts.length) {
+      const margin = 120;
       for (const p of this.parts) {
         p.t += dt * 1000;
-        p.vy += 140 * dt;
-        p.vx *= 1 - 1.6 * dt;
-        p.vy *= 1 - 0.6 * dt;
-        p.x += p.vx * dt;
-        p.y += p.vy * dt;
+        if (p.kind === 'drift') {
+          p.x += Math.sin((p.t + p.ph) * 0.0022) * 30 * dt + p.vx * dt;
+          p.y += p.vy * dt;
+        } else {
+          p.vy += 300 * dt;
+          p.vx *= 1 - 1.1 * dt;
+          p.vy *= 1 - 0.18 * dt;
+          p.x += p.vx * dt;
+          p.y += p.vy * dt;
+        }
+        if (p.y > window.innerHeight + margin) p.t = p.life;
       }
       this.parts = this.parts.filter((p) => p.t < p.life);
     }
+    if (this.flashes.length) {
+      for (const f of this.flashes) f.t += dt * 1000;
+      this.flashes = this.flashes.filter((f) => f.t < f.life);
+    }
 
-    if (!this.waves.length && !this.parts.length) return;
+    if (!this.waves.length && !this.parts.length && !this.flashes.length) return;
 
     const active = this.waves.map((v) => {
       const k = (now - v.t0) / v.dur;
@@ -185,17 +230,37 @@ export class Ripple {
       c.stroke();
     }
 
-    // 3. 金粉
+    // 3. 炸开那一下的闪光
+    for (const f of this.flashes) {
+      const k = f.t / f.life;
+      const a = (1 - k) * (1 - k) * 0.55;
+      if (a < 0.01) continue;
+      const g = c.createRadialGradient(f.x, f.y, 0, f.x, f.y, f.r * (0.6 + k * 1.6));
+      g.addColorStop(0, f.cold ? 'rgba(226,244,255,' + a.toFixed(3) + ')' : 'rgba(255,232,170,' + a.toFixed(3) + ')');
+      g.addColorStop(1, 'rgba(0,0,0,0)');
+      c.fillStyle = g;
+      c.beginPath();
+      c.arc(f.x, f.y, f.r * (0.6 + k * 1.6), 0, Math.PI * 2);
+      c.fill();
+    }
+
+    // 4. 金粉
     for (const p of this.parts) {
       const k = p.t / p.life;
-      const a = (1 - k) * (1 - k);
+      const fadeIn = Math.min(1, p.t / 120);
+      const a = fadeIn * Math.pow(1 - k, 1.6) * p.alpha;
       if (a < 0.02) continue;
-      c.beginPath();
-      c.arc(p.x, p.y, p.r * (1 - k * 0.4), 0, Math.PI * 2);
+      const rr = p.r * (1 - k * 0.35);
       c.fillStyle = p.cold
-        ? 'rgba(226,240,255,' + (a * 0.9).toFixed(3) + ')'
-        : 'rgba(255,216,140,' + (a * 0.95).toFixed(3) + ')';
-      c.fill();
+        ? 'rgba(226,240,255,' + a.toFixed(3) + ')'
+        : 'rgba(255,216,140,' + a.toFixed(3) + ')';
+      if (rr < 1.1) {
+        c.fillRect(p.x - rr, p.y - rr, rr * 2, rr * 2);
+      } else {
+        c.beginPath();
+        c.arc(p.x, p.y, rr, 0, Math.PI * 2);
+        c.fill();
+      }
     }
   }
 }
