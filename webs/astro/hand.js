@@ -56,7 +56,7 @@ class OneEuro {
 /* ---------------- 主类 ---------------- */
 
 export class HandController {
-  constructor({ video, dial, overlay, onStatus, onOpen, onTurn }) {
+  constructor({ video, dial, overlay, onStatus, onOpen, onTurn, onFlip }) {
     this.video = video;
     this.dial = dial;
     this.overlay = overlay;
@@ -66,6 +66,12 @@ export class HandController {
     this.onOpen = onOpen || (() => {});
     /** 手掌转动（弧度/帧），放大状态下用来拖进度条 + 加速自转 */
     this.onTurn = onTurn || (() => {});
+    /** 翻掌：0 = 阳面，1 = 阴面 */
+    this.onFlip = onFlip || (() => {});
+    this._faceRef = undefined;
+    this._faceShown = 0;
+    this._facePending = -1;
+    this._faceCount = 0;
     this._openSmooth = 0;
     this._openSent = -1;
 
@@ -309,6 +315,26 @@ export class HandController {
       slot.turn = 0;
     }
     slot.roll = roll;
+
+    // 掌面朝向：翻掌时这个二维叉积会变号，正反两面据此区分。
+    // 第一次见到的手当作阳面，之后翻转才算阴面 —— 不受左右手影响。
+    const ax = lm[5].x - wrist.x;
+    const ay = lm[5].y - wrist.y;
+    const bx = lm[17].x - wrist.x;
+    const by = lm[17].y - wrist.y;
+    const cross = ax * by - ay * bx;
+    if (Math.abs(cross) > 0.002) {
+      const sign = cross >= 0 ? 1 : -1;
+      if (this._faceRef === undefined) this._faceRef = sign;
+      const want = sign === this._faceRef ? 0 : 1;
+      if (want !== this._facePending) {
+        this._facePending = want;
+        this._faceCount = 1;
+      } else if (++this._faceCount === 6 && want !== this._faceShown) {
+        this._faceShown = want;
+        this.onFlip(want);
+      }
+    }
 
     const tip = lm[8];
     const thumb = lm[4];

@@ -54,6 +54,8 @@ const DEFAULTS = {
   spinOuter: 0.08, // 逆时针（4.6°/s，约 78 秒一圈）
   /** 分界半径：占星图半径的比例（落在星图那圈空白带上） */
   split: 0.71,
+  /** 长按蓄能多久充满（秒） */
+  chargeTime: 1.4,
   /** 这些元素上的指针事件不归组件管 */
   ignore: '[data-dial-ignore]',
   palette: null,
@@ -107,6 +109,24 @@ export const THEMES = {
     badgeText: '#f6e0b0',
     halo: 'rgba(201,163,74,0.09)',
   },
+  // 阴面：银蓝，冷光
+  moon: {
+    plate: '#08090c',
+    band: 'rgba(190,205,225,0.045)',
+    bandActive: 'rgba(190,205,225,0.10)',
+    tickMajor: 'rgba(216,228,244,0.95)',
+    tickMinor: 'rgba(170,190,215,0.45)',
+    label: 'rgba(200,214,232,0.82)',
+    notch: 'rgba(216,228,244,0.9)',
+    arc: 'rgba(226,240,255,0.95)',
+    needle: 'rgba(238,248,255,0.92)',
+    needleHead: '#eaf6ff',
+    needleGlow: 'rgba(190,225,255,0.85)',
+    badgeFill: 'rgba(6,7,10,0.88)',
+    badgeStroke: 'rgba(190,205,225,0.28)',
+    badgeText: '#dbe8f7',
+    halo: 'rgba(150,180,220,0.10)',
+  },
 };
 
 export class Astrolabe extends EventTarget {
@@ -117,7 +137,10 @@ export class Astrolabe extends EventTarget {
     this.ctx = this.canvas.getContext('2d');
     this.btn = root.querySelector('.astro-btn');
     this.o = { ...DEFAULTS, ...options };
-    this.pal = { ...(THEMES[this.o.theme] || THEMES.light), ...(this.o.palette || {}) };
+    this.palGold = { ...(THEMES[this.o.theme] || THEMES.light), ...(this.o.palette || {}) };
+    this.palMoon = { ...THEMES.moon, ...(this.o.palette || {}) };
+    this.pal = this.palGold;
+    this.face = 0;
 
     this.plate = this.pal.plate;
     this.img = null;
@@ -143,6 +166,9 @@ export class Astrolabe extends EventTarget {
     this._cursor = '';
 
     /** 0 = 角落，1 = 屏幕正中放大；present 是缓动后的实际值 */
+    this.charge = 0;
+    this.burst = null;
+    this._prevNow = 0;
     this.spinBoost = 0;
     this._phaseIn = 0;
     this._phaseOut = 0;
@@ -506,6 +532,8 @@ export class Astrolabe extends EventTarget {
       if (g && g.mode !== 'scrub' && !this.hadPinch && g.moved < limit && dt < 700) {
         this._click(g.sx, g.sy);
       }
+      if (this.charge > 0.15) this._fire(this.charge);
+      this.charge = 0;
       if (g && g.mode === 'scrub') {
         this.root.dispatchEvent(new CustomEvent('dial:scrubend'));
       }
@@ -644,6 +672,20 @@ export class Astrolabe extends EventTarget {
       }
     }
 
+    // 长按蓄能：按住不动才充，一拖动就放电
+    const dt = this._prevNow ? Math.min(0.12, (now - this._prevNow) / 1000) : 0;
+    this._prevNow = now;
+    if (this.pointers.size > 0 && this.gesture && this.gesture.moved < 12) {
+      const before = this.charge;
+      this.charge = Math.min(1, this.charge + dt / this.o.chargeTime);
+      this.spinBoost = Math.max(this.spinBoost, 0.12 + this.charge * 1.1);
+      if (Math.abs(this.charge - before) > 0.02) {
+        this.root.dispatchEvent(new CustomEvent('dial:charge', { detail: { charge: this.charge } }));
+      }
+    } else if (this.charge > 0) {
+      this.charge = Math.max(0, this.charge - dt * 3);
+    }
+
     // 放大/回到角落：每帧朝目标逼近一点
     const d = this.presentTarget - this.present;
     if (Math.abs(d) > 0.0015) this.present += d * this.o.presentEase;
@@ -750,6 +792,23 @@ export class Astrolabe extends EventTarget {
     return 0;
   }
 
+  /** 翻掌换面：0 = 阳面（金），1 = 阴面（银蓝） */
+  setFace(f) {
+    f = f ? 1 : 0;
+    if (this.face === f) return;
+    this.face = f;
+    this.pal = f ? this.palMoon : this.palGold;
+    this._mark();
+    this.root.dispatchEvent(new CustomEvent('dial:face', { detail: { face: f } }));
+  }
+
+  _fire(power) {
+    this.burst = { t0: performance.now(), power };
+    this.spinBoost = Math.max(this.spinBoost, power * 1.6);
+    this.root.dispatchEvent(new CustomEvent('dial:burst', { detail: { power } }));
+    this._mark();
+  }
+
   /** 手一转，给自转踩一脚油门（0..1.5） */
   nudgeSpin(v) {
     const b = clamp(v, 0, 1.5);
@@ -828,6 +887,7 @@ export class Astrolabe extends EventTarget {
             c.scale(this.zoom, this.zoom);
             c.imageSmoothingQuality = 'high';
             c.globalAlpha = 0.92 * layer.alpha;
+            if (this.face) c.filter = 'grayscale(0.92) brightness(1.12)';
             c.drawImage(layer.img, -rArt, -rArt, rArt * 2, rArt * 2);
             c.restore();
           }
@@ -889,6 +949,10 @@ export class Astrolabe extends EventTarget {
 
     /* --- 4. 中央读数 --- */
     this._drawBadge(c, S);
+
+    /* --- 5. 蓄能 / 冲击波 --- */
+    this._drawCharge(c, S, rIn, rOut);
+    this._drawBurst(c, S, rOut);
 
     c.restore();
   }
@@ -999,6 +1063,52 @@ export class Astrolabe extends EventTarget {
     c.restore();
   }
 
+  /** 长按时的蓄能弧：从 12 点顺时针长出来，同时在中心收一圈光 */
+  _drawCharge(c, S, rIn, rOut) {
+    const q = this.charge;
+    if (q < 0.02) return;
+    const r = (rIn + rOut) / 2;
+    c.save();
+    c.lineCap = 'round';
+    c.beginPath();
+    c.arc(0, 0, r, -Math.PI / 2, -Math.PI / 2 + q * TAU);
+    c.strokeStyle = this.pal.needleHead;
+    c.lineWidth = Math.max(3, S * 0.017);
+    c.shadowColor = this.pal.needleGlow;
+    c.shadowBlur = S * 0.05 * (0.5 + q);
+    c.stroke();
+
+    c.beginPath();
+    c.arc(0, 0, S * (0.31 - 0.13 * q), 0, TAU);
+    c.globalAlpha = 0.2 + q * 0.55;
+    c.lineWidth = Math.max(1, S * 0.005);
+    c.stroke();
+    c.restore();
+  }
+
+  /** 松手后荡开的一圈冲击波 */
+  _drawBurst(c, S, rOut) {
+    const b = this.burst;
+    if (!b) return;
+    const k = (performance.now() - b.t0) / 620;
+    if (k >= 1) {
+      this.burst = null;
+      return;
+    }
+    const e = 1 - Math.pow(1 - k, 3);
+    c.save();
+    c.globalAlpha = (1 - k) * (0.28 + b.power * 0.6);
+    c.beginPath();
+    c.arc(0, 0, rOut * (0.9 + e * 1.35), 0, TAU);
+    c.strokeStyle = this.pal.needleHead;
+    c.lineWidth = Math.max(1.2, S * 0.014 * (1 - k));
+    c.shadowColor = this.pal.needleGlow;
+    c.shadowBlur = S * 0.06;
+    c.stroke();
+    c.restore();
+    this._mark();
+  }
+
   _drawBadge(c, S) {
     const r = S * GEO.badgeR;
 
@@ -1012,11 +1122,14 @@ export class Astrolabe extends EventTarget {
     c.stroke();
     c.restore();
 
-    const num = String(Math.round(this.pct));
+    // 蓄能时中间显示蓄能百分比，比看圆弧直观
+    const charging = this.charge > 0.05;
+    const num = String(Math.round(charging ? this.charge * 100 : this.pct));
     const fs = S * GEO.badgeFont;
     c.save();
-    c.fillStyle = this.pal.badgeText;
-    c.shadowColor = 'rgba(0,0,0,0.65)';
+    c.fillStyle = charging ? this.pal.needleHead : this.pal.badgeText;
+    c.shadowColor = charging ? this.pal.needleGlow : 'rgba(0,0,0,0.65)';
+    if (charging) c.shadowBlur = S * 0.03;
     c.shadowBlur = S * 0.014;
     c.textBaseline = 'middle';
 

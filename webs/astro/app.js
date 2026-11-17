@@ -73,6 +73,20 @@ function boot(root) {
     dial.nudgeSpin(Math.min(1.2, Math.abs(d) * 45));
   };
 
+  /* ---------- 蓄能 / 松手放 ---------- */
+  root.addEventListener('dial:charge', (e) => {
+    if (note) note.textContent = '蓄能 ' + Math.round(e.detail.charge * 100) + '%';
+  });
+
+  root.addEventListener('dial:burst', (e) => {
+    const p = e.detail.power;
+    if (note) note.textContent = p >= 0.8 ? '放' : '蓄能不足 ' + Math.round(p * 100) + '%';
+    if (p >= 0.8) {
+      dial.setManual(false);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  });
+
   /* ---------- 反方向：拨罗盘 = 滚页面 ---------- */
 
   root.addEventListener('dial:scrub', (e) => {
@@ -91,6 +105,7 @@ function boot(root) {
   });
 
   syncProgress();
+
 
 
 
@@ -153,15 +168,18 @@ function boot(root) {
             onStatus: (state, text) => setNote(state, text),
             // 手张开 → 星盘放大并移到屏幕正中；收拢 → 缩回角落
             // 正在捏合拖动时不跟着变，否则一捏盘就缩回去了
-            onOpen: (v, raw) => {
-              if (!dial.gesture) dial.setPresent(v);
-              // 把数值显示出来，方便对着调阈值
-              if (note && raw) note.textContent = '张开 ' + Math.round(v * 100) + '%';
+            onOpen: (v) => {
+              // 尺寸由按钮控制，这里不再缩放；只留一个读数方便调阈值
+              if (note && v > 0) note.textContent = '张开 ' + Math.round(v * 100) + '%';
             },
             onTurn,
+            onFlip: (face) => {
+              if (dial.present > 0.5) dial.setFace(face);
+            },
           });
         }
         await hand.start();
+        dial.setPresent(1); // 一开手势就直接铺到屏幕正中
       } catch (err) {
         setNote('error', '手势不可用');
         console.warn('[astro] hand', err);
