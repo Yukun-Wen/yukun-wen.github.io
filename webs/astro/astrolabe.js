@@ -48,6 +48,12 @@ const DEFAULTS = {
   ink: false,
   /** 边长小于这个值就不画数字刻度 */
   labelMin: 148,
+  /** 内外两环反向自转（弧度/秒）；spin:false 关掉 */
+  spin: true,
+  spinInner: 0.05, // 顺时针
+  spinOuter: 0.025, // 逆时针
+  /** 分界半径：占星图半径的比例（落在星图那圈空白带上） */
+  split: 0.71,
   /** 这些元素上的指针事件不归组件管 */
   ignore: '[data-dial-ignore]',
   palette: null,
@@ -576,7 +582,36 @@ export class Astrolabe extends EventTarget {
     }
     this._draw();
     this._emit();
-    if (this.anim) this._schedule();
+    if (this.anim || this._spinning()) this._schedule();
+  }
+
+  /** 只有真正看得见、且用户没要求减少动效时才转 */
+  _spinning() {
+    if (!this.o.spin) return false;
+    if (this._reduceMotion()) return false;
+    if (typeof document !== 'undefined' && document.visibilityState === 'hidden') return false;
+    return this.root.classList.contains('on');
+  }
+
+  _reduceMotion() {
+    return (
+      typeof window !== 'undefined' &&
+      window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    );
+  }
+
+  /** 只累积"可见时"的时间，藏起来再出现不会跳一下 */
+  _spinSeconds(now) {
+    if (this._spinLast === undefined) {
+      this._spinLast = now;
+      this._spinAcc = 0;
+      return 0;
+    }
+    const dt = Math.max(0, Math.min(0.12, (now - this._spinLast) / 1000));
+    this._spinLast = now;
+    if (this._spinning()) this._spinAcc += dt;
+    return this._spinAcc;
   }
 
   _animateTo(to, dur) {
@@ -588,6 +623,16 @@ export class Astrolabe extends EventTarget {
   }
 
   _emit() {
+    // 自转是 60fps 的，读数没变就别反复写 DOM
+    const sig =
+      Math.round(this.pct * 10) +
+      '|' +
+      Math.round(this.zoom * 1000) +
+      '|' +
+      Math.round(wrapPi(this.rot) * 1000);
+    if (sig === this._emitSig) return;
+    this._emitSig = sig;
+
     const detail = { pct: this.pct, zoom: this.zoom, rot: this.rot };
     this.root.setAttribute('aria-valuenow', String(Math.round(this.pct)));
     this.root.dispatchEvent(new CustomEvent('dial:change', { detail }));
@@ -624,13 +669,38 @@ export class Astrolabe extends EventTarget {
     if (this.o.ink) {
       // 线稿版：纸已经抠掉了，直接在黑底上画金色墨线
       if (this.inkCanvas) {
-        c.save();
-        c.rotate(this.rot);
-        c.scale(this.zoom, this.zoom);
-        c.imageSmoothingQuality = 'high';
-        c.globalAlpha = 0.92;
-        c.drawImage(this.inkCanvas, -rArt, -rArt, rArt * 2, rArt * 2);
-        c.restore();
+        const t = this._spinSeconds(performance.now());
+        // 拖动整体转；静止时内外两环反向走
+        const inner = this.rot + t * this.o.spinInner;
+        const outer = this.rot - t * this.o.spinOuter;
+        const rSplit = rArt * this.o.split;
+
+        const paint = (clipPath, angle) => {
+          c.save();
+          clipPath();
+          c.clip();
+          c.rotate(angle);
+          c.scale(this.zoom, this.zoom);
+          c.imageSmoothingQuality = 'high';
+          c.globalAlpha = 0.92;
+          c.drawImage(this.inkCanvas, -rArt, -rArt, rArt * 2, rArt * 2);
+          c.restore();
+        };
+
+        // 内盘：顺时针
+        paint(() => c.arc(0, 0, rSplit, 0, TAU), inner);
+        // 外环：逆时针
+        paint(() => {
+          c.arc(0, 0, rArt, 0, TAU);
+          c.arc(0, 0, rSplit, 0, TAU, true);
+        }, outer);
+
+        // 分界的细圈，把接缝收干净
+        c.beginPath();
+        c.arc(0, 0, rSplit, 0, TAU);
+        c.strokeStyle = 'rgba(201,163,74,0.32)';
+        c.lineWidth = Math.max(0.7, S * 0.003);
+        c.stroke();
       }
     } else {
       c.fillStyle = this.plate;
