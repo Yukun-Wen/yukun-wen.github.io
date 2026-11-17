@@ -440,6 +440,9 @@ export class Astrolabe extends EventTarget {
       if (g && g.mode !== 'scrub' && !this.hadPinch && g.moved < limit && dt < 700) {
         this._click(g.sx, g.sy);
       }
+      if (g && g.mode === 'scrub') {
+        this.root.dispatchEvent(new CustomEvent('dial:scrubend'));
+      }
       this.gesture = null;
       this.hadPinch = false;
       return;
@@ -471,6 +474,8 @@ export class Astrolabe extends EventTarget {
     this.pct = v;
     this._mark();
     this._emit();
+    // 用户亲手拨的，不是外部同步进来的 —— 外部据此把页面滚过去
+    this.root.dispatchEvent(new CustomEvent('dial:scrub', { detail: { pct: this.pct } }));
   }
 
   _pctAt(x, y) {

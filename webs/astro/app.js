@@ -50,8 +50,26 @@ function boot(root) {
   window.addEventListener('resize', onScroll);
 
   // 复位之后立刻接回当前进度
-  dial.addEventListener('dial:auto', (e) => {
+  root.addEventListener('dial:auto', (e) => {
     if (!e.detail.manual) dial.setPercent(progress() * 100, { silent: true });
+  });
+
+  /* ---------- 反方向：拨罗盘 = 滚页面 ---------- */
+  const maxScroll = () => Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+
+  root.addEventListener('dial:scrub', (e) => {
+    const max = maxScroll();
+    if (max <= 0) return;
+    const y = Math.round((e.detail.pct / 100) * max);
+    if (Math.abs(window.scrollY - y) < 1) return;
+    window.scrollTo(0, y);
+  });
+
+  // 松手后交回滚动驱动：页面这时正停在同一百分比上，所以不会跳
+  let scrubTimer = 0;
+  root.addEventListener('dial:scrubend', () => {
+    clearTimeout(scrubTimer);
+    scrubTimer = setTimeout(() => dial.setManual(false), 300);
   });
 
   syncProgress();
