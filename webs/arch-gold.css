@@ -761,28 +761,18 @@ body[data-series="arch-home"] .klimt-sparkle circle {
 body[data-series="arch-home"] .klimt-spot {
     position: absolute;
     inset: 0;
-    /* A radial gradient can only ever fade - the edge of a real spot is a
-       cut. So the beam is clipped to a circle instead: everything inside
-       the circle is the beam, everything outside is untouched, and the
-       boundary is as sharp as the renderer can draw a curve. Inside, a
-       filament at the centre, a body graded toward the rim, and a bright
-       line just inside the cut so the edge catches. */
+    /* a small lamp rather than a lens: no cut, no ring, just a warm pool
+       that melts into the canvas over its last third */
     background:
-        radial-gradient(circle 8px at var(--mx, 50vw) var(--my, 40vh),
-            rgba(255, 255, 253, .58) 0%,
-            rgba(255, 252, 238, .26) 48%,
-            rgba(255, 246, 218, 0) 100%),
-        radial-gradient(circle 30px at var(--mx, 50vw) var(--my, 40vh),
-            rgba(255, 250, 232, .46) 0%,
-            rgba(255, 246, 220, .38) 54%,
-            rgba(255, 243, 206, .31) 90%,
-            rgba(255, 243, 206, .31) 99.5%,
-            rgba(255, 243, 206, 0) 100%),
-        radial-gradient(circle 30px at var(--mx, 50vw) var(--my, 40vh),
-            rgba(255, 251, 236, 0) 93%,
-            rgba(255, 252, 240, .22) 97.5%,
-            rgba(255, 253, 246, 0) 100%);
-    clip-path: circle(30px at var(--mx, 50vw) var(--my));
+        radial-gradient(circle 21px at var(--mx, 50vw) var(--my, 40vh),
+            rgba(255, 253, 244, .58) 0%,
+            rgba(255, 249, 232, .38) 34%,
+            rgba(255, 243, 208, .16) 66%,
+            rgba(255, 238, 194, .05) 84%,
+            rgba(255, 236, 188, 0) 100%),
+        radial-gradient(circle 46px at var(--mx, 50vw) var(--my, 40vh),
+            rgba(255, 240, 200, .06) 0%,
+            rgba(255, 236, 190, 0) 100%);
     mix-blend-mode: screen;
     pointer-events: none;
 }
