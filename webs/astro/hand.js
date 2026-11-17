@@ -151,6 +151,8 @@ export class HandController {
     this._clearOverlay();
     this._openSmooth = 0;
     this._openSent = -1;
+    this._rMin = undefined;
+    this._rMax = undefined;
     this.onOpen(0);
     this.onStatus('idle', '摄像头未开启');
   }
@@ -221,18 +223,46 @@ export class HandController {
     this._publishOpen();
   }
 
-  /** 把所有手的最张开值平滑后发出去：0 = 握拳，1 = 全开 */
+  /**
+   * 把所有手的最大张开值发出去：0 = 握拳，1 = 全开。
+   * 手掌大小、镜头距离、机型差得很远，绝对阈值一定不准，
+   * 所以用"见过的最低/最高"做自适应标定，一次开合就能标满。
+   */
   _publishOpen() {
     let raw = 0;
     for (const slot of this.slots.values()) {
-      if (slot.pos && typeof slot.open === 'number') raw = Math.max(raw, slot.open);
+      if (slot.pos && typeof slot.ratio === 'number') raw = Math.max(raw, slot.ratio);
     }
+
+    if (raw > 0) {
+      if (this._rMin === undefined) {
+        // 第一眼如果手已经是张开的（比值偏高），按"张开"起；否则按"握着"起。
+        // 两种情况都保证：一次开合就能把量程标满。
+        if (raw >= 1.5) {
+          this._rMin = raw - 0.55;
+          this._rMax = raw;
+        } else {
+          this._rMin = raw;
+          this._rMax = raw + 0.35;
+        }
+      }
+      // 上限立即跟上，下限只在新低时立刻下移；另一端缓慢回缩
+      this._rMax = raw > this._rMax ? raw : this._rMax + (raw - this._rMax) * 0.0015;
+      this._rMin = raw < this._rMin ? raw : this._rMin + (raw - this._rMin) * 0.0015;
+      if (this._rMax - this._rMin < 0.22) this._rMax = this._rMin + 0.22;
+    }
+
+    let open = 0;
+    if (raw > 0 && this._rMin !== undefined) {
+      open = clamp((raw - this._rMin) / Math.max(0.22, this._rMax - this._rMin), 0, 1);
+    }
+
     // 张开时跟得紧一点，收拢时慢一点，避免抖动
-    const k = raw > this._openSmooth ? 0.35 : 0.18;
-    this._openSmooth += (raw - this._openSmooth) * k;
-    if (Math.abs(this._openSmooth - this._openSent) > 0.008) {
+    const k = open > this._openSmooth ? 0.35 : 0.18;
+    this._openSmooth += (open - this._openSmooth) * k;
+    if (Math.abs(this._openSmooth - this._openSent) > 0.006) {
       this._openSent = this._openSmooth;
-      this.onOpen(this._openSmooth);
+      this.onOpen(this._openSmooth, raw);
     }
   }
 
@@ -248,12 +278,13 @@ export class HandController {
     const palm = Math.hypot(mcp.x - wrist.x, mcp.y - wrist.y);
     if (palm < 0.035) return; // 手太小/太远，忽略
 
-    // 张开度：五个指尖到手腕的平均距离 / 掌长（与离镜头远近无关）
+    // 张开度原始值：五个指尖到手腕的平均距离 / 掌长（与离镜头远近无关）
+    // 只存比值，归一化交给 _publishOpen 自适应标定
     let reach = 0;
     for (const i of [4, 8, 12, 16, 20]) {
       reach += Math.hypot(lm[i].x - wrist.x, lm[i].y - wrist.y);
     }
-    slot.open = clamp((reach / 5 / palm - 1.12) / 0.62, 0, 1);
+    slot.ratio = reach / 5 / palm;
 
     const tip = lm[8];
     const thumb = lm[4];

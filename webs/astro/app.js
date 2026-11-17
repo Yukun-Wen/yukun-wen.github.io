@@ -133,7 +133,11 @@ function boot(root) {
             onStatus: (state, text) => setNote(state, text),
             // 手张开 → 星盘放大并移到屏幕正中；收拢 → 缩回角落
             // 正在捏合拖动时不跟着变，否则一捏盘就缩回去了
-            onOpen: (v) => { if (!dial.gesture) dial.setPresent(v); },
+            onOpen: (v, raw) => {
+              if (!dial.gesture) dial.setPresent(v);
+              // 把数值显示出来，方便对着调阈值
+              if (note && raw) note.textContent = '张开 ' + Math.round(v * 100) + '%';
+            },
           });
         }
         await hand.start();
