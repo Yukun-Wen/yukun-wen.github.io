@@ -89,16 +89,26 @@ function boot(root) {
   });
 
   /* ---------- 蓄能 / 松手放 ---------- */
+  // 蓄得越久，涟漪雨越密越大越快
   root.addEventListener('dial:charge', (e) => {
-    if (note) note.textContent = '蓄能 ' + Math.round(e.detail.charge * 100) + '%';
+    const q = e.detail.charge;
+    ripple.setRain(q);
+    if (note) note.textContent = '蓄能 ' + Math.round(q * 100) + '%';
   });
 
   root.addEventListener('dial:burst', (e) => {
     const p = e.detail.power;
-    if (note) note.textContent = p >= 0.8 ? '放' : '蓄能不足 ' + Math.round(p * 100) + '%';
-    if (p >= 0.8) {
-      dial.setManual(false);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    ripple.setRain(0);
+    if (p >= 0.2) {
+      const r = root.getBoundingClientRect();
+      ripple.shatter(r.left + r.width / 2, r.top + r.height / 2, r.width * 0.5, p, dial.face === 1);
+      if (note) note.textContent = p >= 0.8 ? '散' : '散了 ' + Math.round(p * 100) + '%';
+      if (p >= 0.8) {
+        dial.setManual(false);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    } else if (note) {
+      note.textContent = '蓄能不足';
     }
   });
 

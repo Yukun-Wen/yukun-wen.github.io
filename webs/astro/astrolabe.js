@@ -55,7 +55,7 @@ const DEFAULTS = {
   /** 分界半径：占星图半径的比例（落在星图那圈空白带上） */
   split: 0.71,
   /** 长按蓄能多久充满（秒） */
-  chargeTime: 1.4,
+  chargeTime: 10,
   /** 翻面：总圈数 / 时长（毫秒） */
   flipTurns: 8,
   flipDur: 1800,
@@ -541,13 +541,13 @@ export class Astrolabe extends EventTarget {
       if (g && g.mode !== 'scrub' && !this.hadPinch && g.moved < limit && dt < 700) {
         this._click(g.sx, g.sy);
       }
-      if (this.charge > 0.15) {
+      if (this.charge > 0.2) {
         // 捏合偶尔会松一帧，给个宽限再放
         this._pendingFire = true;
         clearTimeout(this._fireT);
         this._fireT = setTimeout(() => {
           this._pendingFire = false;
-          if (this.charge > 0.15) this._fire(this.charge);
+          if (this.charge > 0.2) this._fire(this.charge);
           this.flip = null;
     this.charge = 0;
           this._mark();
@@ -697,26 +697,33 @@ export class Astrolabe extends EventTarget {
     // 长按蓄能：按住不动才充，一拖动就放电
     const dt = this._prevNow ? Math.min(0.12, (now - this._prevNow) / 1000) : 0;
     this._prevNow = now;
-    let still = false;
-    if (this.pointers.size > 0 && this.gesture) {
-      const g = this.gesture;
-      const p = this.pointers.values().next().value;
-      // 用"离起点的距离"而不是累计路程：手再稳也会抖，累计路程一秒就超标
-      // 必须用屏幕坐标：星盘在放大过程中自己会移动、变大，
-      // 用布局坐标量"手有没有动"会把缩放误判成移动
-      const drift = Math.hypot((p.cx ?? g.cx0) - g.cx0, (p.cy ?? g.cy0) - g.cy0);
-      const turned = Math.abs(this.pct - (g.p0 === undefined ? this.pct : g.p0));
-      still = drift < 38 && turned < 1.5;
-    }
-    if (still) {
-      const before = this.charge;
+    // 捏住就蓄能，不要求手不动；只在放大（魔法）状态生效，
+    // 否则在角落拖动指针也会把盘子炸掉
+    const charging = this.pointers.size > 0 && !!this.gesture && this.present > 0.5;
+    if (charging) {
       this.charge = Math.min(1, this.charge + dt / this.o.chargeTime);
       this.spinBoost = Math.max(this.spinBoost, 0.12 + this.charge * 1.1);
-      if (Math.abs(this.charge - before) > 0.02) {
+      // 比的是"距上次广播涨了多少"，不是每帧增量（每帧只有千分之几）
+      if (Math.abs(this.charge - (this._chargeSent || 0)) > 0.02) {
+        this._chargeSent = this.charge;
         this.root.dispatchEvent(new CustomEvent('dial:charge', { detail: { charge: this.charge } }));
       }
     } else if (this.charge > 0 && !this._pendingFire) {
       this.charge = Math.max(0, this.charge - dt * 3);
+    }
+
+    // 化成金粉散掉：先快速淡出，留一小段空白，再淡回来
+    if (this.dissolve) {
+      const k = (now - this.dissolve.t0) / 1600;
+      let op;
+      if (k < 0.18) op = 1 - k / 0.18;
+      else if (k < 0.62) op = 0;
+      else op = (k - 0.62) / 0.38;
+      this.canvas.style.opacity = clamp(op, 0, 1).toFixed(3);
+      if (k >= 1) {
+        this.dissolve = null;
+        this.canvas.style.opacity = '1';
+      }
     }
 
     // 翻转推进：最后半圈换色，转完收尾
@@ -750,7 +757,7 @@ export class Astrolabe extends EventTarget {
 
     this._draw();
     this._emit();
-    if (this.anim || this.flip || this._spinning() || Math.abs(this.presentTarget - this.present) > 0.002) {
+    if (this.anim || this.flip || this.dissolve || this._spinning() || Math.abs(this.presentTarget - this.present) > 0.002) {
       this._schedule();
     }
   }
@@ -884,6 +891,7 @@ export class Astrolabe extends EventTarget {
 
   _fire(power) {
     this.burst = { t0: performance.now(), power };
+    this.dissolve = { t0: performance.now(), power };
     this.spinBoost = Math.max(this.spinBoost, power * 1.6);
     this.root.dispatchEvent(new CustomEvent('dial:burst', { detail: { power } }));
     this._mark();
