@@ -1,0 +1,105 @@
+/* =================================================================
+   左下角星盘：接替原来的 .dial（阅读进度盘）
+   ================================================================= */
+
+.astro {
+    position: fixed;
+    left: 24px;
+    bottom: 22px;
+    /* 永远只占页面两侧的空白：1180 是 .wrap 的宽度，24 给左边让出画框线 */
+    width: min(200px, max(0px, calc((100vw - 1180px) / 2 - 26px)));
+    height: min(200px, max(0px, calc((100vw - 1180px) / 2 - 26px)));
+    z-index: 6;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity .6s var(--ease), transform .6s var(--ease);
+}
+
+.astro.on { opacity: 1; transform: none; }
+
+.astro-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+/* 手势开关：唯一吃指针事件的子元素 */
+.astro-btn {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 14%;
+    min-width: 18px;
+    max-width: 24px;
+    aspect-ratio: 1;
+    padding: 0;
+    border-radius: 50%;
+    border: 1px solid rgba(201, 163, 74, .32);
+    background: rgba(8, 7, 6, .55);
+    color: #c9a34a;
+    font-size: 9px;
+    line-height: 1;
+    cursor: pointer;
+    pointer-events: auto;
+    opacity: .35;
+    transition: opacity .25s var(--ease), border-color .25s var(--ease), color .25s var(--ease);
+}
+
+.astro-btn:hover,
+.astro-btn:focus-visible { opacity: 1; border-color: #c9a34a; color: #f2d79a; outline: none; }
+.astro-btn[aria-pressed="true"] { opacity: .9; border-color: rgba(242, 215, 154, .7); color: #fbe6b4; }
+
+.astro-video {
+    position: absolute;
+    left: 0;
+    bottom: calc(100% + 30px);
+    width: 164px;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border: 1px solid rgba(201, 163, 74, .22);
+    border-radius: 2px;
+    background: #000;
+    transform: scaleX(-1);
+    display: none;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .5);
+}
+
+.astro.cam .astro-video { display: block; }
+
+.astro-note {
+    position: absolute;
+    left: 0;
+    bottom: calc(100% + 8px);
+    width: 100%;
+    font-size: 10px;
+    line-height: 1.4;
+    color: rgba(226, 198, 132, .62);
+    letter-spacing: .06em;
+    text-align: left;
+    display: none;
+}
+
+.astro.cam .astro-note { display: block; }
+
+/* 手势光标层 */
+.astro-cursor {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 60;
+    pointer-events: none;
+}
+
+/* 两侧没有余量就不放（和原来的 .dial 同一个脾气）；
+   这时候把让位给它的左下角花饰还回去 */
+@media (max-width: 1403px) {
+    .astro { display: none; }
+    body[data-series="arch-home"] .corner.c4 { display: block; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .astro { transition: none; }
+}
