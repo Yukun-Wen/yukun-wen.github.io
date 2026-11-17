@@ -143,6 +143,9 @@ export class Astrolabe extends EventTarget {
     this._cursor = '';
 
     /** 0 = 角落，1 = 屏幕正中放大；present 是缓动后的实际值 */
+    this.spinBoost = 0;
+    this._phaseIn = 0;
+    this._phaseOut = 0;
     this.present = 0;
     this.presentTarget = 0;
     this._lastDrawAt = 0;
@@ -235,10 +238,10 @@ export class Astrolabe extends EventTarget {
     this.root.dispatchEvent(new CustomEvent('dial:auto', { detail: { manual: on } }));
   }
 
-  setPercent(v, { silent = false } = {}) {
+  setPercent(v, { silent = false, snap = true } = {}) {
     v = clamp(v, 0, 100);
-    const snap = this.o.percentSnap;
-    if (snap > 0) v = Math.round(v / snap) * snap;
+    const step = snap ? this.o.percentSnap : 0;
+    if (step > 0) v = Math.round(v / step) * step;
     v = clamp(v, 0, 100);
     if (Math.abs(v - this.pct) < 1e-6) return;
     this.pct = v;
@@ -724,17 +727,34 @@ export class Astrolabe extends EventTarget {
     );
   }
 
-  /** 只累积"可见时"的时间，藏起来再出现不会跳一下 */
+  /**
+   * 推进自转相位。用累积相位而不是"时间×速度"，
+   * 这样转速可以被手势临时推高而不产生跳格。
+   */
   _spinSeconds(now) {
     if (this._spinLast === undefined) {
       this._spinLast = now;
-      this._spinAcc = 0;
+      this._phaseIn = this._phaseIn || 0;
+      this._phaseOut = this._phaseOut || 0;
       return 0;
     }
     const dt = Math.max(0, Math.min(0.12, (now - this._spinLast) / 1000));
     this._spinLast = now;
-    if (this._spinning()) this._spinAcc += dt;
-    return this._spinAcc;
+    if (this._spinning()) {
+      const k = 1 + this.spinBoost * 3;
+      this._phaseIn += dt * this.o.spinInner * k;
+      this._phaseOut += dt * this.o.spinOuter * k;
+      this.spinBoost *= Math.exp(-dt / 0.45); // 不转了自然回落
+      if (this.spinBoost < 0.01) this.spinBoost = 0;
+    }
+    return 0;
+  }
+
+  /** 手一转，给自转踩一脚油门（0..1.5） */
+  nudgeSpin(v) {
+    const b = clamp(v, 0, 1.5);
+    if (b > this.spinBoost) this.spinBoost = b;
+    this._mark();
   }
 
   _animateTo(to, dur) {
@@ -792,10 +812,10 @@ export class Astrolabe extends EventTarget {
     if (this.o.ink) {
       // 线稿版：纸已经抠掉了，直接在黑底上画金色墨线
       if (this.inkCanvas) {
-        const t = this._spinSeconds(performance.now());
+        this._spinSeconds(performance.now());
         // 拖动整体转；静止时内外两环反向走
-        const inner = this.rot + t * this.o.spinInner;
-        const outer = this.rot - t * this.o.spinOuter;
+        const inner = this.rot + this._phaseIn;
+        const outer = this.rot - this._phaseOut;
         const rSplit = rArt * this.o.split;
 
         const layers = this._inkLayers();

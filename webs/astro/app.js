@@ -40,7 +40,7 @@ function boot(root) {
   let queued = 0;
   const syncProgress = () => {
     queued = 0;
-    if (!dial.manual) dial.setPercent(progress() * 100);
+    if (!dial.manual) dial.setPercent(progress() * 100, { snap: false });
   };
   const onScroll = () => {
     if (!queued) queued = requestAnimationFrame(syncProgress);
@@ -51,11 +51,29 @@ function boot(root) {
 
   // 复位之后立刻接回当前进度
   root.addEventListener('dial:auto', (e) => {
-    if (!e.detail.manual) dial.setPercent(progress() * 100, { silent: true });
+    if (!e.detail.manual) dial.setPercent(progress() * 100, { silent: true, snap: false });
   });
 
-  /* ---------- 反方向：拨罗盘 = 滚页面 ---------- */
   const maxScroll = () => Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+
+  /* ---------- 放大状态：扭手 = 拖进度条 + 给自转加速 ---------- */
+  const TURN_GAIN = 18; // 每弧度对应多少百分比
+  const applyPct = (pct) => {
+    const max = maxScroll();
+    if (max <= 0) return;
+    window.scrollTo(0, Math.round((pct / 100) * max));
+  };
+
+  const onTurn = (d) => {
+    if (dial.present < 0.35) return; // 只有放大到中间时才接管
+    if (dial.gesture) return;        // 正在捏合拖动就别抢
+    const next = Math.max(0, Math.min(100, dial.pct + d * TURN_GAIN));
+    dial.setPercent(next, { snap: false });
+    applyPct(next);
+    dial.nudgeSpin(Math.min(1.2, Math.abs(d) * 45));
+  };
+
+  /* ---------- 反方向：拨罗盘 = 滚页面 ---------- */
 
   root.addEventListener('dial:scrub', (e) => {
     const max = maxScroll();
@@ -73,6 +91,8 @@ function boot(root) {
   });
 
   syncProgress();
+
+
 
   /* ---------- 罗盘一直在，不再等滚过首屏 ---------- */
   const showDial = () => {
@@ -138,6 +158,7 @@ function boot(root) {
               // 把数值显示出来，方便对着调阈值
               if (note && raw) note.textContent = '张开 ' + Math.round(v * 100) + '%';
             },
+            onTurn,
           });
         }
         await hand.start();

@@ -12,6 +12,7 @@ const WASM_DIR = new URL('./vendor/mediapipe/wasm', import.meta.url).href;
 const MODEL_URL = new URL('./vendor/models/hand_landmarker.task', import.meta.url).href;
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
+const wrapPi = (a) => (((a + Math.PI) % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2) - Math.PI;
 
 /* ---------------- One Euro 滤波 ---------------- */
 
@@ -55,7 +56,7 @@ class OneEuro {
 /* ---------------- 主类 ---------------- */
 
 export class HandController {
-  constructor({ video, dial, overlay, onStatus, onOpen }) {
+  constructor({ video, dial, overlay, onStatus, onOpen, onTurn }) {
     this.video = video;
     this.dial = dial;
     this.overlay = overlay;
@@ -63,6 +64,8 @@ export class HandController {
     this.onStatus = onStatus || (() => {});
     /** 手张开程度 0..1（0 = 握拳，1 = 五指全开） */
     this.onOpen = onOpen || (() => {});
+    /** 手掌转动（弧度/帧），放大状态下用来拖进度条 + 加速自转 */
+    this.onTurn = onTurn || (() => {});
     this._openSmooth = 0;
     this._openSent = -1;
 
@@ -221,6 +224,7 @@ export class HandController {
     }
 
     this._publishOpen();
+    this._publishTurn();
   }
 
   /**
@@ -266,6 +270,16 @@ export class HandController {
     }
   }
 
+  /** 把这一帧手掌转动的角度发出去（取绝对量最大的那只手） */
+  _publishTurn() {
+    let turn = 0;
+    for (const slot of this.slots.values()) {
+      if (!slot.pos || !slot.turn) continue;
+      if (Math.abs(slot.turn) > Math.abs(turn)) turn = slot.turn;
+    }
+    if (turn !== 0) this.onTurn(turn);
+  }
+
   _keyFor(handed, i, seen) {
     const label = handed?.[i]?.[0]?.categoryName || handed?.[i]?.[0]?.displayName;
     const base = label ? `hand-${label}` : `hand-${i}`;
@@ -285,6 +299,16 @@ export class HandController {
       reach += Math.hypot(lm[i].x - wrist.x, lm[i].y - wrist.y);
     }
     slot.ratio = reach / 5 / palm;
+
+    // 手掌朝向：腕→中指根这条线的角度。x 取反，让"顺时针"和镜子里看到的一致
+    const roll = -Math.atan2(mcp.y - wrist.y, mcp.x - wrist.x);
+    if (typeof slot.roll === 'number') {
+      const d = wrapPi(roll - slot.roll);
+      slot.turn = Math.abs(d) < 0.5 ? d : 0; // 跳变（手重新摆位）不算
+    } else {
+      slot.turn = 0;
+    }
+    slot.roll = roll;
 
     const tip = lm[8];
     const thumb = lm[4];
