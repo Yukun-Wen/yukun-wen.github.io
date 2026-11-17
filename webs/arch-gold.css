@@ -768,21 +768,21 @@ body[data-series="arch-home"] .klimt-spot {
        filament at the centre, a body graded toward the rim, and a bright
        line just inside the cut so the edge catches. */
     background:
-        radial-gradient(circle 34px at var(--mx, 50vw) var(--my, 40vh),
+        radial-gradient(circle 8px at var(--mx, 50vw) var(--my, 40vh),
             rgba(255, 255, 253, .58) 0%,
             rgba(255, 252, 238, .26) 48%,
             rgba(255, 246, 218, 0) 100%),
-        radial-gradient(circle 124px at var(--mx, 50vw) var(--my, 40vh),
+        radial-gradient(circle 30px at var(--mx, 50vw) var(--my, 40vh),
             rgba(255, 250, 232, .46) 0%,
             rgba(255, 246, 220, .38) 54%,
             rgba(255, 243, 206, .31) 90%,
             rgba(255, 243, 206, .31) 99.5%,
             rgba(255, 243, 206, 0) 100%),
-        radial-gradient(circle 124px at var(--mx, 50vw) var(--my, 40vh),
+        radial-gradient(circle 30px at var(--mx, 50vw) var(--my, 40vh),
             rgba(255, 251, 236, 0) 93%,
             rgba(255, 252, 240, .22) 97.5%,
             rgba(255, 253, 246, 0) 100%);
-    clip-path: circle(124px at var(--mx, 50vw) var(--my));
+    clip-path: circle(30px at var(--mx, 50vw) var(--my));
     mix-blend-mode: screen;
     pointer-events: none;
 }
