@@ -50,8 +50,8 @@ const DEFAULTS = {
   labelMin: 148,
   /** 内外两环反向自转（弧度/秒）；spin:false 关掉 */
   spin: true,
-  spinInner: 0.05, // 顺时针
-  spinOuter: 0.025, // 逆时针
+  spinInner: 0.07, // 顺时针
+  spinOuter: 0.035, // 逆时针
   /** 分界半径：占星图半径的比例（落在星图那圈空白带上） */
   split: 0.71,
   /** 这些元素上的指针事件不归组件管 */
@@ -133,6 +133,12 @@ export class Astrolabe extends EventTarget {
 
     this._ro = new ResizeObserver(() => this._resize());
     this._ro.observe(root);
+
+    // 从别的标签页回来时，自转循环得重新接上
+    this._onVis = () => {
+      if (document.visibilityState === 'visible') this._mark();
+    };
+    document.addEventListener('visibilitychange', this._onVis);
   }
 
   /* ================= 对外 API ================= */
@@ -256,6 +262,7 @@ export class Astrolabe extends EventTarget {
     window.removeEventListener('touchmove', this._h.touch, true);
     window.removeEventListener('click', this._h.click, true);
     this.root.removeEventListener('keydown', this._h.key);
+    document.removeEventListener('visibilitychange', this._onVis);
     this._ro.disconnect();
     if (this._raf) cancelAnimationFrame(this._raf);
   }
@@ -586,6 +593,11 @@ export class Astrolabe extends EventTarget {
   }
 
   /** 只有真正看得见、且用户没要求减少动效时才转 */
+  /** 外部把组件从隐藏切成可见时叫一声，自转循环才会接上 */
+  kick() {
+    this._mark();
+  }
+
   _spinning() {
     if (!this.o.spin) return false;
     if (this._reduceMotion()) return false;

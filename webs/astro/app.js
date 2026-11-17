@@ -80,6 +80,8 @@ function boot(root) {
   const updateVisible = () => {
     const show = !masthead || masthead.getBoundingClientRect().bottom < 60;
     root.classList.toggle('on', show || focused);
+    // 从隐藏切成可见的那一刻要踢一下，自转循环才会重新跑起来
+    if (show || focused) dial.kick();
   };
   window.addEventListener('scroll', updateVisible, { passive: true });
   updateVisible();
