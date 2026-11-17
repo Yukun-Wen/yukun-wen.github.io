@@ -9,6 +9,7 @@
  */
 
 import { Astrolabe } from './astrolabe.js';
+import { Ripple } from './ripple.js';
 
 const root = document.getElementById('astro');
 if (root) {
@@ -72,6 +73,20 @@ function boot(root) {
     applyPct(next);
     dial.nudgeSpin(Math.min(1.2, Math.abs(d) * 45));
   };
+
+  /* ---------- 翻面：绕竖轴转 8 圈，背景星辰被涟漪扫亮 ---------- */
+  root.addEventListener('dial:flipstart', () => {
+    const r = root.getBoundingClientRect();
+    const cx = r.left + r.width / 2;
+    const cy = r.top + r.height / 2;
+    ripple.burst(cx, cy, { dur: 1700, power: 1 });
+    setTimeout(() => ripple.burst(cx, cy, { dur: 1300, power: 0.55 }), 420);
+    if (note) note.textContent = '换面中';
+  });
+
+  root.addEventListener('dial:flipend', () => {
+    if (note) note.textContent = dial.face ? '阴面' : '阳面';
+  });
 
   /* ---------- 蓄能 / 松手放 ---------- */
   root.addEventListener('dial:charge', (e) => {
@@ -137,6 +152,11 @@ function boot(root) {
   scrim.className = 'astro-scrim';
   document.body.appendChild(scrim);
 
+  const rippleCanvas = document.createElement('canvas');
+  rippleCanvas.className = 'astro-ripple';
+  document.body.appendChild(rippleCanvas);
+  const ripple = new Ripple(rippleCanvas);
+
   let hand = null;
   let starting = false;
 
@@ -174,7 +194,7 @@ function boot(root) {
             },
             onTurn,
             onFlip: (face) => {
-              if (dial.present > 0.5) dial.setFace(face);
+              if (dial.present > 0.5) dial.flipTo(face);
             },
           });
         }

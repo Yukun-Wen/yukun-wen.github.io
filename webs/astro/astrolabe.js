@@ -56,6 +56,9 @@ const DEFAULTS = {
   split: 0.71,
   /** 长按蓄能多久充满（秒） */
   chargeTime: 1.4,
+  /** 翻面：总圈数 / 时长（毫秒） */
+  flipTurns: 8,
+  flipDur: 1800,
   /** 这些元素上的指针事件不归组件管 */
   ignore: '[data-dial-ignore]',
   palette: null,
@@ -166,6 +169,7 @@ export class Astrolabe extends EventTarget {
     this._cursor = '';
 
     /** 0 = 角落，1 = 屏幕正中放大；present 是缓动后的实际值 */
+    this.flip = null;
     this.charge = 0;
     this.burst = null;
     this._prevNow = 0;
@@ -544,11 +548,13 @@ export class Astrolabe extends EventTarget {
         this._fireT = setTimeout(() => {
           this._pendingFire = false;
           if (this.charge > 0.15) this._fire(this.charge);
-          this.charge = 0;
+          this.flip = null;
+    this.charge = 0;
           this._mark();
         }, 240);
       } else {
-        this.charge = 0;
+        this.flip = null;
+    this.charge = 0;
       }
       if (g && g.mode === 'scrub') {
         this.root.dispatchEvent(new CustomEvent('dial:scrubend'));
@@ -713,6 +719,21 @@ export class Astrolabe extends EventTarget {
       this.charge = Math.max(0, this.charge - dt * 3);
     }
 
+    // 翻转推进：最后半圈换色，转完收尾
+    if (this.flip) {
+      const u = clamp((now - this.flip.t0) / this.flip.dur, 0, 1);
+      const turns = this._flipDeg(u) / 360;
+      if (!this.flip.swapped && turns >= this.o.flipTurns - 0.5) {
+        this.flip.swapped = true;
+        this.setFace(this.flip.face);
+      }
+      if (u >= 1) {
+        this.flip = null;
+        this.canvas.style.transform = '';
+        this.root.dispatchEvent(new CustomEvent('dial:flipend', { detail: { face: this.face } }));
+      }
+    }
+
     // 放大/回到角落：每帧朝目标逼近一点
     const d = this.presentTarget - this.present;
     if (Math.abs(d) > 0.0015) this.present += d * this.o.presentEase;
@@ -720,7 +741,7 @@ export class Astrolabe extends EventTarget {
     this._applyPresentation();
 
     // 静止自转没必要跑 60fps；有手势/动画时全速
-    const idle = !this.gesture && !this.anim && Math.abs(this.presentTarget - this.present) < 0.002;
+    const idle = !this.gesture && !this.anim && !this.flip && Math.abs(this.presentTarget - this.present) < 0.002;
     if (idle && now - this._lastDrawAt < 30) {
       this._schedule();
       return;
@@ -729,7 +750,7 @@ export class Astrolabe extends EventTarget {
 
     this._draw();
     this._emit();
-    if (this.anim || this._spinning() || Math.abs(this.presentTarget - this.present) > 0.002) {
+    if (this.anim || this.flip || this._spinning() || Math.abs(this.presentTarget - this.present) > 0.002) {
       this._schedule();
     }
   }
@@ -772,6 +793,14 @@ export class Astrolabe extends EventTarget {
     if (tf !== this._lastTf) {
       this._lastTf = tf;
       el.style.transform = tf;
+    }
+
+    if (this.flip) {
+      const u = clamp((performance.now() - this.flip.t0) / this.flip.dur, 0, 1);
+      const deg = this._flipDeg(u);
+      this.canvas.style.transform = 'perspective(1400px) rotateY(' + deg.toFixed(1) + 'deg)';
+    } else if (this.canvas.style.transform) {
+      this.canvas.style.transform = '';
     }
     this._cssScale = s;
 
@@ -817,6 +846,30 @@ export class Astrolabe extends EventTarget {
       if (this.spinBoost < 0.01) this.spinBoost = 0;
     }
     return 0;
+  }
+
+  /**
+   * 绕竖轴翻转换面：前 55% 匀速跑 6 圈，后 45% 减速再跑 2 圈，
+   * 最后半圈（图案侧过去的时候）把颜色换掉，再转正露出来。
+   */
+  flipTo(face, opts = {}) {
+    const f = face ? 1 : 0;
+    if (this.flip) return;
+    if (f === this.face) return;
+    this.flip = { t0: performance.now(), dur: opts.dur || this.o.flipDur, face: f, swapped: false };
+    this.root.dispatchEvent(new CustomEvent('dial:flipstart', { detail: { face: f } }));
+    this._mark();
+  }
+
+  /** 0..1 的进度 → 已经转过的角度（度） */
+  _flipDeg(u) {
+    const A = 0.55;
+    const total = this.o.flipTurns;
+    const fast = Math.max(1, total - 2);
+    const slow = total - fast;
+    if (u <= A) return fast * (u / A) * 360;
+    const v = (u - A) / (1 - A);
+    return (fast + slow * (1 - Math.pow(1 - v, 3))) * 360;
   }
 
   /** 翻掌换面：0 = 阳面（金），1 = 阴面（银蓝） */
